@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("leetsandbox")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7abe9b13b1c4b31796d24e3b51657cdee8a9ff96")]
 [assembly: System.Reflection.AssemblyProductAttribute("leetsandbox")]
 [assembly: System.Reflection.AssemblyTitleAttribute("leetsandbox")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
