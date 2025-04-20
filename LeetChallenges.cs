@@ -4,6 +4,28 @@ public static class LeetChallenges
 {
 
 
+
+    // add one count each time you find a match
+    // subtract one count each time you don't
+    // whatever has a net value of > 0 is the winner
+    // we don't have to have a total count of the majority
+    // all we need to do is to use a strategy that 
+    // cancels whatever is currently the majority if it doesn't match
+    // whatever remainder will still find the majority
+    public static int BoyerMooreMajority(int[] nums) {
+        int count = 0;
+        int candidate = 0;
+
+        foreach (int num in nums) {
+            if (count == 0) {
+                candidate = num;
+            }
+            count += (num == candidate) ? 1 : -1;
+        }
+
+        return candidate;
+    }
+
     // Works but inefficient
     public static int MajorityElement(int[] nums) {
             for (int i=0; i< nums.Length; i++){
