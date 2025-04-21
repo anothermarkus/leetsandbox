@@ -4,6 +4,104 @@ public static class LeetChallenges
 {
 
 
+  // don't have to iterate over every combination
+  // because you are guaranteed to capture 
+  // the most profit even if a lower min price
+  // comes up later
+  public static int MaxProfit2(int[] prices) {
+        int minPrice = int.MaxValue;
+        int maxProfit = 0;
+
+        foreach (int price in prices) {
+            if (price < minPrice) {
+                minPrice = price;
+            } else {
+                int profit = price - minPrice;
+                if (profit > maxProfit) {
+                    maxProfit = profit;
+                }
+            }
+        }
+
+        return maxProfit;
+    }
+
+
+    public static int MaxProfit(int[] prices) {
+
+        int profit = 0;
+
+        for (int i=0; i< prices.Length; i++){
+            for (int j=i+1; j < prices.Length; j++){
+                // is this more profitable?
+                if (prices[j] - prices[i] > profit){
+                    profit = prices[j] - prices[i]; 
+                }
+            }
+        }
+
+        return profit;
+        
+    }
+
+
+    //  k = 3
+    // [1, 2, 3, 4, 5, 6, 7] - Input Array
+    // [7, 6, 5, 4, 3, 2, 1] - Reverse All
+    // [5, 6, 7, 4, 3, 2, 1] - Reverse first k
+    // [5, 6, 7, 1, 2, 3, 4] - Reverse remaining
+    public static void Rotate2(int[] nums, int k)
+    {
+        int n = nums.Length;
+        k %= n; // In case k is huge!
+        Reverse(nums, 0, n - 1);
+        Reverse(nums, 0, k - 1);
+        Reverse(nums, k, n - 1);
+    }
+
+    private static void Reverse(int[] nums, int left, int right)
+    {
+        while (left < right)
+        {
+            int temp = nums[left];
+            nums[left] = nums[right];
+            nums[right] = temp;
+            left++;
+            right--;
+        }
+    }
+
+
+
+
+    // Brute force
+    // Tried to do something elegant with swapping values
+    // but only worked when the array had an odd number of values
+    public static void Rotate(int[] nums, int k)
+    {
+
+        for (int i = 0; i < k; i++)
+        {
+
+            int curIndex = 0;
+            int currentValue = nums[0];
+            int valueBeforeOverwrite;
+
+            for (int j = 1; j < nums.Length; j++)
+            {
+                curIndex = (curIndex + 1) % nums.Length;
+
+                valueBeforeOverwrite = nums[curIndex];
+                nums[curIndex] = currentValue;
+                currentValue = valueBeforeOverwrite;
+            }
+            nums[0] = currentValue;
+
+        }
+
+
+    }
+
 
     // add one count each time you find a match
     // subtract one count each time you don't
@@ -12,12 +110,15 @@ public static class LeetChallenges
     // all we need to do is to use a strategy that 
     // cancels whatever is currently the majority if it doesn't match
     // whatever remainder will still find the majority
-    public static int BoyerMooreMajority(int[] nums) {
+    public static int BoyerMooreMajority(int[] nums)
+    {
         int count = 0;
         int candidate = 0;
 
-        foreach (int num in nums) {
-            if (count == 0) {
+        foreach (int num in nums)
+        {
+            if (count == 0)
+            {
                 candidate = num;
             }
             count += (num == candidate) ? 1 : -1;
@@ -27,19 +128,24 @@ public static class LeetChallenges
     }
 
     // Works but inefficient
-    public static int MajorityElement(int[] nums) {
-            for (int i=0; i< nums.Length; i++){
-                int counter = 0;            
-                for (int j=0; i< nums.Length; j++){
-                    if (nums[i] == nums[j]){
-                        counter++;
-                    }
-                    if (counter >= nums.Length/2){
-                        return nums[i];
-                    }
+    public static int MajorityElement(int[] nums)
+    {
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int counter = 0;
+            for (int j = 0; i < nums.Length; j++)
+            {
+                if (nums[i] == nums[j])
+                {
+                    counter++;
+                }
+                if (counter >= nums.Length / 2)
+                {
+                    return nums[i];
                 }
             }
-            return nums[0];
+        }
+        return nums[0];
     }
 
 

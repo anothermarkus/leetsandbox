@@ -8,9 +8,10 @@ class Program
     static void Main(string[] args)
     {
        
-        int[] nums = [0,0,1,1,1,1,2,3,3];
+        int[] nums = [1,2,3,4,5,6,7];
+        int k = 3;
 
-        LeetChallenges.RemoveDuplicates2(nums);
+        LeetChallenges.Rotate(nums,k);
 
 
     }
