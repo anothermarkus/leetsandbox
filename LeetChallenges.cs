@@ -4,6 +4,91 @@ public static class LeetChallenges
 {
 
 
+    public static int MaxProfitSpaceOptimized(int[] prices) {
+        if (prices.Length == 0) return 0;
+
+        int hold = -prices[0];
+        int notHold = 0;
+
+        for (int i = 1; i < prices.Length; i++) {
+            int prevNotHold = notHold;
+            notHold = Math.Max(notHold, hold + prices[i]);
+            hold = Math.Max(hold, prevNotHold - prices[i]);
+        }
+
+        return notHold;
+    }
+
+    public static int MaxProfitDP(int[] prices)
+    {
+        if (prices.Length == 0) return 0;
+
+        int n = prices.Length;
+        int[,] dp = new int[n, 2]; // Memoize: store all computations in array
+
+        // dp[i, 0] = max profit at day i when NOT holding
+        // dp[i, 1] = max profit at day i when HOLDING
+
+
+        dp[0, 0] = 0;             // Not holding on day 0: no stock, no profit
+        dp[0, 1] = -prices[0];    // Holding on day 0: bought the stock, profit is negative cost
+
+        // greedy approach
+        for (int i = 1; i < n; i++)
+        {
+            // Not holding on day i:
+            // Either we did nothing (stayed not holding), or we sold today (was holding yesterday)
+            dp[i, 0] = Math.Max(dp[i - 1, 0], dp[i - 1, 1] + prices[i]);
+
+            // Holding on day i:
+            // Either we did nothing (kept holding), or we bought today (was not holding yesterday)
+            dp[i, 1] = Math.Max(dp[i - 1, 1], dp[i - 1, 0] - prices[i]);
+        }
+
+        return dp[n - 1, 0]; // Final profit must be when not holding stock
+    }
+
+
+    // Linear Time
+    public static int MaxProfit(int[] prices) {
+        int maxProfit = 0;
+        for (int i = 1; i < prices.Length; i++) {
+            if (prices[i] > prices[i - 1]) {
+                maxProfit += prices[i] - prices[i - 1];
+            }
+        }
+        return maxProfit;
+    }
+
+
+
+    // Brute Force recursion
+    public static int MaxProfitMedium(int[] prices) {
+        return BuySell(prices, 0);
+    }
+
+    private static int BuySell(int[] prices, int start) {
+        if (start >= prices.Length)
+            return 0;
+
+        int maxProfit = 0;
+        for (int buy = start; buy < prices.Length - 1; buy++) {
+            for (int sell = buy + 1; sell < prices.Length; sell++) {
+                if (prices[sell] > prices[buy]) {
+                    int currentProfit = prices[sell] - prices[buy];
+                    // After selling, you can start buying again from sell + 1
+                    int remainingProfit = BuySell(prices, sell + 1);
+                    maxProfit = Math.Max(maxProfit, currentProfit + remainingProfit);
+                }
+            }
+        }
+
+        return maxProfit;
+    }
+
+
+
+
   // don't have to iterate over every combination
   // because you are guaranteed to capture 
   // the most profit even if a lower min price
