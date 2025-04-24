@@ -4,6 +4,26 @@ public static class LeetChallenges
 {
 
 
+    public static bool CanJump(int[] nums) {
+
+    // (*) [* x]   [*]
+    // [2, 3, 1, 1, 4, 2] - true
+    int biggest = 0;
+        
+        for (int i = 0; i < nums.Length; i++) {
+
+            // If I ever iterate beyond my max range
+            // then the jump to the end is impossible return false
+            if (i > biggest){
+                return false;
+            }
+
+            biggest = Math.Max(biggest, i + nums[i]);
+        }
+        return true;
+    }
+
+
     public static int MaxProfitSpaceOptimized(int[] prices) {
         if (prices.Length == 0) return 0;
 
