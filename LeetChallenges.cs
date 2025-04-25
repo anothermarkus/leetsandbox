@@ -4,6 +4,29 @@ public static class LeetChallenges
 {
 
 
+    public static int JumpII(int[] nums) {
+        int jumps = 0;
+        int currentEnd = 0;
+        int farthest = 0;
+
+        for (int i = 0; i < nums.Length - 1; i++) {
+            farthest = Math.Max(farthest, i + nums[i]);
+
+            // Even though you are not actually 
+            // jumping from this point, "farthest"
+            // will be tracking how long you can go
+            // you already passed your jump point
+            // and just collecting your longest distance 
+            // as you go. 
+            if (i == currentEnd) {
+                jumps++;
+                currentEnd = farthest;
+            }
+        }
+
+        return jumps;
+    }
+
     public static bool CanJump(int[] nums) {
 
     // (*) [* x]   [*]
