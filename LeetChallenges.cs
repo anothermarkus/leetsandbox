@@ -4,6 +4,39 @@ public static class LeetChallenges
 {
 
 
+    // First we order the values of f from the largest to the lowest value. 
+    // Then, we look for the last position in which f 
+    // is greater than or equal to the position (we call h this position)
+    // Sorting kills the time complexity
+    // However! you can use storage to gain O(n) time at the cost of O(n) size
+    public static int HIndex(int[] citations) {
+        
+        // [3,0,6,1,5]
+        int n = citations.Length;
+
+        if (n == 0) return 0;
+
+        Array.Sort(citations);
+        Array.Reverse(citations);
+
+        //  sort and check from the end
+        // [6,5,3,1,0] - f's
+        //  1 2 3 4 5  - position
+
+        // [3,1,1]
+        //  1 2 3
+    
+        int i = citations.Length-1;
+        while (i >= 0 ){
+          if( citations[i] >= (i+1) ){
+           return i+1;    
+          }
+          i--;
+       }
+       return 0;                 
+    }
+
+
     public static int JumpII(int[] nums) {
         int jumps = 0;
         int currentEnd = 0;
