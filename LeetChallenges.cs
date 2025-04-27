@@ -1,7 +1,69 @@
 
+public class RandomizedSet
+{
+
+    Dictionary<int, int> dictionary;
+    List<int> list;
+    Random random;
+
+    public RandomizedSet()
+    {
+        dictionary = new Dictionary<int, int>();
+        list = new List<int>();
+        random = new Random();
+    }
+
+    public bool Insert(int val)
+    {
+
+        if (dictionary.ContainsKey(val))
+        {
+            return false;
+        }
+
+        list.Add(val);
+        dictionary.Add(val, list.Count - 1);
+        return true;
+    }
+
+
+    public bool Remove(int val)
+    {
+        if (!dictionary.ContainsKey(val))
+        {
+            return false;
+        }
+
+        var index = dictionary[val];
+        var endValue = list[list.Count - 1];
+
+        list[index] = endValue; //swap it out
+
+        dictionary[endValue] = index;
+
+        // remove the value in dictionary
+        dictionary.Remove(val);
+
+        // remove the value in the list
+        list.RemoveAt(list.Count - 1);
+
+        return true;
+    }
+
+    public int GetRandom()
+    {
+        int randomVal = random.Next(0, list.Count);
+        return list[randomVal];
+    }
+}
+
+
 
 public static class LeetChallenges
 {
+
+
+
 
 
     // First we order the values of f from the largest to the lowest value. 
@@ -9,8 +71,9 @@ public static class LeetChallenges
     // is greater than or equal to the position (we call h this position)
     // Sorting kills the time complexity
     // However! you can use storage to gain O(n) time at the cost of O(n) size
-    public static int HIndex(int[] citations) {
-        
+    public static int HIndex(int[] citations)
+    {
+
         // [3,0,6,1,5]
         int n = citations.Length;
 
@@ -25,24 +88,28 @@ public static class LeetChallenges
 
         // [3,1,1]
         //  1 2 3
-    
-        int i = citations.Length-1;
-        while (i >= 0 ){
-          if( citations[i] >= (i+1) ){
-           return i+1;    
-          }
-          i--;
-       }
-       return 0;                 
+
+        int i = citations.Length - 1;
+        while (i >= 0)
+        {
+            if (citations[i] >= (i + 1))
+            {
+                return i + 1;
+            }
+            i--;
+        }
+        return 0;
     }
 
 
-    public static int JumpII(int[] nums) {
+    public static int JumpII(int[] nums)
+    {
         int jumps = 0;
         int currentEnd = 0;
         int farthest = 0;
 
-        for (int i = 0; i < nums.Length - 1; i++) {
+        for (int i = 0; i < nums.Length - 1; i++)
+        {
             farthest = Math.Max(farthest, i + nums[i]);
 
             // Even though you are not actually 
@@ -51,7 +118,8 @@ public static class LeetChallenges
             // you already passed your jump point
             // and just collecting your longest distance 
             // as you go. 
-            if (i == currentEnd) {
+            if (i == currentEnd)
+            {
                 jumps++;
                 currentEnd = farthest;
             }
@@ -60,17 +128,20 @@ public static class LeetChallenges
         return jumps;
     }
 
-    public static bool CanJump(int[] nums) {
+    public static bool CanJump(int[] nums)
+    {
 
-    // (*) [* x]   [*]
-    // [2, 3, 1, 1, 4, 2] - true
-    int biggest = 0;
-        
-        for (int i = 0; i < nums.Length; i++) {
+        // (*) [* x]   [*]
+        // [2, 3, 1, 1, 4, 2] - true
+        int biggest = 0;
+
+        for (int i = 0; i < nums.Length; i++)
+        {
 
             // If I ever iterate beyond my max range
             // then the jump to the end is impossible return false
-            if (i > biggest){
+            if (i > biggest)
+            {
                 return false;
             }
 
@@ -80,13 +151,15 @@ public static class LeetChallenges
     }
 
 
-    public static int MaxProfitSpaceOptimized(int[] prices) {
+    public static int MaxProfitSpaceOptimized(int[] prices)
+    {
         if (prices.Length == 0) return 0;
 
         int hold = -prices[0];
         int notHold = 0;
 
-        for (int i = 1; i < prices.Length; i++) {
+        for (int i = 1; i < prices.Length; i++)
+        {
             int prevNotHold = notHold;
             notHold = Math.Max(notHold, hold + prices[i]);
             hold = Math.Max(hold, prevNotHold - prices[i]);
@@ -126,10 +199,13 @@ public static class LeetChallenges
 
 
     // Linear Time
-    public static int MaxProfit(int[] prices) {
+    public static int MaxProfit(int[] prices)
+    {
         int maxProfit = 0;
-        for (int i = 1; i < prices.Length; i++) {
-            if (prices[i] > prices[i - 1]) {
+        for (int i = 1; i < prices.Length; i++)
+        {
+            if (prices[i] > prices[i - 1])
+            {
                 maxProfit += prices[i] - prices[i - 1];
             }
         }
@@ -139,18 +215,23 @@ public static class LeetChallenges
 
 
     // Brute Force recursion
-    public static int MaxProfitMedium(int[] prices) {
+    public static int MaxProfitMedium(int[] prices)
+    {
         return BuySell(prices, 0);
     }
 
-    private static int BuySell(int[] prices, int start) {
+    private static int BuySell(int[] prices, int start)
+    {
         if (start >= prices.Length)
             return 0;
 
         int maxProfit = 0;
-        for (int buy = start; buy < prices.Length - 1; buy++) {
-            for (int sell = buy + 1; sell < prices.Length; sell++) {
-                if (prices[sell] > prices[buy]) {
+        for (int buy = start; buy < prices.Length - 1; buy++)
+        {
+            for (int sell = buy + 1; sell < prices.Length; sell++)
+            {
+                if (prices[sell] > prices[buy])
+                {
                     int currentProfit = prices[sell] - prices[buy];
                     // After selling, you can start buying again from sell + 1
                     int remainingProfit = BuySell(prices, sell + 1);
@@ -165,20 +246,26 @@ public static class LeetChallenges
 
 
 
-  // don't have to iterate over every combination
-  // because you are guaranteed to capture 
-  // the most profit even if a lower min price
-  // comes up later
-  public static int MaxProfit2(int[] prices) {
+    // don't have to iterate over every combination
+    // because you are guaranteed to capture 
+    // the most profit even if a lower min price
+    // comes up later
+    public static int MaxProfit2(int[] prices)
+    {
         int minPrice = int.MaxValue;
         int maxProfit = 0;
 
-        foreach (int price in prices) {
-            if (price < minPrice) {
+        foreach (int price in prices)
+        {
+            if (price < minPrice)
+            {
                 minPrice = price;
-            } else {
+            }
+            else
+            {
                 int profit = price - minPrice;
-                if (profit > maxProfit) {
+                if (profit > maxProfit)
+                {
                     maxProfit = profit;
                 }
             }
@@ -188,21 +275,25 @@ public static class LeetChallenges
     }
 
 
-    public static int MaxProfit(int[] prices) {
+    public static int MaxProfit(int[] prices)
+    {
 
         int profit = 0;
 
-        for (int i=0; i< prices.Length; i++){
-            for (int j=i+1; j < prices.Length; j++){
+        for (int i = 0; i < prices.Length; i++)
+        {
+            for (int j = i + 1; j < prices.Length; j++)
+            {
                 // is this more profitable?
-                if (prices[j] - prices[i] > profit){
-                    profit = prices[j] - prices[i]; 
+                if (prices[j] - prices[i] > profit)
+                {
+                    profit = prices[j] - prices[i];
                 }
             }
         }
 
         return profit;
-        
+
     }
 
 
