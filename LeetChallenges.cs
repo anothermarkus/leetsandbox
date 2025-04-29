@@ -2,6 +2,57 @@
 public class RandomizedSet
 {
 
+      public static int[] ProductExceptSelf(int[] nums) {
+        int[] output = new int[nums.Length];
+
+        //  [1,2,3,4]
+        // Prefix - Basic Product Array - Multiply over each value over to the next one
+        // Suffix - Product Array each element at index i contains the product of all elements to the right of i
+        
+        //left[i] = product of nums[0..i-1]
+        //right[i] = product of nums[i+1..n-1]
+
+        // [1,2,3,4] -> [1,  1,  2, 6]     // Prefix product (L)
+        // [1,2,3,4] -> [24, 12, 4, 1]     // Suffix product (R)                                        
+        // [24,12,8,6]                     // Result array
+
+        // [1,2,3,4] x [1,2,3,4] 
+        //      <-L           R   // nums[3]
+        //    <-L           R->   // nums[2]
+        //   <-L           R->    // nums[1]
+        //  L           R->       // nums[0]
+     
+        int[] left  = new int[nums.Length];
+        int[] right  = new int[nums.Length];
+
+        left[0] = 1;
+        right[nums.Length-1] = 1;
+
+        for (int i = 1; i < nums.Length; i++) {
+           //typically
+           //nums[i] = nums[i] * nums[i - 1];
+            left[i] = left[i - 1] * nums[i - 1];
+        }
+
+        for(int i=nums.Length-2;i>=0;i--)
+        {
+            right[i]=right[i+1]*nums[i+1];
+            // typically an adjustment after to include 
+            // a for-loop that includes i
+            // right[i] *= right[i];
+        }
+
+
+        for(int i=0;i<nums.Length;i++)
+        {
+            output[i]=left[i]*right[i];
+        }
+
+
+        return output;
+    }
+
+
     Dictionary<int, int> dictionary;
     List<int> list;
     Random random;
