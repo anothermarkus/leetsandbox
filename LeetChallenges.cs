@@ -2,6 +2,96 @@
 public class RandomizedSet
 {
 
+
+
+    public static int Candy(int[] ratings) {
+        int n = ratings.Length;
+        int[] candies = new int[n];
+
+        // Start with 1 candy for everyone
+        for (int i = 0; i < n; i++) {
+            candies[i] = 1;
+        }
+
+        // Go left to right upping the candies
+        for (int i = 1; i < n; i++) {
+            if (ratings[i] > ratings[i - 1]) {
+                candies[i] = candies[i - 1] + 1;
+            }
+        }
+
+        // go right to left
+        for (int i = n - 2; i >= 0; i--) {
+            if (ratings[i] > ratings[i + 1]) {
+                // You may get a lower rating if you naively do candies[i + 1] + 1, so take the max
+                candies[i] = Math.Max(candies[i], candies[i + 1] + 1);
+            }
+        }
+        return candies.Sum();
+    }
+
+
+
+   // Greedy Approach, keep a tally of the distance we can go
+   // If there is guaranteed to be a solution
+   // we can discard the index we've chosen and move onto the next one
+    public static int CanCompleteCircuit(int[] gas, int[] cost) {
+        int start = 0;
+        int tank = 0;
+        int total = 0;
+
+        for (int i = 0; i < gas.Length; i++) {
+            total += gas[i] - cost[i];
+        }
+
+        if (total < 0) {
+            return -1;
+        }
+
+        
+        for (int i = 0; i < gas.Length; i++) {
+            tank += gas[i] - cost[i];
+            
+            // This "sub path" fails since we run out
+            // If this sub path fails, anything within this subpath will fail as well
+            //
+            // If you try to start anywhere between start + 1 and i, you’ll have 
+            // less gas accumulated than you had starting from start, so you’ll run out of gas even sooner.
+            //
+            // The only way you can make it beyond "i" is to have more gas along the way, which
+            // you did not get anyway otherwise you would have made it.
+            if (tank < 0) {
+                start = i + 1;
+                tank = 0; 
+            }
+        }
+
+        return start;
+    }
+
+
+    // It's the same solution as a linear path 
+    // with the exception of the last node isn't counted as a cost
+    //
+    // public int CanReachEnd(int[] gas, int[] cost) {
+    //     int start = 0;
+    //     int tank = 0;
+
+    //     for (int i = 0; i < gas.Length; i++) {
+    //         tank += gas[i] - cost[i];
+
+    //         if (tank < 0) {
+    //             // You can't reach i from the current start,
+    //             // so skip everything up to i and start fresh from i + 1
+    //             start = i + 1;
+    //             tank = 0;
+    //         }
+    //     }
+
+    //     // If start is within bounds, return it
+    //     return start < gas.Length ? start : -1;
+    // }
+
       public static int[] ProductExceptSelf(int[] nums) {
         int[] output = new int[nums.Length];
 
