@@ -3,6 +3,110 @@ public class RandomizedSet
 {
 
 
+     public static int TrapOnO1(int[] height) {
+
+        // 4th approach
+        //
+        // O(n) time and O(1) space
+        // You always move from the side with the smaller wall
+        // That side is the bottleneck, and the other side is at least as tall
+
+        // A left pointer and a right pointer moving toward each other
+        // leftMax: the tallest bar you've seen from the left side
+        // rightMax: the tallest bar you've seen from the right side
+        int left = 0, right = height.Length - 1;
+        int leftMax = 0, rightMax = 0;
+        int waterSum = 0;
+
+        while (left < right) {
+            leftMax = Math.Max(leftMax, height[left]);
+            rightMax = Math.Max(rightMax, height[right]);
+
+            if (leftMax < rightMax) {
+                waterSum += leftMax - height[left];
+                left++;
+            } else {
+                waterSum += rightMax - height[right];
+                right--;
+            }
+        }
+
+        return waterSum;
+     }
+
+    public static int TrapOnOn(int[] height) {
+        
+        // water[i] = min(maxLeft, maxRight) - height[i]
+
+        // 3rd approach is O(n) time and O(n) space complexity
+        // calculate the max height of the current cell going left
+        // and current cell going right
+        int[] maxToLeft = new int[height.Length];
+        int[] maxToRight = new int[height.Length];
+
+        maxToLeft[0] = height[0];
+        for (int i = 1; i < height.Length; i++) {
+            maxToLeft[i] = Math.Max(maxToLeft[i - 1], height[i]);
+        }
+
+        maxToRight[height.Length - 1] = height[height.Length - 1];
+        for (int i = height.Length - 2; i >= 0; i--) {
+            maxToRight[i] = Math.Max(maxToRight[i + 1], height[i]);
+        }
+
+        int waterSum = 0;
+        // sum up the water level
+        for (int i = 0; i < height.Length; i++) {
+            waterSum +=  Math.Min(maxToLeft[i], maxToRight[i]) - height[i];
+        }
+
+
+        return waterSum;
+
+    }
+
+    public static int TrapOnnO1(int[] height) {
+
+        // 2nd Approach is O(n^2) time complexity
+        // For each i, mark the "start" of a wall
+        // then calculate each "level" which is the max value of the array
+        // then count the amount of water inbetween the bounds 
+        int trappedWater = 0;
+        int maxValue = 0; // TODO: doesn't matter not efficient anyway
+
+        for (int level = 1; level <= maxValue; level++) {
+            bool started = false;
+            int tempWater = 0;
+            for (int j = 0; j < height.Length; j++) {
+                if (height[j] >= level) {
+                    if (started) {
+                        trappedWater += tempWater;
+                    } else {
+                        started = true;
+                    }
+                    tempWater = 0;
+                } else if (started) {
+                    tempWater++;
+                }
+            }
+        }
+
+        return trappedWater;
+
+    }
+
+    //                            (2,11)
+    //        [0,0,0,0,0,0,0,3,0,0,0,0]
+    //        [0,0,0,2,0,0,0,3,2,0,2,0]
+    //        [0,1,0,2,1,0,1,3,2,1,2,1]
+    //       0,0
+    //
+    //      First idea is to build a 2d array and fill up the array as per example and count between walls
+    //      row by row
+    //      O(n^2) space and O(n^2) time .. not optimal at all!
+    //      public static int TrapOnnOnn(int[] height) { ... }
+
+
 
     public static int Candy(int[] ratings) {
         int n = ratings.Length;
