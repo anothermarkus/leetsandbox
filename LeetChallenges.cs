@@ -2,6 +2,76 @@
 public class RandomizedSet
 {
 
+    public static int RomanToIntOptimized(string s) {
+        Dictionary<char, int> dict = new Dictionary<char, int> {
+            {'I', 1},
+            {'V', 5},
+            {'X', 10},
+            {'L', 50},
+            {'C', 100},
+            {'D', 500},
+            {'M', 1000}
+        };
+
+        int total = 0;
+        int prevValue = 0;
+
+        for (int i = s.Length - 1; i >= 0; i--) {
+            int currentValue = dict[s[i]];
+
+            if (currentValue < prevValue) {
+                total -= currentValue;
+            } else {
+                total += currentValue;
+            }
+
+            prevValue = currentValue;
+        }
+
+        return total;
+    }
+
+
+     public static int RomanToInt(string s) {
+        
+        Dictionary<string,int> dict = new Dictionary<string,int>();
+
+        dict.Add("I",1);
+        dict.Add("V",5);
+        dict.Add("X",10);
+        dict.Add("L",50);
+        dict.Add("C",100);
+        dict.Add("D",500);
+        dict.Add("M",1000);
+
+        dict.Add("IV",4);
+        dict.Add("IX",9);
+        dict.Add("XL",40);
+        dict.Add("XC",90);
+        dict.Add("CD",400);
+        dict.Add("CM",900);
+
+        int i = 0;
+        int runningSum = 0;
+
+
+        while (i < s.Length){
+            
+            // first check next pointer if it's a special case
+            if (i + 1 < s.Length && dict.ContainsKey(s.Substring(i, 2))) {
+                 runningSum += dict[s.Substring(i, 2)];
+                i += 2;
+            }else{
+                runningSum += dict[s[i].ToString()];
+                i++;
+            }
+
+        }
+
+        return runningSum;
+        
+    }
+
 
      public static int TrapOnO1(int[] height) {
 
