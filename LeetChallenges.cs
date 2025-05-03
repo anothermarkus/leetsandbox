@@ -2,6 +2,172 @@
 public class RandomizedSet
 {
 
+
+
+    public static string IntToRomanClean(int num) {
+
+        string[] thousandsLookup = new string[]{"","M","MM","MMM"};
+        string[] hundredsLookup = new string[]{"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"};
+        string[] tensLookup = new string[]{"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
+        string[] onesLookup = new string[]{"","I","II","III","IV","V","VI","VII","VIII","IX"};
+
+        int thousands = num / 1000;
+        int hundreds = num % 1000 / 100;
+        int tens = num % 100 / 10;
+        int ones = num % 10;
+        
+        return thousandsLookup[thousands] + hundredsLookup[hundreds] + tensLookup[tens] + onesLookup[ones];        
+
+    }
+
+
+    public static string IntToRoman(int num) {
+
+        string romanValue = "";
+       
+        // M  1000's
+        if (num >= 1000){
+
+            // input is less than 4000 
+            int firstDigit =  num / 1000;
+
+
+            while (firstDigit > 0 ){
+                romanValue += "M";
+                firstDigit--;
+            }
+
+            num = num % 1000;
+        }
+
+        // D or C  100's
+        // 900  CM  (Sub)
+        // 800  DCCC
+        // 700  DCC
+        // 600  DC
+        // 500  D
+        // 400  CD   (Sub)
+        // 300  CCC
+        // 200  CC
+        // 100  C
+         if (num >= 100){
+
+            int firstDigit = num / 100;
+
+            // CD CM
+            if (firstDigit == 4){
+                 romanValue += "CD";
+                firstDigit -=4;
+
+
+            } else if (firstDigit == 9){
+                   romanValue += "CM";
+                   firstDigit -=9;
+
+
+            } else {
+            
+                if  (firstDigit >= 5){
+                    // append C's to D
+                    romanValue += "D";
+
+                    firstDigit -= 5;
+                }
+
+                while (firstDigit > 0 ){
+                    romanValue += "C";
+                    firstDigit --;
+                }
+
+                
+            }
+
+             num = num % 100;
+        }
+
+         // X or L  100's
+        // 90  XC  (Sub)
+        // 80  LXXX
+        // 70  LXX
+        // 60  LX
+        // 50  L
+        // 40  XL   (Sub)
+        // 30  XXX
+        // 20  XX
+        // 10  X
+        if (num >= 10 ){
+
+            int firstDigit = num / 10;
+
+            if (firstDigit == 4){
+                romanValue +="XL";
+                firstDigit -=4;
+
+            } else if (firstDigit == 9){
+                romanValue +="XC";
+                firstDigit -=9;
+
+            } else {
+            
+                if  (firstDigit >= 5){
+                    // append X's to L
+                    romanValue += "L";
+
+                    firstDigit -= 5;
+                }
+
+                while (firstDigit > 0 ){
+                    romanValue += "X";
+                    firstDigit --;
+                }
+
+                
+            }
+
+             num = num % 10;
+
+        }
+
+        // i or V
+        // IX - Subtractive
+        // VIII
+        // VII
+        // VI
+        // V
+        // IV  - Subtractive
+        // III
+        // II
+        // I
+        if (num >= 1){
+
+            int firstDigit = num % 10;
+
+            if (firstDigit == 4){
+                 romanValue += "IV";
+                 firstDigit -=4;
+            } else if (firstDigit == 9){
+                romanValue += "IX";
+                firstDigit -=9;
+            } else{ 
+
+                if  (firstDigit >= 5){
+                    // append I's to V
+                    romanValue += "V";
+                    firstDigit -= 5;
+                }
+
+                while (firstDigit > 0 ){
+                    romanValue += "I";
+                    firstDigit --;
+                }
+            
+            }         
+        }
+         return romanValue;
+    }    
+    
+
+
     public static int RomanToIntOptimized(string s) {
         Dictionary<char, int> dict = new Dictionary<char, int> {
             {'I', 1},
