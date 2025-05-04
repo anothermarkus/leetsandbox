@@ -3,6 +3,41 @@ public class RandomizedSet
 {
 
 
+    public int LengthOfLastWordNoStringOperation(string s) {       
+       
+       int sum = 0;
+       int i = s.Length - 1;
+
+        // skip whitespace
+        while (i >= 0 && s[i] == ' ') i--; 
+
+        while (i >= 0 && s[i] != ' '){
+            sum+= 1;
+            i--;
+        }
+
+        return sum;
+
+    }
+
+
+    public static int LengthOfLastWord(string s) {       
+        int sum = 0;
+
+        s = s.TrimEnd();
+
+        for (int i=0; i< s.Length; i++){
+            if (s[i] == ' '){
+                sum = 0;
+            }else{
+                sum++;
+            }
+        }
+        return sum;
+
+    }
+
+
 
     public static string IntToRomanClean(int num) {
 
