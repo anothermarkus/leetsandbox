@@ -2,6 +2,31 @@
 public class RandomizedSet
 {
 
+public class Solution {
+    public static string LongestCommonPrefix(string[] strs) {
+
+        string candidate = strs[0];
+        string maxPrefix = "";
+        
+        int i = 1;
+        while (i < strs.Length){
+
+            int maxMatch = 0;
+            for (int j = 0; j < strs[i].Length; j++){
+                
+                if (j < candidate.Length && strs[i][j] == candidate[j]){
+                    maxMatch++;
+                }else{                 
+                    break;
+                }
+            }
+            candidate = candidate.Substring(0,maxMatch);
+            i++;
+        }
+        return candidate;
+    }
+
+
 
     public int LengthOfLastWordNoStringOperation(string s) {       
        
