@@ -2,7 +2,135 @@
 public class RandomizedSet
 {
 
-public class Solution {
+
+  public static string ReverseWordsOptimized(string s) {
+        // Convert string to char array for in-place modifications
+        char[] charArray = s.ToCharArray();
+        
+        int start = 0;
+        int end = charArray.Length - 1;
+
+        while (start <= end && charArray[start] == ' ') start++; // Trim leading spaces
+        while (end >= start && charArray[end] == ' ') end--;   // Trim trailing spaces
+
+        // Step 1: Reverse the entire string
+        Reverse(charArray, start, end);
+
+        // Step 2: Reverse each word in-place
+        int wordStart = start;
+        for (int i = start; i <= end; i++) {
+            if (charArray[i] == ' ' || i == end) {
+                int wordEnd = (i == end) ? i : i - 1;
+                Reverse(charArray, wordStart, wordEnd);
+                wordStart = i + 1;
+            }
+        }
+
+        // Step 3: Clean up extra spaces between words (by compacting in-place)
+        int writeIndex = start;
+        for (int readIndex = start; readIndex <= end; readIndex++) {
+            // Skip extra spaces
+            if (readIndex == start && charArray[readIndex] == ' ') continue;
+            if (readIndex > start && charArray[readIndex] == ' ' && charArray[readIndex - 1] == ' ') continue;
+
+            // Write valid characters to the result array
+            charArray[writeIndex++] = charArray[readIndex];
+        }
+
+        // Final conversion of charArray back to string
+        return new string(charArray, start, writeIndex - start);
+    }
+
+    private static void Reverse(char[] charArray, int start, int end) {
+        while (start < end) {
+            char temp = charArray[start];
+            charArray[start] = charArray[end];
+            charArray[end] = temp;
+            start++;
+            end--;
+        }
+    }
+
+
+    public static string ReverseWords(string s) {
+
+        int i =0;
+        int j=0;
+
+        // trim leading whitespaces
+        while (i < s.Length){
+
+            if (s[0] == ' '){
+                s = s.Substring(1);
+            }else{
+                break;
+            }
+        i++;
+        }
+
+        i = s.Length -1;
+          // trim leading whitespaces
+        while (i > 0){
+
+            if (s[s.Length-1] == ' '){
+                s = s.Substring(0,s.Length-1);
+            }else{
+                break;
+            }
+            i--;
+        }
+        
+        // trim multiple whitespaces
+        i=0;
+        while (i < s.Length){
+
+            if (i+1 < s.Length && s[i] == ' ' && s[i+1] == ' '){
+                s = s.Substring(0,i) + s.Substring(i+1);
+                i--; // adjust not to overshoot
+            }
+            i++;
+        }
+
+ 
+        s = reverse(s,0,s.Length);        
+        
+        i=0;
+
+        while (i< s.Length){
+
+            if (s[i] == ' '){
+                // found word boundary
+                s = reverse(s,j,i);
+                j = i+1;
+                i = j;
+            }else{
+                i++;
+            }
+        }
+
+        s = reverse(s, j, s.Length); // cannot omit the last word
+
+        return s;
+    }
+
+    private static string reverse(string input, int start, int end){
+        int left = start;
+        int right = end -1;
+
+        char[] charArray = input.ToCharArray();
+
+        while (left < right){
+            char placeholder = charArray[left];
+            charArray[left] = charArray[right];
+            charArray[right] = placeholder;
+            left++;
+            right--;
+            
+        }
+        return new string(charArray);
+    }
+
+
     public static string LongestCommonPrefix(string[] strs) {
 
         string candidate = strs[0];
