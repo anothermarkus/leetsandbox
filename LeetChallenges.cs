@@ -1,7 +1,54 @@
 
-public class RandomizedSet
-{
 
+using System.Text;
+
+public class Solution {
+    public static string ConvertPayPalIsHiringZigZag(string s, int numRows) {
+        
+        if (numRows == 1){
+            return s;
+        }
+
+        // PAYPALISHIRING , 3
+        StringBuilder[] listOfStrings = new StringBuilder[numRows];
+          for (int j = 0; j < numRows; j++) {
+            listOfStrings[j] = new StringBuilder();
+        }
+
+        bool flipDirection = true;
+        int zigZagIndex=0;
+      
+        // Build Up
+        //[PAHN]
+        //[APLSIIG]
+        //[YIR]
+        for (int i = 0; i < s.Length; i++) {
+            listOfStrings[zigZagIndex].Append(s[i]);
+
+            // 0,1,2,1,0
+            if (zigZagIndex == numRows-1 || zigZagIndex == 0 ){
+                flipDirection = !flipDirection;
+            }
+
+            if (flipDirection){
+                zigZagIndex = zigZagIndex-1;
+            }else{
+                zigZagIndex = zigZagIndex+1;
+            }
+
+        }
+
+
+        StringBuilder result = new StringBuilder();
+        foreach (var sb in listOfStrings) {
+            result.Append(sb);
+        }
+
+        return result.ToString();
+    }
+
+ 
+}
 
   public static string ReverseWordsOptimized(string s) {
         // Convert string to char array for in-place modifications
