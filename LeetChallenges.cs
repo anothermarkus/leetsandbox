@@ -1,9 +1,31 @@
-
-
 using System.Text;
+    
+    static class LeetChallenges
+{
 
-public class Solution {
-    public static string ConvertPayPalIsHiringZigZag(string s, int numRows) {
+    public static int StrStr(string haystack, string needle) {
+        
+        if (needle.Length == 0) return 0;
+
+          for (int i = 0; i <= haystack.Length - needle.Length; i++) {
+            if (haystack[i] == needle[0]) {
+                bool isMatch = true;
+                for (int j = 1; j < needle.Length; j++) {
+                    if (haystack[i + j] != needle[j]) {
+                        isMatch = false;
+                        break;
+                    }
+                }
+                if (isMatch) return i;
+            }
+        }
+
+        return -1;
+
+
+    }
+
+    static string ConvertPayPalIsHiringZigZag(string s, int numRows) {
         
         if (numRows == 1){
             return s;
@@ -48,9 +70,7 @@ public class Solution {
     }
 
  
-}
-
-  public static string ReverseWordsOptimized(string s) {
+   static string ReverseWordsOptimized(string s) {
         // Convert string to char array for in-place modifications
         char[] charArray = s.ToCharArray();
         
@@ -99,7 +119,7 @@ public class Solution {
     }
 
 
-    public static string ReverseWords(string s) {
+     static string ReverseWords(string s) {
 
         int i =0;
         int j=0;
@@ -160,7 +180,7 @@ public class Solution {
         return s;
     }
 
-    private static string reverse(string input, int start, int end){
+    static string reverse(string input, int start, int end){
         int left = start;
         int right = end -1;
 
@@ -178,7 +198,7 @@ public class Solution {
     }
 
 
-    public static string LongestCommonPrefix(string[] strs) {
+     static string LongestCommonPrefix(string[] strs) {
 
         string candidate = strs[0];
         string maxPrefix = "";
@@ -203,7 +223,7 @@ public class Solution {
 
 
 
-    public int LengthOfLastWordNoStringOperation(string s) {       
+     static int LengthOfLastWordNoStringOperation(string s) {       
        
        int sum = 0;
        int i = s.Length - 1;
@@ -221,7 +241,7 @@ public class Solution {
     }
 
 
-    public static int LengthOfLastWord(string s) {       
+     static int LengthOfLastWord(string s) {       
         int sum = 0;
 
         s = s.TrimEnd();
@@ -239,7 +259,7 @@ public class Solution {
 
 
 
-    public static string IntToRomanClean(int num) {
+     static string IntToRomanClean(int num) {
 
         string[] thousandsLookup = new string[]{"","M","MM","MMM"};
         string[] hundredsLookup = new string[]{"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"};
@@ -256,7 +276,7 @@ public class Solution {
     }
 
 
-    public static string IntToRoman(int num) {
+     static string IntToRoman(int num) {
 
         string romanValue = "";
        
@@ -403,7 +423,7 @@ public class Solution {
     
 
 
-    public static int RomanToIntOptimized(string s) {
+     static int RomanToIntOptimized(string s) {
         Dictionary<char, int> dict = new Dictionary<char, int> {
             {'I', 1},
             {'V', 5},
@@ -433,7 +453,7 @@ public class Solution {
     }
 
 
-     public static int RomanToInt(string s) {
+      static int RomanToInt(string s) {
         
         Dictionary<string,int> dict = new Dictionary<string,int>();
 
@@ -474,7 +494,7 @@ public class Solution {
     }
 
 
-     public static int TrapOnO1(int[] height) {
+      static int TrapOnO1(int[] height) {
 
         // 4th approach
         //
@@ -505,7 +525,7 @@ public class Solution {
         return waterSum;
      }
 
-    public static int TrapOnOn(int[] height) {
+     static int TrapOnOn(int[] height) {
         
         // water[i] = min(maxLeft, maxRight) - height[i]
 
@@ -536,7 +556,7 @@ public class Solution {
 
     }
 
-    public static int TrapOnnO1(int[] height) {
+     static int TrapOnnO1(int[] height) {
 
         // 2nd Approach is O(n^2) time complexity
         // For each i, mark the "start" of a wall
@@ -575,11 +595,11 @@ public class Solution {
     //      First idea is to build a 2d array and fill up the array as per example and count between walls
     //      row by row
     //      O(n^2) space and O(n^2) time .. not optimal at all!
-    //      public static int TrapOnnOnn(int[] height) { ... }
+    //       static int TrapOnnOnn(int[] height) { ... }
 
 
 
-    public static int Candy(int[] ratings) {
+     static int Candy(int[] ratings) {
         int n = ratings.Length;
         int[] candies = new int[n];
 
@@ -610,7 +630,7 @@ public class Solution {
    // Greedy Approach, keep a tally of the distance we can go
    // If there is guaranteed to be a solution
    // we can discard the index we've chosen and move onto the next one
-    public static int CanCompleteCircuit(int[] gas, int[] cost) {
+     static int CanCompleteCircuit(int[] gas, int[] cost) {
         int start = 0;
         int tank = 0;
         int total = 0;
@@ -648,7 +668,7 @@ public class Solution {
     // It's the same solution as a linear path 
     // with the exception of the last node isn't counted as a cost
     //
-    // public int CanReachEnd(int[] gas, int[] cost) {
+    //  int CanReachEnd(int[] gas, int[] cost) {
     //     int start = 0;
     //     int tank = 0;
 
@@ -667,7 +687,7 @@ public class Solution {
     //     return start < gas.Length ? start : -1;
     // }
 
-      public static int[] ProductExceptSelf(int[] nums) {
+       static int[] ProductExceptSelf(int[] nums) {
         int[] output = new int[nums.Length];
 
         //  [1,2,3,4]
@@ -718,65 +738,63 @@ public class Solution {
     }
 
 
-    Dictionary<int, int> dictionary;
-    List<int> list;
-    Random random;
+    // Dictionary<int, int> dictionary;
+    // List<int> list;
+    // Random random;
 
-    public RandomizedSet()
-    {
-        dictionary = new Dictionary<int, int>();
-        list = new List<int>();
-        random = new Random();
-    }
+    //  RandomizedSet()
+    // {
+    //     dictionary = new Dictionary<int, int>();
+    //     list = new List<int>();
+    //     random = new Random();
+    // }
 
-    public bool Insert(int val)
-    {
+    // static bool Insert(int val)
+    // {
 
-        if (dictionary.ContainsKey(val))
-        {
-            return false;
-        }
+    //     if (dictionary.ContainsKey(val))
+    //     {
+    //         return false;
+    //     }
 
-        list.Add(val);
-        dictionary.Add(val, list.Count - 1);
-        return true;
-    }
-
-
-    public bool Remove(int val)
-    {
-        if (!dictionary.ContainsKey(val))
-        {
-            return false;
-        }
-
-        var index = dictionary[val];
-        var endValue = list[list.Count - 1];
-
-        list[index] = endValue; //swap it out
-
-        dictionary[endValue] = index;
-
-        // remove the value in dictionary
-        dictionary.Remove(val);
-
-        // remove the value in the list
-        list.RemoveAt(list.Count - 1);
-
-        return true;
-    }
-
-    public int GetRandom()
-    {
-        int randomVal = random.Next(0, list.Count);
-        return list[randomVal];
-    }
-}
+    //     list.Add(val);
+    //     dictionary.Add(val, list.Count - 1);
+    //     return true;
+    // }
 
 
+    //  static bool Remove(int val)
+    // {
+    //     if (!dictionary.ContainsKey(val))
+    //     {
+    //         return false;
+    //     }
 
-public static class LeetChallenges
-{
+    //     var index = dictionary[val];
+    //     var endValue = list[list.Count - 1];
+
+    //     list[index] = endValue; //swap it out
+
+    //     dictionary[endValue] = index;
+
+    //     // remove the value in dictionary
+    //     dictionary.Remove(val);
+
+    //     // remove the value in the list
+    //     list.RemoveAt(list.Count - 1);
+
+    //     return true;
+    // }
+
+    //  static int GetRandom()
+    // {
+    //     int randomVal = random.Next(0, list.Count);
+    //     return list[randomVal];
+    // }
+
+
+
+ 
 
 
 
@@ -787,7 +805,7 @@ public static class LeetChallenges
     // is greater than or equal to the position (we call h this position)
     // Sorting kills the time complexity
     // However! you can use storage to gain O(n) time at the cost of O(n) size
-    public static int HIndex(int[] citations)
+     static int HIndex(int[] citations)
     {
 
         // [3,0,6,1,5]
@@ -818,7 +836,7 @@ public static class LeetChallenges
     }
 
 
-    public static int JumpII(int[] nums)
+     static int JumpII(int[] nums)
     {
         int jumps = 0;
         int currentEnd = 0;
@@ -844,7 +862,7 @@ public static class LeetChallenges
         return jumps;
     }
 
-    public static bool CanJump(int[] nums)
+     static bool CanJump(int[] nums)
     {
 
         // (*) [* x]   [*]
@@ -867,7 +885,7 @@ public static class LeetChallenges
     }
 
 
-    public static int MaxProfitSpaceOptimized(int[] prices)
+     static int MaxProfitSpaceOptimized(int[] prices)
     {
         if (prices.Length == 0) return 0;
 
@@ -884,7 +902,7 @@ public static class LeetChallenges
         return notHold;
     }
 
-    public static int MaxProfitDP(int[] prices)
+     static int MaxProfitDP(int[] prices)
     {
         if (prices.Length == 0) return 0;
 
@@ -915,7 +933,7 @@ public static class LeetChallenges
 
 
     // Linear Time
-    public static int MaxProfit(int[] prices)
+     static int MaxProfitLinear(int[] prices)
     {
         int maxProfit = 0;
         for (int i = 1; i < prices.Length; i++)
@@ -931,7 +949,7 @@ public static class LeetChallenges
 
 
     // Brute Force recursion
-    public static int MaxProfitMedium(int[] prices)
+     static int MaxProfitMedium(int[] prices)
     {
         return BuySell(prices, 0);
     }
@@ -966,7 +984,7 @@ public static class LeetChallenges
     // because you are guaranteed to capture 
     // the most profit even if a lower min price
     // comes up later
-    public static int MaxProfit2(int[] prices)
+     static int MaxProfit2(int[] prices)
     {
         int minPrice = int.MaxValue;
         int maxProfit = 0;
@@ -991,7 +1009,7 @@ public static class LeetChallenges
     }
 
 
-    public static int MaxProfit(int[] prices)
+     static int MaxProfit(int[] prices)
     {
 
         int profit = 0;
@@ -1018,7 +1036,7 @@ public static class LeetChallenges
     // [7, 6, 5, 4, 3, 2, 1] - Reverse All
     // [5, 6, 7, 4, 3, 2, 1] - Reverse first k
     // [5, 6, 7, 1, 2, 3, 4] - Reverse remaining
-    public static void Rotate2(int[] nums, int k)
+     static void Rotate2(int[] nums, int k)
     {
         int n = nums.Length;
         k %= n; // In case k is huge!
@@ -1045,7 +1063,7 @@ public static class LeetChallenges
     // Brute force
     // Tried to do something elegant with swapping values
     // but only worked when the array had an odd number of values
-    public static void Rotate(int[] nums, int k)
+     static void Rotate(int[] nums, int k)
     {
 
         for (int i = 0; i < k; i++)
@@ -1078,7 +1096,7 @@ public static class LeetChallenges
     // all we need to do is to use a strategy that 
     // cancels whatever is currently the majority if it doesn't match
     // whatever remainder will still find the majority
-    public static int BoyerMooreMajority(int[] nums)
+     static int BoyerMooreMajority(int[] nums)
     {
         int count = 0;
         int candidate = 0;
@@ -1096,7 +1114,7 @@ public static class LeetChallenges
     }
 
     // Works but inefficient
-    public static int MajorityElement(int[] nums)
+     static int MajorityElement(int[] nums)
     {
         for (int i = 0; i < nums.Length; i++)
         {
@@ -1126,7 +1144,7 @@ public static class LeetChallenges
     // if it's the same, it means we have more than one duplicate always moves forward
 
     // This method allows for at most one duplicate
-    public static int RemoveDuplicates2(int[] nums)
+     static int RemoveDuplicates2(int[] nums)
     {
 
         if (nums.Length <= 2) return nums.Length;
@@ -1145,7 +1163,7 @@ public static class LeetChallenges
     }
 
 
-    public static int RemoveDuplicates(int[] nums)
+     static int RemoveDuplicates(int[] nums)
     {
         if (nums.Length == 0) return 0;
 
@@ -1162,7 +1180,7 @@ public static class LeetChallenges
         return i + 1; // Number of unique elements
     }
 
-    public static int RemoveElement(int[] nums, int val)
+     static int RemoveElement(int[] nums, int val)
     {
         int i = 0;
         int n = nums.Length;
@@ -1186,7 +1204,7 @@ public static class LeetChallenges
 
 
 
-    public static void Merge(int[] nums1, int m, int[] nums2, int n)
+     static void Merge(int[] nums1, int m, int[] nums2, int n)
     {
         int writeIndex = m + n - 1;  // Last position in nums1
         int i = m - 1;  // Last initialized element in nums1
