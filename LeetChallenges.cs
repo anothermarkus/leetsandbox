@@ -1,7 +1,34 @@
 using System.Text;
     
     static class LeetChallenges
-{
+    {
+    public static IList<string> FizzBuzz(int n) {
+
+            List<string> fizzBuzz = new List<string>();
+
+            for (int i=1; i<n+1 ; i++){
+                if (i % 3 == 0 && i % 5 == 0 ){
+                    fizzBuzz.Add("FizzBuzz");
+                    continue;
+                }
+
+                if (i % 3 == 0){
+                    fizzBuzz.Add("Fizz");
+                    continue;
+                }
+
+                if (i % 5 == 0){
+                    fizzBuzz.Add("Buzz");
+                    continue;
+                }
+
+                fizzBuzz.Add(i.ToString());
+            }
+
+            return fizzBuzz;
+            
+        }
+    
 
     public static int StrStr(string haystack, string needle) {
         
