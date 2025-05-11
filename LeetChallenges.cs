@@ -1,44 +1,97 @@
 using System.Text;
-    
-    static class LeetChallenges
+
+static class LeetChallenges
+{
+
+
+    public static bool IsPalindrome(string s)
     {
-    public static IList<string> FizzBuzz(int n) {
 
-            List<string> fizzBuzz = new List<string>();
+        if (s == null) return false;
 
-            for (int i=1; i<n+1 ; i++){
-                if (i % 3 == 0 && i % 5 == 0 ){
-                    fizzBuzz.Add("FizzBuzz");
-                    continue;
-                }
 
-                if (i % 3 == 0){
-                    fizzBuzz.Add("Fizz");
-                    continue;
-                }
+        // sanitize input
 
-                if (i % 5 == 0){
-                    fizzBuzz.Add("Buzz");
-                    continue;
-                }
+        // This is probably better programming style
+        // for clarity but this is frowned upon in Leet as I understand
+        //
+        //string sanitized = s.ToUpper();
+        //Regex rgx = new Regex("[^a-zA-Z0-9]");
+        //sanitized = rgx.Replace(sanitized, "");
 
-                fizzBuzz.Add(i.ToString());
+        int left = 0;
+        int right = s.Length - 1;
+
+
+        while (left < right)
+        {
+
+            while (left < right && !char.IsLetterOrDigit(s[left])) left++;
+            while (left < right && !char.IsLetterOrDigit(s[right])) right--;
+
+            if (char.ToUpper(s[left]) != char.ToUpper(s[right]))
+            {
+                return false;
             }
 
-            return fizzBuzz;
-            
-        }
-    
+            right--;
+            left++;
 
-    public static int StrStr(string haystack, string needle) {
-        
+        }
+
+        return true;
+
+    }
+
+
+
+    public static IList<string> FizzBuzz(int n)
+    {
+
+        List<string> fizzBuzz = new List<string>();
+
+        for (int i = 1; i < n + 1; i++)
+        {
+            if (i % 3 == 0 && i % 5 == 0)
+            {
+                fizzBuzz.Add("FizzBuzz");
+                continue;
+            }
+
+            if (i % 3 == 0)
+            {
+                fizzBuzz.Add("Fizz");
+                continue;
+            }
+
+            if (i % 5 == 0)
+            {
+                fizzBuzz.Add("Buzz");
+                continue;
+            }
+
+            fizzBuzz.Add(i.ToString());
+        }
+
+        return fizzBuzz;
+
+    }
+
+
+    public static int StrStr(string haystack, string needle)
+    {
+
         if (needle.Length == 0) return 0;
 
-          for (int i = 0; i <= haystack.Length - needle.Length; i++) {
-            if (haystack[i] == needle[0]) {
+        for (int i = 0; i <= haystack.Length - needle.Length; i++)
+        {
+            if (haystack[i] == needle[0])
+            {
                 bool isMatch = true;
-                for (int j = 1; j < needle.Length; j++) {
-                    if (haystack[i + j] != needle[j]) {
+                for (int j = 1; j < needle.Length; j++)
+                {
+                    if (haystack[i + j] != needle[j])
+                    {
                         isMatch = false;
                         break;
                     }
@@ -52,55 +105,65 @@ using System.Text;
 
     }
 
-    static string ConvertPayPalIsHiringZigZag(string s, int numRows) {
-        
-        if (numRows == 1){
+    static string ConvertPayPalIsHiringZigZag(string s, int numRows)
+    {
+
+        if (numRows == 1)
+        {
             return s;
         }
 
         // PAYPALISHIRING , 3
         StringBuilder[] listOfStrings = new StringBuilder[numRows];
-          for (int j = 0; j < numRows; j++) {
+        for (int j = 0; j < numRows; j++)
+        {
             listOfStrings[j] = new StringBuilder();
         }
 
         bool flipDirection = true;
-        int zigZagIndex=0;
-      
+        int zigZagIndex = 0;
+
         // Build Up
         //[PAHN]
         //[APLSIIG]
         //[YIR]
-        for (int i = 0; i < s.Length; i++) {
+        for (int i = 0; i < s.Length; i++)
+        {
             listOfStrings[zigZagIndex].Append(s[i]);
 
             // 0,1,2,1,0
-            if (zigZagIndex == numRows-1 || zigZagIndex == 0 ){
+            if (zigZagIndex == numRows - 1 || zigZagIndex == 0)
+            {
                 flipDirection = !flipDirection;
             }
 
-            if (flipDirection){
-                zigZagIndex = zigZagIndex-1;
-            }else{
-                zigZagIndex = zigZagIndex+1;
+            if (flipDirection)
+            {
+                zigZagIndex = zigZagIndex - 1;
+            }
+            else
+            {
+                zigZagIndex = zigZagIndex + 1;
             }
 
         }
 
 
         StringBuilder result = new StringBuilder();
-        foreach (var sb in listOfStrings) {
+        foreach (var sb in listOfStrings)
+        {
             result.Append(sb);
         }
 
         return result.ToString();
     }
 
- 
-   static string ReverseWordsOptimized(string s) {
+
+    static string ReverseWordsOptimized(string s)
+    {
         // Convert string to char array for in-place modifications
         char[] charArray = s.ToCharArray();
-        
+
         int start = 0;
         int end = charArray.Length - 1;
 
@@ -112,8 +175,10 @@ using System.Text;
 
         // Step 2: Reverse each word in-place
         int wordStart = start;
-        for (int i = start; i <= end; i++) {
-            if (charArray[i] == ' ' || i == end) {
+        for (int i = start; i <= end; i++)
+        {
+            if (charArray[i] == ' ' || i == end)
+            {
                 int wordEnd = (i == end) ? i : i - 1;
                 Reverse(charArray, wordStart, wordEnd);
                 wordStart = i + 1;
@@ -122,7 +187,8 @@ using System.Text;
 
         // Step 3: Clean up extra spaces between words (by compacting in-place)
         int writeIndex = start;
-        for (int readIndex = start; readIndex <= end; readIndex++) {
+        for (int readIndex = start; readIndex <= end; readIndex++)
+        {
             // Skip extra spaces
             if (readIndex == start && charArray[readIndex] == ' ') continue;
             if (readIndex > start && charArray[readIndex] == ' ' && charArray[readIndex - 1] == ' ') continue;
@@ -135,8 +201,10 @@ using System.Text;
         return new string(charArray, start, writeIndex - start);
     }
 
-    private static void Reverse(char[] charArray, int start, int end) {
-        while (start < end) {
+    private static void Reverse(char[] charArray, int start, int end)
+    {
+        while (start < end)
+        {
             char temp = charArray[start];
             charArray[start] = charArray[end];
             charArray[end] = temp;
@@ -146,58 +214,73 @@ using System.Text;
     }
 
 
-     static string ReverseWords(string s) {
+    static string ReverseWords(string s)
+    {
 
-        int i =0;
-        int j=0;
+        int i = 0;
+        int j = 0;
 
         // trim leading whitespaces
-        while (i < s.Length){
+        while (i < s.Length)
+        {
 
-            if (s[0] == ' '){
+            if (s[0] == ' ')
+            {
                 s = s.Substring(1);
-            }else{
+            }
+            else
+            {
                 break;
             }
-        i++;
+            i++;
         }
 
-        i = s.Length -1;
-          // trim leading whitespaces
-        while (i > 0){
+        i = s.Length - 1;
+        // trim leading whitespaces
+        while (i > 0)
+        {
 
-            if (s[s.Length-1] == ' '){
-                s = s.Substring(0,s.Length-1);
-            }else{
+            if (s[s.Length - 1] == ' ')
+            {
+                s = s.Substring(0, s.Length - 1);
+            }
+            else
+            {
                 break;
             }
             i--;
         }
-        
-        // trim multiple whitespaces
-        i=0;
-        while (i < s.Length){
 
-            if (i+1 < s.Length && s[i] == ' ' && s[i+1] == ' '){
-                s = s.Substring(0,i) + s.Substring(i+1);
+        // trim multiple whitespaces
+        i = 0;
+        while (i < s.Length)
+        {
+
+            if (i + 1 < s.Length && s[i] == ' ' && s[i + 1] == ' ')
+            {
+                s = s.Substring(0, i) + s.Substring(i + 1);
                 i--; // adjust not to overshoot
             }
             i++;
         }
 
- 
-        s = reverse(s,0,s.Length);        
-        
-        i=0;
 
-        while (i< s.Length){
+        s = reverse(s, 0, s.Length);
 
-            if (s[i] == ' '){
+        i = 0;
+
+        while (i < s.Length)
+        {
+
+            if (s[i] == ' ')
+            {
                 // found word boundary
-                s = reverse(s,j,i);
-                j = i+1;
+                s = reverse(s, j, i);
+                j = i + 1;
                 i = j;
-            }else{
+            }
+            else
+            {
                 i++;
             }
         }
@@ -207,42 +290,49 @@ using System.Text;
         return s;
     }
 
-    static string reverse(string input, int start, int end){
+    static string reverse(string input, int start, int end)
+    {
         int left = start;
-        int right = end -1;
+        int right = end - 1;
 
         char[] charArray = input.ToCharArray();
 
-        while (left < right){
+        while (left < right)
+        {
             char placeholder = charArray[left];
             charArray[left] = charArray[right];
             charArray[right] = placeholder;
             left++;
             right--;
-            
+
         }
         return new string(charArray);
     }
 
 
-     static string LongestCommonPrefix(string[] strs) {
+    static string LongestCommonPrefix(string[] strs)
+    {
 
         string candidate = strs[0];
-        string maxPrefix = "";
-        
+
         int i = 1;
-        while (i < strs.Length){
+        while (i < strs.Length)
+        {
 
             int maxMatch = 0;
-            for (int j = 0; j < strs[i].Length; j++){
-                
-                if (j < candidate.Length && strs[i][j] == candidate[j]){
+            for (int j = 0; j < strs[i].Length; j++)
+            {
+
+                if (j < candidate.Length && strs[i][j] == candidate[j])
+                {
                     maxMatch++;
-                }else{                 
+                }
+                else
+                {
                     break;
                 }
             }
-            candidate = candidate.Substring(0,maxMatch);
+            candidate = candidate.Substring(0, maxMatch);
             i++;
         }
         return candidate;
@@ -250,16 +340,18 @@ using System.Text;
 
 
 
-     static int LengthOfLastWordNoStringOperation(string s) {       
-       
-       int sum = 0;
-       int i = s.Length - 1;
+    static int LengthOfLastWordNoStringOperation(string s)
+    {
+
+        int sum = 0;
+        int i = s.Length - 1;
 
         // skip whitespace
-        while (i >= 0 && s[i] == ' ') i--; 
+        while (i >= 0 && s[i] == ' ') i--;
 
-        while (i >= 0 && s[i] != ' '){
-            sum+= 1;
+        while (i >= 0 && s[i] != ' ')
+        {
+            sum += 1;
             i--;
         }
 
@@ -268,15 +360,20 @@ using System.Text;
     }
 
 
-     static int LengthOfLastWord(string s) {       
+    static int LengthOfLastWord(string s)
+    {
         int sum = 0;
 
         s = s.TrimEnd();
 
-        for (int i=0; i< s.Length; i++){
-            if (s[i] == ' '){
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == ' ')
+            {
                 sum = 0;
-            }else{
+            }
+            else
+            {
                 sum++;
             }
         }
@@ -286,35 +383,39 @@ using System.Text;
 
 
 
-     static string IntToRomanClean(int num) {
+    static string IntToRomanClean(int num)
+    {
 
-        string[] thousandsLookup = new string[]{"","M","MM","MMM"};
-        string[] hundredsLookup = new string[]{"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"};
-        string[] tensLookup = new string[]{"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"};
-        string[] onesLookup = new string[]{"","I","II","III","IV","V","VI","VII","VIII","IX"};
+        string[] thousandsLookup = new string[] { "", "M", "MM", "MMM" };
+        string[] hundredsLookup = new string[] { "", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM" };
+        string[] tensLookup = new string[] { "", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC" };
+        string[] onesLookup = new string[] { "", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX" };
 
         int thousands = num / 1000;
         int hundreds = num % 1000 / 100;
         int tens = num % 100 / 10;
         int ones = num % 10;
-        
-        return thousandsLookup[thousands] + hundredsLookup[hundreds] + tensLookup[tens] + onesLookup[ones];        
+
+        return thousandsLookup[thousands] + hundredsLookup[hundreds] + tensLookup[tens] + onesLookup[ones];
 
     }
 
 
-     static string IntToRoman(int num) {
+    static string IntToRoman(int num)
+    {
 
         string romanValue = "";
-       
+
         // M  1000's
-        if (num >= 1000){
+        if (num >= 1000)
+        {
 
             // input is less than 4000 
-            int firstDigit =  num / 1000;
+            int firstDigit = num / 1000;
 
 
-            while (firstDigit > 0 ){
+            while (firstDigit > 0)
+            {
                 romanValue += "M";
                 firstDigit--;
             }
@@ -332,42 +433,50 @@ using System.Text;
         // 300  CCC
         // 200  CC
         // 100  C
-         if (num >= 100){
+        if (num >= 100)
+        {
 
             int firstDigit = num / 100;
 
             // CD CM
-            if (firstDigit == 4){
-                 romanValue += "CD";
-                firstDigit -=4;
+            if (firstDigit == 4)
+            {
+                romanValue += "CD";
+                firstDigit -= 4;
 
 
-            } else if (firstDigit == 9){
-                   romanValue += "CM";
-                   firstDigit -=9;
+            }
+            else if (firstDigit == 9)
+            {
+                romanValue += "CM";
+                firstDigit -= 9;
 
 
-            } else {
-            
-                if  (firstDigit >= 5){
+            }
+            else
+            {
+
+                if (firstDigit >= 5)
+                {
                     // append C's to D
                     romanValue += "D";
 
                     firstDigit -= 5;
                 }
 
-                while (firstDigit > 0 ){
+                while (firstDigit > 0)
+                {
                     romanValue += "C";
-                    firstDigit --;
+                    firstDigit--;
                 }
 
-                
+
             }
 
-             num = num % 100;
+            num = num % 100;
         }
 
-         // X or L  100's
+        // X or L  100's
         // 90  XC  (Sub)
         // 80  LXXX
         // 70  LXX
@@ -377,36 +486,44 @@ using System.Text;
         // 30  XXX
         // 20  XX
         // 10  X
-        if (num >= 10 ){
+        if (num >= 10)
+        {
 
             int firstDigit = num / 10;
 
-            if (firstDigit == 4){
-                romanValue +="XL";
-                firstDigit -=4;
+            if (firstDigit == 4)
+            {
+                romanValue += "XL";
+                firstDigit -= 4;
 
-            } else if (firstDigit == 9){
-                romanValue +="XC";
-                firstDigit -=9;
+            }
+            else if (firstDigit == 9)
+            {
+                romanValue += "XC";
+                firstDigit -= 9;
 
-            } else {
-            
-                if  (firstDigit >= 5){
+            }
+            else
+            {
+
+                if (firstDigit >= 5)
+                {
                     // append X's to L
                     romanValue += "L";
 
                     firstDigit -= 5;
                 }
 
-                while (firstDigit > 0 ){
+                while (firstDigit > 0)
+                {
                     romanValue += "X";
-                    firstDigit --;
+                    firstDigit--;
                 }
 
-                
+
             }
 
-             num = num % 10;
+            num = num % 10;
 
         }
 
@@ -420,37 +537,46 @@ using System.Text;
         // III
         // II
         // I
-        if (num >= 1){
+        if (num >= 1)
+        {
 
             int firstDigit = num % 10;
 
-            if (firstDigit == 4){
-                 romanValue += "IV";
-                 firstDigit -=4;
-            } else if (firstDigit == 9){
+            if (firstDigit == 4)
+            {
+                romanValue += "IV";
+                firstDigit -= 4;
+            }
+            else if (firstDigit == 9)
+            {
                 romanValue += "IX";
-                firstDigit -=9;
-            } else{ 
+                firstDigit -= 9;
+            }
+            else
+            {
 
-                if  (firstDigit >= 5){
+                if (firstDigit >= 5)
+                {
                     // append I's to V
                     romanValue += "V";
                     firstDigit -= 5;
                 }
 
-                while (firstDigit > 0 ){
+                while (firstDigit > 0)
+                {
                     romanValue += "I";
-                    firstDigit --;
+                    firstDigit--;
                 }
-            
-            }         
+
+            }
         }
-         return romanValue;
-    }    
-    
+        return romanValue;
+    }
 
 
-     static int RomanToIntOptimized(string s) {
+
+    static int RomanToIntOptimized(string s)
+    {
         Dictionary<char, int> dict = new Dictionary<char, int> {
             {'I', 1},
             {'V', 5},
@@ -464,12 +590,16 @@ using System.Text;
         int total = 0;
         int prevValue = 0;
 
-        for (int i = s.Length - 1; i >= 0; i--) {
+        for (int i = s.Length - 1; i >= 0; i--)
+        {
             int currentValue = dict[s[i]];
 
-            if (currentValue < prevValue) {
+            if (currentValue < prevValue)
+            {
                 total -= currentValue;
-            } else {
+            }
+            else
+            {
                 total += currentValue;
             }
 
@@ -480,36 +610,41 @@ using System.Text;
     }
 
 
-      static int RomanToInt(string s) {
-        
-        Dictionary<string,int> dict = new Dictionary<string,int>();
+    static int RomanToInt(string s)
+    {
 
-        dict.Add("I",1);
-        dict.Add("V",5);
-        dict.Add("X",10);
-        dict.Add("L",50);
-        dict.Add("C",100);
-        dict.Add("D",500);
-        dict.Add("M",1000);
+        Dictionary<string, int> dict = new Dictionary<string, int>();
 
-        dict.Add("IV",4);
-        dict.Add("IX",9);
-        dict.Add("XL",40);
-        dict.Add("XC",90);
-        dict.Add("CD",400);
-        dict.Add("CM",900);
+        dict.Add("I", 1);
+        dict.Add("V", 5);
+        dict.Add("X", 10);
+        dict.Add("L", 50);
+        dict.Add("C", 100);
+        dict.Add("D", 500);
+        dict.Add("M", 1000);
+
+        dict.Add("IV", 4);
+        dict.Add("IX", 9);
+        dict.Add("XL", 40);
+        dict.Add("XC", 90);
+        dict.Add("CD", 400);
+        dict.Add("CM", 900);
 
         int i = 0;
         int runningSum = 0;
 
 
-        while (i < s.Length){
-            
+        while (i < s.Length)
+        {
+
             // first check next pointer if it's a special case
-            if (i + 1 < s.Length && dict.ContainsKey(s.Substring(i, 2))) {
-                 runningSum += dict[s.Substring(i, 2)];
+            if (i + 1 < s.Length && dict.ContainsKey(s.Substring(i, 2)))
+            {
+                runningSum += dict[s.Substring(i, 2)];
                 i += 2;
-            }else{
+            }
+            else
+            {
                 runningSum += dict[s[i].ToString()];
                 i++;
             }
@@ -517,11 +652,12 @@ using System.Text;
         }
 
         return runningSum;
-        
+
     }
 
 
-      static int TrapOnO1(int[] height) {
+    static int TrapOnO1(int[] height)
+    {
 
         // 4th approach
         //
@@ -536,24 +672,29 @@ using System.Text;
         int leftMax = 0, rightMax = 0;
         int waterSum = 0;
 
-        while (left < right) {
+        while (left < right)
+        {
             leftMax = Math.Max(leftMax, height[left]);
             rightMax = Math.Max(rightMax, height[right]);
 
-            if (leftMax < rightMax) {
+            if (leftMax < rightMax)
+            {
                 waterSum += leftMax - height[left];
                 left++;
-            } else {
+            }
+            else
+            {
                 waterSum += rightMax - height[right];
                 right--;
             }
         }
 
         return waterSum;
-     }
+    }
 
-     static int TrapOnOn(int[] height) {
-        
+    static int TrapOnOn(int[] height)
+    {
+
         // water[i] = min(maxLeft, maxRight) - height[i]
 
         // 3rd approach is O(n) time and O(n) space complexity
@@ -563,19 +704,22 @@ using System.Text;
         int[] maxToRight = new int[height.Length];
 
         maxToLeft[0] = height[0];
-        for (int i = 1; i < height.Length; i++) {
+        for (int i = 1; i < height.Length; i++)
+        {
             maxToLeft[i] = Math.Max(maxToLeft[i - 1], height[i]);
         }
 
         maxToRight[height.Length - 1] = height[height.Length - 1];
-        for (int i = height.Length - 2; i >= 0; i--) {
+        for (int i = height.Length - 2; i >= 0; i--)
+        {
             maxToRight[i] = Math.Max(maxToRight[i + 1], height[i]);
         }
 
         int waterSum = 0;
         // sum up the water level
-        for (int i = 0; i < height.Length; i++) {
-            waterSum +=  Math.Min(maxToLeft[i], maxToRight[i]) - height[i];
+        for (int i = 0; i < height.Length; i++)
+        {
+            waterSum += Math.Min(maxToLeft[i], maxToRight[i]) - height[i];
         }
 
 
@@ -583,7 +727,8 @@ using System.Text;
 
     }
 
-     static int TrapOnnO1(int[] height) {
+    static int TrapOnnO1(int[] height)
+    {
 
         // 2nd Approach is O(n^2) time complexity
         // For each i, mark the "start" of a wall
@@ -592,18 +737,26 @@ using System.Text;
         int trappedWater = 0;
         int maxValue = 0; // TODO: doesn't matter not efficient anyway
 
-        for (int level = 1; level <= maxValue; level++) {
+        for (int level = 1; level <= maxValue; level++)
+        {
             bool started = false;
             int tempWater = 0;
-            for (int j = 0; j < height.Length; j++) {
-                if (height[j] >= level) {
-                    if (started) {
+            for (int j = 0; j < height.Length; j++)
+            {
+                if (height[j] >= level)
+                {
+                    if (started)
+                    {
                         trappedWater += tempWater;
-                    } else {
+                    }
+                    else
+                    {
                         started = true;
                     }
                     tempWater = 0;
-                } else if (started) {
+                }
+                else if (started)
+                {
                     tempWater++;
                 }
             }
@@ -626,25 +779,31 @@ using System.Text;
 
 
 
-     static int Candy(int[] ratings) {
+    static int Candy(int[] ratings)
+    {
         int n = ratings.Length;
         int[] candies = new int[n];
 
         // Start with 1 candy for everyone
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
+        {
             candies[i] = 1;
         }
 
         // Go left to right upping the candies
-        for (int i = 1; i < n; i++) {
-            if (ratings[i] > ratings[i - 1]) {
+        for (int i = 1; i < n; i++)
+        {
+            if (ratings[i] > ratings[i - 1])
+            {
                 candies[i] = candies[i - 1] + 1;
             }
         }
 
         // go right to left
-        for (int i = n - 2; i >= 0; i--) {
-            if (ratings[i] > ratings[i + 1]) {
+        for (int i = n - 2; i >= 0; i--)
+        {
+            if (ratings[i] > ratings[i + 1])
+            {
                 // You may get a lower rating if you naively do candies[i + 1] + 1, so take the max
                 candies[i] = Math.Max(candies[i], candies[i + 1] + 1);
             }
@@ -654,26 +813,30 @@ using System.Text;
 
 
 
-   // Greedy Approach, keep a tally of the distance we can go
-   // If there is guaranteed to be a solution
-   // we can discard the index we've chosen and move onto the next one
-     static int CanCompleteCircuit(int[] gas, int[] cost) {
+    // Greedy Approach, keep a tally of the distance we can go
+    // If there is guaranteed to be a solution
+    // we can discard the index we've chosen and move onto the next one
+    static int CanCompleteCircuit(int[] gas, int[] cost)
+    {
         int start = 0;
         int tank = 0;
         int total = 0;
 
-        for (int i = 0; i < gas.Length; i++) {
+        for (int i = 0; i < gas.Length; i++)
+        {
             total += gas[i] - cost[i];
         }
 
-        if (total < 0) {
+        if (total < 0)
+        {
             return -1;
         }
 
-        
-        for (int i = 0; i < gas.Length; i++) {
+
+        for (int i = 0; i < gas.Length; i++)
+        {
             tank += gas[i] - cost[i];
-            
+
             // This "sub path" fails since we run out
             // If this sub path fails, anything within this subpath will fail as well
             //
@@ -682,9 +845,10 @@ using System.Text;
             //
             // The only way you can make it beyond "i" is to have more gas along the way, which
             // you did not get anyway otherwise you would have made it.
-            if (tank < 0) {
+            if (tank < 0)
+            {
                 start = i + 1;
-                tank = 0; 
+                tank = 0;
             }
         }
 
@@ -714,13 +878,14 @@ using System.Text;
     //     return start < gas.Length ? start : -1;
     // }
 
-       static int[] ProductExceptSelf(int[] nums) {
+    static int[] ProductExceptSelf(int[] nums)
+    {
         int[] output = new int[nums.Length];
 
         //  [1,2,3,4]
         // Prefix - Basic Product Array - Multiply over each value over to the next one
         // Suffix - Product Array each element at index i contains the product of all elements to the right of i
-        
+
         //left[i] = product of nums[0..i-1]
         //right[i] = product of nums[i+1..n-1]
 
@@ -733,31 +898,32 @@ using System.Text;
         //    <-L           R->   // nums[2]
         //   <-L           R->    // nums[1]
         //  L           R->       // nums[0]
-     
-        int[] left  = new int[nums.Length];
-        int[] right  = new int[nums.Length];
+
+        int[] left = new int[nums.Length];
+        int[] right = new int[nums.Length];
 
         left[0] = 1;
-        right[nums.Length-1] = 1;
+        right[nums.Length - 1] = 1;
 
-        for (int i = 1; i < nums.Length; i++) {
-           //typically
-           //nums[i] = nums[i] * nums[i - 1];
+        for (int i = 1; i < nums.Length; i++)
+        {
+            //typically
+            //nums[i] = nums[i] * nums[i - 1];
             left[i] = left[i - 1] * nums[i - 1];
         }
 
-        for(int i=nums.Length-2;i>=0;i--)
+        for (int i = nums.Length - 2; i >= 0; i--)
         {
-            right[i]=right[i+1]*nums[i+1];
+            right[i] = right[i + 1] * nums[i + 1];
             // typically an adjustment after to include 
             // a for-loop that includes i
             // right[i] *= right[i];
         }
 
 
-        for(int i=0;i<nums.Length;i++)
+        for (int i = 0; i < nums.Length; i++)
         {
-            output[i]=left[i]*right[i];
+            output[i] = left[i] * right[i];
         }
 
 
@@ -821,7 +987,7 @@ using System.Text;
 
 
 
- 
+
 
 
 
@@ -832,7 +998,7 @@ using System.Text;
     // is greater than or equal to the position (we call h this position)
     // Sorting kills the time complexity
     // However! you can use storage to gain O(n) time at the cost of O(n) size
-     static int HIndex(int[] citations)
+    static int HIndex(int[] citations)
     {
 
         // [3,0,6,1,5]
@@ -863,7 +1029,7 @@ using System.Text;
     }
 
 
-     static int JumpII(int[] nums)
+    static int JumpII(int[] nums)
     {
         int jumps = 0;
         int currentEnd = 0;
@@ -889,7 +1055,7 @@ using System.Text;
         return jumps;
     }
 
-     static bool CanJump(int[] nums)
+    static bool CanJump(int[] nums)
     {
 
         // (*) [* x]   [*]
@@ -912,7 +1078,7 @@ using System.Text;
     }
 
 
-     static int MaxProfitSpaceOptimized(int[] prices)
+    static int MaxProfitSpaceOptimized(int[] prices)
     {
         if (prices.Length == 0) return 0;
 
@@ -929,7 +1095,7 @@ using System.Text;
         return notHold;
     }
 
-     static int MaxProfitDP(int[] prices)
+    static int MaxProfitDP(int[] prices)
     {
         if (prices.Length == 0) return 0;
 
@@ -960,7 +1126,7 @@ using System.Text;
 
 
     // Linear Time
-     static int MaxProfitLinear(int[] prices)
+    static int MaxProfitLinear(int[] prices)
     {
         int maxProfit = 0;
         for (int i = 1; i < prices.Length; i++)
@@ -976,7 +1142,7 @@ using System.Text;
 
 
     // Brute Force recursion
-     static int MaxProfitMedium(int[] prices)
+    static int MaxProfitMedium(int[] prices)
     {
         return BuySell(prices, 0);
     }
@@ -1011,7 +1177,7 @@ using System.Text;
     // because you are guaranteed to capture 
     // the most profit even if a lower min price
     // comes up later
-     static int MaxProfit2(int[] prices)
+    static int MaxProfit2(int[] prices)
     {
         int minPrice = int.MaxValue;
         int maxProfit = 0;
@@ -1036,7 +1202,7 @@ using System.Text;
     }
 
 
-     static int MaxProfit(int[] prices)
+    static int MaxProfit(int[] prices)
     {
 
         int profit = 0;
@@ -1063,7 +1229,7 @@ using System.Text;
     // [7, 6, 5, 4, 3, 2, 1] - Reverse All
     // [5, 6, 7, 4, 3, 2, 1] - Reverse first k
     // [5, 6, 7, 1, 2, 3, 4] - Reverse remaining
-     static void Rotate2(int[] nums, int k)
+    static void Rotate2(int[] nums, int k)
     {
         int n = nums.Length;
         k %= n; // In case k is huge!
@@ -1090,7 +1256,7 @@ using System.Text;
     // Brute force
     // Tried to do something elegant with swapping values
     // but only worked when the array had an odd number of values
-     static void Rotate(int[] nums, int k)
+    static void Rotate(int[] nums, int k)
     {
 
         for (int i = 0; i < k; i++)
@@ -1123,7 +1289,7 @@ using System.Text;
     // all we need to do is to use a strategy that 
     // cancels whatever is currently the majority if it doesn't match
     // whatever remainder will still find the majority
-     static int BoyerMooreMajority(int[] nums)
+    static int BoyerMooreMajority(int[] nums)
     {
         int count = 0;
         int candidate = 0;
@@ -1141,7 +1307,7 @@ using System.Text;
     }
 
     // Works but inefficient
-     static int MajorityElement(int[] nums)
+    static int MajorityElement(int[] nums)
     {
         for (int i = 0; i < nums.Length; i++)
         {
@@ -1171,7 +1337,7 @@ using System.Text;
     // if it's the same, it means we have more than one duplicate always moves forward
 
     // This method allows for at most one duplicate
-     static int RemoveDuplicates2(int[] nums)
+    static int RemoveDuplicates2(int[] nums)
     {
 
         if (nums.Length <= 2) return nums.Length;
@@ -1190,7 +1356,7 @@ using System.Text;
     }
 
 
-     static int RemoveDuplicates(int[] nums)
+    static int RemoveDuplicates(int[] nums)
     {
         if (nums.Length == 0) return 0;
 
@@ -1207,7 +1373,7 @@ using System.Text;
         return i + 1; // Number of unique elements
     }
 
-     static int RemoveElement(int[] nums, int val)
+    static int RemoveElement(int[] nums, int val)
     {
         int i = 0;
         int n = nums.Length;
@@ -1231,7 +1397,7 @@ using System.Text;
 
 
 
-     static void Merge(int[] nums1, int m, int[] nums2, int n)
+    static void Merge(int[] nums1, int m, int[] nums2, int n)
     {
         int writeIndex = m + n - 1;  // Last position in nums1
         int i = m - 1;  // Last initialized element in nums1
