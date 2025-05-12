@@ -3,6 +3,20 @@ using System.Text;
 static class LeetChallenges
 {
 
+    public static bool IsSubsequence(string s, string t) {
+        int schar = 0;
+        int tchar = 0;
+
+        while (schar < s.Length && tchar < t.Length) {
+            if (s[schar] == t[tchar]) {
+                schar++;
+            }
+            tchar++;
+        }
+
+        return schar == s.Length;
+    }
+
 
     public static bool IsPalindrome(string s)
     {
