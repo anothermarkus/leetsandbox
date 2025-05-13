@@ -3,6 +3,32 @@ using System.Text;
 static class LeetChallenges
 {
 
+    // This one only works because the input GUARANTEES a solution
+    // AND it is GUARANTEED to be sorted.
+    // Because of this constraint, you just keep moving inwards until
+    // find the solution that is waiting for you.
+    // 
+    // Left inwards if it's too small, right inwards if it's too big.
+    public static int[] TwoSum(int[] numbers, int target) {
+        int left = 0;
+        int right = numbers.Length - 1;
+
+        while (left < right) {
+            int sum = numbers[left] + numbers[right];
+            if (sum == target) {
+                return new int[] { left + 1, right + 1 }; 
+            }
+            if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+
+        return new int[0]; 
+    }
+
+
     public static bool IsSubsequence(string s, string t) {
         int schar = 0;
         int tchar = 0;
