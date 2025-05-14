@@ -3,6 +3,29 @@ using System.Text;
 static class LeetChallenges
 {
 
+    public static int MaxArea(int[] height) {
+            int left = 0;
+            int right = height.Length - 1;
+            int maxVolume = 0;
+
+            while (left < right) {
+                int width = right - left;
+                int minHeight = Math.Min(height[left], height[right]);
+                int currentVol = minHeight * width;
+                maxVolume = Math.Max(maxVolume, currentVol);
+
+                if (height[left] < height[right]) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+
+            return maxVolume;
+        }
+
+
+
     // This one only works because the input GUARANTEES a solution
     // AND it is GUARANTEED to be sorted.
     // Because of this constraint, you just keep moving inwards until
