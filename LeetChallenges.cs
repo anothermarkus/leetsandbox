@@ -3,26 +3,100 @@ using System.Text;
 static class LeetChallenges
 {
 
-    public static int MaxArea(int[] height) {
-            int left = 0;
-            int right = height.Length - 1;
-            int maxVolume = 0;
+     public static IList<IList<int>> ThreeSumPointer(int[] nums) {
+        Array.Sort(nums);
+    var result = new List<IList<int>>();
 
-            while (left < right) {
-                int width = right - left;
-                int minHeight = Math.Min(height[left], height[right]);
-                int currentVol = minHeight * width;
-                maxVolume = Math.Max(maxVolume, currentVol);
+    for (int i = 0; i < nums.Length - 2; i++)
+    {
+        if (i > 0 && nums[i] == nums[i - 1])
+            continue; // Skip duplicate `i`
 
-                if (height[left] < height[right]) {
-                    left++;
-                } else {
-                    right--;
-                }
-            }
+        int left = i + 1;
+        int right = nums.Length - 1;
 
-            return maxVolume;
-        }
+        while (left < right)
+        {
+            int sum = nums[i] + nums[left] + nums[right];
+
+            if (sum == 0)
+            {
+                result.Add(new List<int> { nums[i], nums[left], nums[right] });
+
+                // Move left/right and skip duplicates
+                int leftVal = nums[left];
+                int rightVal = nums[right];
+
+                while (left < right && nums[left] == leftVal) left++;
+                while (left < right && nums[right] == rightVal) right--;
+            }
+            else if (sum < 0)
+            {
+                left++;
+            }
+            else
+            {
+                right--;
+            }
+        }
+    }
+
+    return result;
+    }
+
+     public static IList<IList<int>> ThreeSumHash(int[] nums) {
+        var results = new HashSet<string>(); // Use a set to prevent duplicates
+        var final = new List<IList<int>>();
+
+        for (int i = 0; i < nums.Length; i++) {
+            int fixedNum = nums[i];
+            var seen = new HashSet<int>();
+
+            for (int j = i + 1; j < nums.Length; j++) {
+                int complement = -fixedNum - nums[j];
+
+                if (seen.Contains(complement)) {
+                    var triplet = new List<int> { fixedNum, nums[j], complement };
+                    triplet.Sort(); // Ensure triplets are always in same order for deduplication
+                    string key = string.Join(",", triplet);
+                    if (!results.Contains(key)) {
+                        results.Add(key);
+                        final.Add(triplet);
+                    }
+                }
+
+                seen.Add(nums[j]);
+            }
+        }
+
+        return final;
+    }
+
+    public static int MaxArea(int[] height)
+    {
+        int left = 0;
+        int right = height.Length - 1;
+        int maxVolume = 0;
+
+        while (left < right)
+        {
+            int width = right - left;
+            int minHeight = Math.Min(height[left], height[right]);
+            int currentVol = minHeight * width;
+            maxVolume = Math.Max(maxVolume, currentVol);
+
+            if (height[left] < height[right])
+            {
+                left++;
+            }
+            else
+            {
+                right--;
+            }
+        }
+
+        return maxVolume;
+    }
 
 
 
