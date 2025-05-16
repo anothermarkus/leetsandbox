@@ -3,6 +3,35 @@ using System.Text;
 static class LeetChallenges
 {
 
+      public static int MinSubArrayLen(int target, int[] nums) {
+
+        // Add to sum Going Right with R
+        // Subtract sum Going Right with L
+        // Subtract Left while greater or equal
+        // use the minimum that has the smallest diff between L and R
+        // [2,3,1,2,4,3]
+        // LR
+        int sum = 0;
+        int min = int.MaxValue;
+        int L=0;
+
+        // fix and slide        
+        for (int R=0; R< nums.Length; R++){
+            sum += nums[R];
+
+
+            while( sum >= target ){
+                min = Math.Min(R-L+1, min);
+                sum -= nums[L];
+                L++;
+            }
+        }
+
+
+        return min == int.MaxValue ? 0 : min;
+    }
+
+
      public static IList<IList<int>> ThreeSumPointer(int[] nums) {
         Array.Sort(nums);
     var result = new List<IList<int>>();
