@@ -2,8 +2,40 @@ using System.Text;
 
 static class LeetChallenges
 {
+    
+        public static int LengthOfLongestSubstring(string s) {
+    
+        // Uh oh, a dupe
+        // "abcabcbb"
+        //  L  R
 
-      public static int MinSubArrayLen(int target, int[] nums) {
+        // Move the window until dupe isn't there
+        // "abcabcbb"
+        //   L R
+
+
+        int l = 0;
+        int maxLength = 0;
+        HashSet<char> window = new HashSet<char>();
+    
+        for (int r=0; r<s.Length; r++){
+            while ( window.Contains(s[r]) ){
+                window.Remove(s[l]);
+                l++;
+            }
+
+            window.Add(s[r]);
+            maxLength = Math.Max(maxLength, r-l+1);
+        }
+       
+        return maxLength;
+
+
+    }
+
+
+      public static int MinSubArrayLen(int target, int[] nums)
+    {
 
         // Add to sum Going Right with R
         // Subtract sum Going Right with L
@@ -13,22 +45,24 @@ static class LeetChallenges
         // LR
         int sum = 0;
         int min = int.MaxValue;
-        int L=0;
+        int L = 0;
 
         // fix and slide        
-        for (int R=0; R< nums.Length; R++){
+        for (int R = 0; R < nums.Length; R++)
+        {
             sum += nums[R];
 
 
-            while( sum >= target ){
-                min = Math.Min(R-L+1, min);
+            while (sum >= target)
+            {
+                min = Math.Min(R - L + 1, min);
                 sum -= nums[L];
                 L++;
             }
         }
 
 
-        return min == int.MaxValue ? 0 : min;
+        return min == int.MaxValue ? 0 : min;
     }
 
 
