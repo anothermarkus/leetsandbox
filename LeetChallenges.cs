@@ -3,8 +3,65 @@ using System.Text;
 static class LeetChallenges
 {
     
-        public static int LengthOfLongestSubstring(string s) {
+
+      public static IList<int> FindSubstring(string s, string[] words) {
+         if (s == null || s.Length == 0 || words == null || words.Length == 0) return new List<int>();
+
+        
+        int wordLength = words[0].Length;
+        int totalWords = words.Length;
+        int totalLength = wordLength * totalWords;
+
+        
+        Dictionary<string, int> wordCount = new Dictionary<string, int>();
+
+        foreach (string word in words) {
+            if (!wordCount.ContainsKey(word)) wordCount[word] = 0;
+            wordCount[word]++;
+        }
+
+        List<int> result = new List<int>();
+        
+
+        for (int i = 0; i < wordLength; i++) {
+            int left = i;
+            int count = 0;
+            Dictionary<string, int> window = new Dictionary<string, int>();
+
+            for (int j = i; j <= s.Length - wordLength; j += wordLength) {
+            string w = s.Substring(j, wordLength);
+            if (wordCount.ContainsKey(w)) {
+                if (!window.ContainsKey(w)) window[w] = 0;
+                window[w]++;
+                count++;
+
+                 // If word appears too many times, move left pointer
+                while (window[w] > wordCount[w]) {
+                    string leftWord = s.Substring(left, wordLength);
+                    window[leftWord]--;
+                    left += wordLength;
+                    count--;
+                }
+
+                if (count == totalWords) {
+                    result.Add(left);
+                }
+            } else {
+                window.Clear();
+                count = 0;
+                left = j + wordLength;
+            }
+        }
+    }
+
+    return result;
+
+
+    }
     
+        public static int LengthOfLongestSubstring(string s)
+    {
+
         // Uh oh, a dupe
         // "abcabcbb"
         //  L  R
@@ -17,17 +74,19 @@ static class LeetChallenges
         int l = 0;
         int maxLength = 0;
         HashSet<char> window = new HashSet<char>();
-    
-        for (int r=0; r<s.Length; r++){
-            while ( window.Contains(s[r]) ){
+
+        for (int r = 0; r < s.Length; r++)
+        {
+            while (window.Contains(s[r]))
+            {
                 window.Remove(s[l]);
                 l++;
             }
 
             window.Add(s[r]);
-            maxLength = Math.Max(maxLength, r-l+1);
+            maxLength = Math.Max(maxLength, r - l + 1);
         }
-       
+
         return maxLength;
 
 
