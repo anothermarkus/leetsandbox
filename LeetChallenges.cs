@@ -2,59 +2,116 @@ using System.Text;
 
 static class LeetChallenges
 {
+     public static string MinWindow(string s, string t) {
+        if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t)) return "";
+
+        Dictionary<char, int> tCount = new Dictionary<char, int>();
+        foreach (char c in t) {
+            if (!tCount.ContainsKey(c)) tCount[c] = 0;         
+                tCount[c]++;
+        }
+
+        Dictionary<char, int> window = new Dictionary<char, int>();
+        int have = 0;
+        int need = tCount.Count;
+        int left = 0;
+
+        int resLen = int.MaxValue;
+        int resStart = 0;
+
+
+         for (int right = 0; right < s.Length; right++) {
+            char c = s[right];
+            if (!window.ContainsKey(c))  window[c] = 0;
+            window[c]++;
+
+              if (tCount.ContainsKey(c) && window[c] == tCount[c])
+                have++;
+
+                
+            while (have == need) {
+
+                // find the smallest window 
+                if (right - left + 1 < resLen) {
+                    resStart = left;
+                    resLen = right - left + 1;
+                }
+
+                char leftChar = s[left];
+                window[leftChar]--;
+                if (tCount.ContainsKey(leftChar) && window[leftChar] < tCount[leftChar])
+                    have--;
+
+                left++;
+            }
+        }
+
+        return resLen == int.MaxValue ? "" : s.Substring(resStart, resLen);
+        
+     
+    }
     
 
-      public static IList<int> FindSubstring(string s, string[] words) {
-         if (s == null || s.Length == 0 || words == null || words.Length == 0) return new List<int>();
+      public static IList<int> FindSubstring(string s, string[] words)
+    {
+        if (s == null || s.Length == 0 || words == null || words.Length == 0) return new List<int>();
 
-        
+
         int wordLength = words[0].Length;
         int totalWords = words.Length;
         int totalLength = wordLength * totalWords;
 
-        
+
         Dictionary<string, int> wordCount = new Dictionary<string, int>();
 
-        foreach (string word in words) {
+        foreach (string word in words)
+        {
             if (!wordCount.ContainsKey(word)) wordCount[word] = 0;
             wordCount[word]++;
         }
 
         List<int> result = new List<int>();
-        
 
-        for (int i = 0; i < wordLength; i++) {
+
+        for (int i = 0; i < wordLength; i++)
+        {
             int left = i;
             int count = 0;
             Dictionary<string, int> window = new Dictionary<string, int>();
 
-            for (int j = i; j <= s.Length - wordLength; j += wordLength) {
-            string w = s.Substring(j, wordLength);
-            if (wordCount.ContainsKey(w)) {
-                if (!window.ContainsKey(w)) window[w] = 0;
-                window[w]++;
-                count++;
+            for (int j = i; j <= s.Length - wordLength; j += wordLength)
+            {
+                string w = s.Substring(j, wordLength);
+                if (wordCount.ContainsKey(w))
+                {
+                    if (!window.ContainsKey(w)) window[w] = 0;
+                    window[w]++;
+                    count++;
 
-                 // If word appears too many times, move left pointer
-                while (window[w] > wordCount[w]) {
-                    string leftWord = s.Substring(left, wordLength);
-                    window[leftWord]--;
-                    left += wordLength;
-                    count--;
-                }
+                    // If word appears too many times, move left pointer
+                    while (window[w] > wordCount[w])
+                    {
+                        string leftWord = s.Substring(left, wordLength);
+                        window[leftWord]--;
+                        left += wordLength;
+                        count--;
+                    }
 
-                if (count == totalWords) {
-                    result.Add(left);
+                    if (count == totalWords)
+                    {
+                        result.Add(left);
+                    }
                 }
-            } else {
-                window.Clear();
-                count = 0;
-                left = j + wordLength;
+                else
+                {
+                    window.Clear();
+                    count = 0;
+                    left = j + wordLength;
+                }
             }
         }
-    }
 
-    return result;
+        return result;
 
 
     }
