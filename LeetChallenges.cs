@@ -2,13 +2,55 @@ using System.Text;
 
 static class LeetChallenges
 {
-     public static string MinWindow(string s, string t) {
+     public static bool IsValidSudoku(char[][] board) {
+        // Check rows
+        for (int i = 0; i < 9; i++) {
+            if (!IsSubSolutionValid(board, i, i + 1, 0, 9))
+                return false;
+        }
+
+        // Check columns
+        for (int i = 0; i < 9; i++) {
+            if (!IsSubSolutionValid(board, 0, 9, i, i + 1))
+                return false;
+        }
+
+        // Check 3x3 subgrids
+        for (int row = 0; row < 9; row += 3) {
+            for (int col = 0; col < 9; col += 3) {
+                if (!IsSubSolutionValid(board, row, row + 3, col, col + 3))
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool IsSubSolutionValid(char[][] board, int startRow, int endRow, int startCol, int endCol) {
+        HashSet<char> setOfNine  = new HashSet<char>();
+
+        for (int i = startRow; i < endRow; i++) {
+            for (int j = startCol; j < endCol; j++) {
+                char candidate = board[i][j];
+                if (candidate != '.') {
+                    if (setOfNine.Contains(candidate)) return false;
+                    setOfNine.Add(candidate);
+                }
+            }
+        }
+
+        return true;
+    }
+
+     public static string MinWindow(string s, string t)
+    {
         if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t)) return "";
 
         Dictionary<char, int> tCount = new Dictionary<char, int>();
-        foreach (char c in t) {
-            if (!tCount.ContainsKey(c)) tCount[c] = 0;         
-                tCount[c]++;
+        foreach (char c in t)
+        {
+            if (!tCount.ContainsKey(c)) tCount[c] = 0;
+            tCount[c]++;
         }
 
         Dictionary<char, int> window = new Dictionary<char, int>();
@@ -20,19 +62,22 @@ static class LeetChallenges
         int resStart = 0;
 
 
-         for (int right = 0; right < s.Length; right++) {
+        for (int right = 0; right < s.Length; right++)
+        {
             char c = s[right];
-            if (!window.ContainsKey(c))  window[c] = 0;
+            if (!window.ContainsKey(c)) window[c] = 0;
             window[c]++;
 
-              if (tCount.ContainsKey(c) && window[c] == tCount[c])
+            if (tCount.ContainsKey(c) && window[c] == tCount[c])
                 have++;
 
-                
-            while (have == need) {
+
+            while (have == need)
+            {
 
                 // find the smallest window 
-                if (right - left + 1 < resLen) {
+                if (right - left + 1 < resLen)
+                {
                     resStart = left;
                     resLen = right - left + 1;
                 }
@@ -47,8 +92,8 @@ static class LeetChallenges
         }
 
         return resLen == int.MaxValue ? "" : s.Substring(resStart, resLen);
-        
-     
+
+
     }
     
 
