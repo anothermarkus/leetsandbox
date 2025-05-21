@@ -2,22 +2,102 @@ using System.Text;
 
 static class LeetChallenges
 {
-     public static bool IsValidSudoku(char[][] board) {
+
+    //[ [1,2,3],
+    //  [4,5,6],
+    //  [7,8,9]  ]
+
+    // maxTop - Top range: matrix[]
+
+    // Reduce top range by one
+    // Right -> reduce right range by one -> 
+    // Down -> reduce down range by one
+    // Left -> reduce left range by one
+    // Top -> reduce top range by one
+    //
+    // Repeat
+
+    // flag right until end of column at row
+
+
+    //(0,0) -> (0,1) -> (0,2)
+    //(1,2) -> (2,3) 
+    //->         
+    public static IList<int> SpiralOrder(int[][] matrix)
+    {
+
+        int maxRight = matrix[0].Length - 1;
+        int maxLeft = 0;
+        int maxTop = 0;
+        int maxBottom = matrix.Length - 1;
+        List<int> results = new List<int>();
+
+        while (maxTop <= maxBottom && maxLeft <= maxRight)
+        {
+
+            // Move Right
+            for (int j = maxLeft; j <= maxRight; j++)
+            {
+                results.Add(matrix[maxTop][j]);
+            }
+            maxTop++;
+
+            // Move Down
+            for (int i = maxTop; i <= maxBottom; i++)
+            {
+                results.Add(matrix[i][maxRight]);
+            }
+            maxRight--;
+
+            // Move Left
+            if (maxTop <= maxBottom)
+            {
+                for (int j = maxRight; j >= maxLeft; j--)
+                {
+                    results.Add(matrix[maxBottom][j]);
+                }
+                maxBottom--;
+            }
+
+            // Move Up
+            if (maxLeft <= maxRight)
+            {
+                for (int i = maxBottom; i >= maxTop; i--)
+                {
+                    results.Add(matrix[i][maxLeft]);
+                }
+                maxLeft++;
+            }
+
+        }
+
+
+        return results;
+
+
+    }
+
+    public static bool IsValidSudoku(char[][] board)
+    {
         // Check rows
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
             if (!IsSubSolutionValid(board, i, i + 1, 0, 9))
                 return false;
         }
 
         // Check columns
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++)
+        {
             if (!IsSubSolutionValid(board, 0, 9, i, i + 1))
                 return false;
         }
 
         // Check 3x3 subgrids
-        for (int row = 0; row < 9; row += 3) {
-            for (int col = 0; col < 9; col += 3) {
+        for (int row = 0; row < 9; row += 3)
+        {
+            for (int col = 0; col < 9; col += 3)
+            {
                 if (!IsSubSolutionValid(board, row, row + 3, col, col + 3))
                     return false;
             }
