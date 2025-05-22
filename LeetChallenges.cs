@@ -3,6 +3,35 @@ using System.Text;
 static class LeetChallenges
 {
 
+
+     // Transpose
+        // 1 4 7 -> 7 4 1
+        // 2 5 8 -> 8 5 2
+        // 3 6 9 -> 9 6 3
+
+        // Reverse
+        // 7 4 1 -> 1 4 7
+        // 8 5 2 -> 2 5 8 
+        // 9 6 3 -> 3 6 9 
+        public static void Rotate(int[][] matrix) {
+        int n = matrix.Length;
+
+        // Transpose
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        
+        // Reverse
+        for (int i = 0; i < n; i++) {
+            Array.Reverse(matrix[i]);
+        }
+    }
+
+
     //[ [1,2,3],
     //  [4,5,6],
     //  [7,8,9]  ]
