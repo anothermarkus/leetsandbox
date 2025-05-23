@@ -1,32 +1,77 @@
 using System.Text;
+using System.Collections;
 
 static class LeetChallenges
 {
 
 
-     // Transpose
-        // 1 4 7 -> 7 4 1
-        // 2 5 8 -> 8 5 2
-        // 3 6 9 -> 9 6 3
+ public static void SetZeroes(int[][] matrix) {
 
-        // Reverse
-        // 7 4 1 -> 1 4 7
-        // 8 5 2 -> 2 5 8 
-        // 9 6 3 -> 3 6 9 
-        public static void Rotate(int[][] matrix) {
+        int rows = matrix.Length;
+        int columns = matrix[0].Length;
+
+        BitArray bitwiseRows = new BitArray(rows);
+        BitArray bitwiseColumns = new BitArray(columns);
+    
+        // First need to find 0's otherwise we risk setting them
+        // unnecessarily
+
+
+        for (int i=0; i< rows; i++){
+            for (int j=0; j< columns; j++){
+                if (matrix[i][j] == 0){
+                    bitwiseRows[i] = true;
+                    bitwiseColumns[j] = true;
+                }
+            }
+        }
+
+         for (int i=0; i< rows; i++){
+            for (int j=0; j< columns; j++){
+                if (bitwiseRows[i]){
+                    matrix[i][j] = 0;
+                    continue;
+                }
+
+                if (bitwiseColumns[j]){
+                    matrix[i][j] = 0;
+                    continue;
+                }
+            }
+         }
+
+    }
+
+
+
+
+    // Transpose
+    // 1 4 7 -> 7 4 1
+    // 2 5 8 -> 8 5 2
+    // 3 6 9 -> 9 6 3
+
+    // Reverse
+    // 7 4 1 -> 1 4 7
+    // 8 5 2 -> 2 5 8 
+    // 9 6 3 -> 3 6 9 
+    public static void Rotate(int[][] matrix)
+    {
         int n = matrix.Length;
 
         // Transpose
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
                 int temp = matrix[i][j];
                 matrix[i][j] = matrix[j][i];
                 matrix[j][i] = temp;
             }
         }
-        
+
         // Reverse
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++)
+        {
             Array.Reverse(matrix[i]);
         }
     }
