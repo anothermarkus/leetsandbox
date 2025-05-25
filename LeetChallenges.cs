@@ -3,8 +3,151 @@ using System.Collections;
 
 static class LeetChallenges
 {
+    
+      public static void GameOfLifeInPlace(int[][] board) {
+        int rows = board.Length;
+        int cols = board[0].Length;
 
-   public static void SetZeroesNoSpace(int[][] matrix) {
+        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
+        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                int liveNeighbors = 0;
+
+                for (int d = 0; d < 8; d++) {
+                    int ni = i + dx[d];
+                    int nj = j + dy[d];
+                    if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
+                        liveNeighbors += board[ni][nj] & 1; // current state
+                    }
+                }
+
+                // Apply Game of Life rules using current state (LSB) and write new state to 2nd bit
+                if ((board[i][j] & 1) == 1) {
+                    if (liveNeighbors == 2 || liveNeighbors == 3) {
+                        board[i][j] |= 2; // Set second bit to 1 → cell stays alive
+                    }
+                } else {
+                    if (liveNeighbors == 3) {
+                        board[i][j] |= 2; // Set second bit to 1 → cell becomes alive
+                    }
+                }
+            }
+        }
+
+        // Final pass: shift each cell right 1 bit to update to new state
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                board[i][j] >>= 1;
+            }
+        }
+    }
+
+      public static void GameOfLife(int[][] board)
+    {
+
+        int rows = board.Length;
+        int columns = board[0].Length;
+
+        int[][] nextState = new int[rows][];
+        for (int i = 0; i < rows; i++)
+        {
+            nextState[i] = new int[columns];
+        }
+
+        for (int i = 0; i < board.Length; i++)
+        {
+            for (int j = 0; j < board[i].Length; j++)
+            {
+                nextState[i][j] = nextVal(board, i, j);
+            }
+        }
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                board[i][j] = nextState[i][j];
+            }
+        }
+
+    }
+
+    // Checks the conditions of the surrounding squares
+    private static int nextVal(int[][] board, int i, int j){
+        int rows = board.Length;
+        int columns = board[0].Length;
+        int onesCount = 0;
+        int cellValue = board[i][j];
+
+        bool canGoTop = i > 0;
+        bool canGoBottom = i < rows - 1;
+        bool canGoRight = j < columns - 1;
+        bool canGoLeft = j > 0;
+        
+
+        // top: i-1, j
+        if (canGoTop){
+            onesCount += board[i-1][j];
+
+            // top left: i-1, j-1
+            if (canGoLeft){
+                  onesCount += board[i-1][j-1];
+            }
+
+            // top right: i-1, j+1 
+            if (canGoRight){
+                onesCount += board[i-1][j+1];
+            }
+
+        }
+        
+        // bottom: i+1, j
+        if (canGoBottom){
+            onesCount += board[i+1][j];
+
+            // bottom left: i+1, j-1
+            if (canGoLeft){
+                onesCount += board[i+1][j-1];
+            }
+            
+            // bottom right: i+1, j+1
+            if (canGoRight){
+                onesCount += board[i+1][j+1];
+            }
+        }
+
+        // left: i, j-1
+        if (canGoLeft){
+            onesCount += board[i][j-1];
+        }
+
+        // right: i, j+1
+        if (canGoRight){
+            onesCount += board[i][j+1];
+        }
+
+        if (cellValue == 0 && onesCount == 3){
+            return 1;
+        }
+
+        if (cellValue == 1 && (onesCount < 2 || onesCount > 3) ){
+            return 0;
+        }
+
+         if (cellValue == 1 && (onesCount == 2 || onesCount == 3) ){
+            return 1;
+        }
+
+        return board[i][j];
+
+
+    }
+
+
+    public static void SetZeroesNoSpace(int[][] matrix)
+    {
         int rows = matrix.Length;
         int cols = matrix[0].Length;
 
@@ -12,25 +155,32 @@ static class LeetChallenges
         bool firstColZero = false;
 
         // Check if first row has any zeros
-        for (int j = 0; j < cols; j++) {
-            if (matrix[0][j] == 0) {
+        for (int j = 0; j < cols; j++)
+        {
+            if (matrix[0][j] == 0)
+            {
                 firstRowZero = true;
                 break;
             }
         }
 
         // Check if first column has any zeros
-        for (int i = 0; i < rows; i++) {
-            if (matrix[i][0] == 0) {
+        for (int i = 0; i < rows; i++)
+        {
+            if (matrix[i][0] == 0)
+            {
                 firstColZero = true;
                 break;
             }
         }
 
         // Use first row and column as markers
-        for (int i = 1; i < rows; i++) {
-            for (int j = 1; j < cols; j++) {
-                if (matrix[i][j] == 0) {
+        for (int i = 1; i < rows; i++)
+        {
+            for (int j = 1; j < cols; j++)
+            {
+                if (matrix[i][j] == 0)
+                {
                     matrix[i][0] = 0;
                     matrix[0][j] = 0;
                 }
@@ -38,24 +188,31 @@ static class LeetChallenges
         }
 
         // Zero out cells based on markers
-        for (int i = 1; i < rows; i++) {
-            for (int j = 1; j < cols; j++) {
-                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+        for (int i = 1; i < rows; i++)
+        {
+            for (int j = 1; j < cols; j++)
+            {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0)
+                {
                     matrix[i][j] = 0;
                 }
             }
         }
 
         // Zero out first row if needed
-        if (firstRowZero) {
-            for (int j = 0; j < cols; j++) {
+        if (firstRowZero)
+        {
+            for (int j = 0; j < cols; j++)
+            {
                 matrix[0][j] = 0;
             }
         }
 
         // Zero out first column if needed
-        if (firstColZero) {
-            for (int i = 0; i < rows; i++) {
+        if (firstColZero)
+        {
+            for (int i = 0; i < rows; i++)
+            {
                 matrix[i][0] = 0;
             }
         }
