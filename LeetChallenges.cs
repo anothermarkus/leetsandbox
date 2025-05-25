@@ -4,32 +4,67 @@ using System.Collections;
 static class LeetChallenges
 {
     
-      public static void GameOfLifeInPlace(int[][] board) {
+      public static bool CanConstruct(string ransomNote, string magazine) {
+        Dictionary<char,int> mag = new Dictionary<char,int>();
+        foreach(char c in magazine)
+        {
+            if(mag.ContainsKey(c))
+            {
+                mag[c] = mag[c] + 1;
+            }
+            else
+            mag.Add(c,1);
+        }
+        foreach(char c in ransomNote)
+        {
+            if(!mag.ContainsKey(c)) return false;
+            else
+            {
+                int count = mag[c];
+                if(count == 0) return false;
+                mag[c] = mag[c] - 1;
+            }
+        }
+        return true;
+    }
+
+
+      public static void GameOfLifeInPlace(int[][] board)
+    {
         int rows = board.Length;
         int cols = board[0].Length;
 
-        int[] dx = {-1, -1, -1, 0, 0, 1, 1, 1};
-        int[] dy = {-1, 0, 1, -1, 1, -1, 0, 1};
+        int[] dx = { -1, -1, -1, 0, 0, 1, 1, 1 };
+        int[] dy = { -1, 0, 1, -1, 1, -1, 0, 1 };
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
                 int liveNeighbors = 0;
 
-                for (int d = 0; d < 8; d++) {
+                for (int d = 0; d < 8; d++)
+                {
                     int ni = i + dx[d];
                     int nj = j + dy[d];
-                    if (ni >= 0 && ni < rows && nj >= 0 && nj < cols) {
+                    if (ni >= 0 && ni < rows && nj >= 0 && nj < cols)
+                    {
                         liveNeighbors += board[ni][nj] & 1; // current state
                     }
                 }
 
                 // Apply Game of Life rules using current state (LSB) and write new state to 2nd bit
-                if ((board[i][j] & 1) == 1) {
-                    if (liveNeighbors == 2 || liveNeighbors == 3) {
+                if ((board[i][j] & 1) == 1)
+                {
+                    if (liveNeighbors == 2 || liveNeighbors == 3)
+                    {
                         board[i][j] |= 2; // Set second bit to 1 → cell stays alive
                     }
-                } else {
-                    if (liveNeighbors == 3) {
+                }
+                else
+                {
+                    if (liveNeighbors == 3)
+                    {
                         board[i][j] |= 2; // Set second bit to 1 → cell becomes alive
                     }
                 }
@@ -37,8 +72,10 @@ static class LeetChallenges
         }
 
         // Final pass: shift each cell right 1 bit to update to new state
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
                 board[i][j] >>= 1;
             }
         }
