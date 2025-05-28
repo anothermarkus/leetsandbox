@@ -3,25 +3,93 @@ using System.Collections;
 
 static class LeetChallenges
 {
-    
-      public static bool CanConstruct(string ransomNote, string magazine) {
-        Dictionary<char,int> mag = new Dictionary<char,int>();
-        foreach(char c in magazine)
+     public static bool IsAnagram(string s, string t) {
+
+        //Need to check cases like
+        // s = "aabb" and "ab" 
+        if (s.Length != t.Length) return false;
+
+        Dictionary<char,int> charCount = new Dictionary<char,int>();
+        for (int i=0; i<s.Length; i++){
+            char c = s[i];
+            if(!charCount.ContainsKey(c)){ charCount[c] = 0; }
+            charCount[c]++;
+        }
+
+        for (int i=0; i<t.Length; i++){
+            char c = t[i];
+            if(!charCount.ContainsKey(c) || charCount[c] == 0){ 
+                return false;
+            }            
+            charCount[c]--;
+        }
+        return true;
+    }
+
+     public static bool WordPattern(string pattern, string s)
+    {
+        Dictionary<char, string> patternToString = new Dictionary<char, string>();
+        Dictionary<string, char> stringToPattern = new Dictionary<string, char>();
+        string[] tokens = s.Split(' ');
+
+        if (pattern.Length != tokens.Length)
         {
-            if(mag.ContainsKey(c))
+            return false;
+        }
+
+        for (int i = 0; i < pattern.Length; i++)
+        {
+
+            char c = pattern[i];
+            string token = tokens[i];
+
+            if (patternToString.ContainsKey(c))
+            {
+                if (patternToString[c] != token)
+                {
+                    return false;
+                }
+
+            }
+            else
+            {
+                patternToString[c] = token;
+            }
+
+            if (stringToPattern.ContainsKey(token))
+            {
+                if (stringToPattern[token] != c)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                stringToPattern[token] = c;
+            }
+        }
+        return true;
+    }
+    
+      public static bool CanConstruct(string ransomNote, string magazine)
+    {
+        Dictionary<char, int> mag = new Dictionary<char, int>();
+        foreach (char c in magazine)
+        {
+            if (mag.ContainsKey(c))
             {
                 mag[c] = mag[c] + 1;
             }
             else
-            mag.Add(c,1);
+                mag.Add(c, 1);
         }
-        foreach(char c in ransomNote)
+        foreach (char c in ransomNote)
         {
-            if(!mag.ContainsKey(c)) return false;
+            if (!mag.ContainsKey(c)) return false;
             else
             {
                 int count = mag[c];
-                if(count == 0) return false;
+                if (count == 0) return false;
                 mag[c] = mag[c] - 1;
             }
         }
