@@ -3,24 +3,116 @@ using System.Collections;
 
 static class LeetChallenges
 {
-     public static bool IsAnagram(string s, string t) {
+
+    public IList<IList<string>> GroupAnagramsEfficient(string[] strs)
+    {
+
+        Dictionary<string, List<string>> map = new Dictionary<string, List<string>>();
+
+        foreach (string s in strs)
+        {
+            char[] chars = s.ToCharArray();
+            Array.Sort(chars); 
+            string key = new string(chars); // key is sorted chars
+
+            if (!map.ContainsKey(key))
+            {
+                map[key] = new List<string>();
+            }
+            map[key].Add(s); // value is a list, appending each the candidate string that matches
+        }
+
+        return new List<IList<string>>(map.Values);
+    }
+
+
+
+    public static IList<IList<string>> GroupAnagrams(string[] strs)
+    {
+
+        IList<IList<string>> listOfLists = new List<IList<string>>();
+        Dictionary<int, string> map = new Dictionary<int, string>();
+
+        // This helps to keep track of everything
+        // rather than removing over the iterator
+        for (int i = 0; i < strs.Length; i++)
+        {
+            map[i] = strs[i];
+        }
+
+        for (int i = 0; i < strs.Length; i++)
+        {
+            if (!map.ContainsKey(i))
+            {
+                continue;
+            }
+
+            string candidate = strs[i];
+            List<string> currentList = new List<string>();
+            currentList.Add(candidate);
+            map.Remove(i);
+
+            // check all that is remaining in the list
+            for (int j = i; j < strs.Length; j++)
+            {
+                if (!map.ContainsKey(j))
+                {
+                    continue;
+                }
+
+                string nextCandidate = strs[j];
+                if (IsAnagram(candidate, nextCandidate))
+                {
+                    currentList.Add(nextCandidate);
+                    map.Remove(j);
+                }
+            }
+            listOfLists.Add(currentList);
+        }
+
+        return listOfLists;
+    }
+
+
+    
+     public static bool IsAnagramEfficient(string s, string t)
+    {
+        if (s.Length != t.Length) return false;
+        int[] f = new int[26];
+        foreach (char c in s) { ++f[c - 'a']; }
+        foreach (char c in t)
+        {
+            if (f[c - 'a'] > 0) --f[c - 'a'];
+            else
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+     public static bool IsAnagram(string s, string t)
+    {
 
         //Need to check cases like
         // s = "aabb" and "ab" 
         if (s.Length != t.Length) return false;
 
-        Dictionary<char,int> charCount = new Dictionary<char,int>();
-        for (int i=0; i<s.Length; i++){
+        Dictionary<char, int> charCount = new Dictionary<char, int>();
+        for (int i = 0; i < s.Length; i++)
+        {
             char c = s[i];
-            if(!charCount.ContainsKey(c)){ charCount[c] = 0; }
+            if (!charCount.ContainsKey(c)) { charCount[c] = 0; }
             charCount[c]++;
         }
 
-        for (int i=0; i<t.Length; i++){
+        for (int i = 0; i < t.Length; i++)
+        {
             char c = t[i];
-            if(!charCount.ContainsKey(c) || charCount[c] == 0){ 
+            if (!charCount.ContainsKey(c) || charCount[c] == 0)
+            {
                 return false;
-            }            
+            }
             charCount[c]--;
         }
         return true;
