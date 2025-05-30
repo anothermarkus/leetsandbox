@@ -47,7 +47,7 @@ static class LeetChallenges
     }
 
 
-    public IList<IList<string>> GroupAnagramsEfficient(string[] strs)
+    public static IList<IList<string>> GroupAnagramsEfficient(string[] strs)
     {
 
         Dictionary<string, List<string>> map = new Dictionary<string, List<string>>();
@@ -946,7 +946,7 @@ static class LeetChallenges
     // find the solution that is waiting for you.
     // 
     // Left inwards if it's too small, right inwards if it's too big.
-    public static int[] TwoSum(int[] numbers, int target) {
+    public static int[] TwoSumOld(int[] numbers, int target) {
         int left = 0;
         int right = numbers.Length - 1;
 
