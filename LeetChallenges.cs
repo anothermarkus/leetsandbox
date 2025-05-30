@@ -3,6 +3,49 @@ using System.Collections;
 
 static class LeetChallenges
 {
+    
+      public static int[] TwoSumClean(int[] nums, int target) {
+    
+        Dictionary<int,int> indcies = new Dictionary<int,int>();        
+        // Map all the values into a dictionary
+
+        for (int i=0; i< nums.Length; i++){
+            int compliment = target - nums[i];
+            if (indcies.ContainsKey(compliment)){
+                 return new int[]{ i, indcies[compliment] };
+            }
+
+            if (!indcies.ContainsKey(nums[i])){
+                indcies.Add(nums[i],i);
+            }
+        }
+        return new int[]{};
+    }
+
+    public static int[] TwoSum(int[] nums, int target)
+    {
+
+        Dictionary<int, int> indcies = new Dictionary<int, int>();
+        // Map all the values into a dictionary
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (!indcies.ContainsKey(nums[i]))
+            {
+                indcies.Add(nums[i], i);
+            }
+        }
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int compliment = target - nums[i];
+            if (indcies.ContainsKey(compliment) && (indcies[compliment] != i))
+            {
+                return new int[] { i, indcies[compliment] };
+            }
+        }
+        return new int[] { };
+    }
+
 
     public IList<IList<string>> GroupAnagramsEfficient(string[] strs)
     {
@@ -12,7 +55,7 @@ static class LeetChallenges
         foreach (string s in strs)
         {
             char[] chars = s.ToCharArray();
-            Array.Sort(chars); 
+            Array.Sort(chars);
             string key = new string(chars); // key is sorted chars
 
             if (!map.ContainsKey(key))
