@@ -4,22 +4,38 @@ using System.Collections;
 static class LeetChallenges
 {
     
-      public static int[] TwoSumClean(int[] nums, int target) {
-    
-        Dictionary<int,int> indcies = new Dictionary<int,int>();        
+      public static bool ContainsNearbyDuplicate(int[] nums, int k) {
+        // num,index
+        Dictionary<int,int> seen = new Dictionary<int,int>();
+        for (int i=0; i< nums.Length; i++){                       
+            if (seen.ContainsKey(nums[i]) && (i - seen[nums[i]] <= k) ) {
+                return true;                
+            }
+            seen[nums[i]] = i; // update with the latest index
+        }
+        return false;
+    }
+
+      public static int[] TwoSumClean(int[] nums, int target)
+    {
+
+        Dictionary<int, int> indcies = new Dictionary<int, int>();
         // Map all the values into a dictionary
 
-        for (int i=0; i< nums.Length; i++){
+        for (int i = 0; i < nums.Length; i++)
+        {
             int compliment = target - nums[i];
-            if (indcies.ContainsKey(compliment)){
-                 return new int[]{ i, indcies[compliment] };
+            if (indcies.ContainsKey(compliment))
+            {
+                return new int[] { i, indcies[compliment] };
             }
 
-            if (!indcies.ContainsKey(nums[i])){
-                indcies.Add(nums[i],i);
+            if (!indcies.ContainsKey(nums[i]))
+            {
+                indcies.Add(nums[i], i);
             }
         }
-        return new int[]{};
+        return new int[] { };
     }
 
     public static int[] TwoSum(int[] nums, int target)
