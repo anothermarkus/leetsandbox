@@ -4,12 +4,42 @@ using System.Collections;
 static class LeetChallenges
 {
     
-      public static bool ContainsNearbyDuplicate(int[] nums, int k) {
+
+    
+    public static int LongestConsecutive(int[] nums) {
+  
+        HashSet<int> hashNums = new HashSet<int>(nums);
+        int longest = 0;
+
+        foreach (var num in hashNums){
+            if (hashNums.Contains(num-1)){
+                // not at the start of the set, skip
+                continue;                
+            }
+
+            int length=1;
+            int currentNum = num; 
+
+            while (hashNums.Contains(currentNum+1)){
+                currentNum++;
+                length++;
+            }
+
+            longest = Math.Max(longest,length);
+        }
+
+    return longest;
+    }
+    
+      public static bool ContainsNearbyDuplicate(int[] nums, int k)
+    {
         // num,index
-        Dictionary<int,int> seen = new Dictionary<int,int>();
-        for (int i=0; i< nums.Length; i++){                       
-            if (seen.ContainsKey(nums[i]) && (i - seen[nums[i]] <= k) ) {
-                return true;                
+        Dictionary<int, int> seen = new Dictionary<int, int>();
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (seen.ContainsKey(nums[i]) && (i - seen[nums[i]] <= k))
+            {
+                return true;
             }
             seen[nums[i]] = i; // update with the latest index
         }
