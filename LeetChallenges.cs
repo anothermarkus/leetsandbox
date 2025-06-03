@@ -3,7 +3,58 @@ using System.Collections;
 
 static class LeetChallenges
 {
+    public static IList<string> SummaryRangesSimplified(int[] nums) {              
+        List<string> summaryRange = new List<string>();
+
+        int i=0;
+        while ( i < nums.Length){
+
+            int start = i;            
+            while (i < nums.Length -1 && nums[i] + 1 == nums[i+1]){
+                i++;
+            }
+            int end = i;
+
+            if (start == end){
+                summaryRange.Add($"{nums[start]}");                
+            }else{
+                summaryRange.Add($"{nums[start]}->{nums[end]}");
+            }
+            
+        i++;
+
+        }
+
+        return summaryRange;
+      
+    }
     
+
+     public static IList<string> SummaryRanges(int[] nums)
+    {
+        List<string> summaryRange = new List<string>();
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(nums[i]);
+            if (i >= nums.Length - 1 || nums[i] + 1 != nums[i + 1])
+            {
+                summaryRange.Add(sb.ToString());
+                continue;
+            }
+
+            while (i < nums.Length - 1 && nums[i] + 1 == nums[i + 1])
+            {
+                i++;
+            }
+            sb.Append("->");
+            sb.Append(nums[i]);
+
+            summaryRange.Add(sb.ToString());
+        }
+        return summaryRange;
+    }
 
     
     public static int LongestConsecutive(int[] nums) {
