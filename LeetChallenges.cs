@@ -3,30 +3,66 @@ using System.Collections;
 
 static class LeetChallenges
 {
-    public static IList<string> SummaryRangesSimplified(int[] nums) {              
+    
+    public static int[][] Merge(int[][] intervals) {
+
+         if (intervals == null || intervals.Length == 0)
+            return new int[0][];
+
+        // Sort by a
+        Array.Sort(intervals, (a, b) => a[0].CompareTo(b[0]));
+
+        List<int[]> newIntervals = new List<int[]>();
+
+        int i = 0;
+        while (i < intervals.Length) {
+            int left = intervals[i][0];
+            int right = intervals[i][1];
+
+            // Merge all overlapping intervals
+            while (i < intervals.Length - 1 && intervals[i + 1][0] <= right) {
+                i++;
+                right = Math.Max(right, intervals[i][1]);
+            }
+
+            newIntervals.Add(new int[] { left, right });
+            i++;
+        }
+
+        return newIntervals.ToArray();
+
+    }
+
+    public static IList<string> SummaryRangesSimplified(int[] nums)
+    {
         List<string> summaryRange = new List<string>();
 
-        int i=0;
-        while ( i < nums.Length){
+        int i = 0;
+        while (i < nums.Length)
+        {
 
-            int start = i;            
-            while (i < nums.Length -1 && nums[i] + 1 == nums[i+1]){
+            int start = i;
+            while (i < nums.Length - 1 && nums[i] + 1 == nums[i + 1])
+            {
                 i++;
             }
             int end = i;
 
-            if (start == end){
-                summaryRange.Add($"{nums[start]}");                
-            }else{
+            if (start == end)
+            {
+                summaryRange.Add($"{nums[start]}");
+            }
+            else
+            {
                 summaryRange.Add($"{nums[start]}->{nums[end]}");
             }
-            
-        i++;
+
+            i++;
 
         }
 
         return summaryRange;
-      
+
     }
     
 
