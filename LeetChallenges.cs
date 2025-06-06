@@ -4,9 +4,40 @@ using System.Collections;
 static class LeetChallenges
 {
     
-    public static int[][] Merge(int[][] intervals) {
+    public static int[][] Insert(int[][] intervals, int[] newInterval) {
+        int i=0;
+        List<int[]> newIntervals = new List<int[]>();
 
-         if (intervals == null || intervals.Length == 0)
+        int newLeft = newInterval[0];
+        int newRight = newInterval[1];
+
+        // add all intervals that come before newInterval
+        while (i < intervals.Length && intervals[i][1] < newLeft) {
+            newIntervals.Add(intervals[i]);
+            i++;
+        }
+
+        // merge overlapping intervals
+        while (i < intervals.Length && intervals[i][0] <= newRight) {
+            newLeft = Math.Min(newLeft, intervals[i][0]);
+            newRight = Math.Max(newRight, intervals[i][1]);
+            i++;
+        }
+
+        newIntervals.Add(new int[] { newLeft, newRight });
+
+        // add remaining intervals after the newInterval
+        while (i < intervals.Length) {
+            newIntervals.Add(intervals[i]);
+            i++;
+        }
+        return newIntervals.ToArray();
+    }
+
+    public static int[][] Merge(int[][] intervals)
+    {
+
+        if (intervals == null || intervals.Length == 0)
             return new int[0][];
 
         // Sort by a
@@ -15,12 +46,14 @@ static class LeetChallenges
         List<int[]> newIntervals = new List<int[]>();
 
         int i = 0;
-        while (i < intervals.Length) {
+        while (i < intervals.Length)
+        {
             int left = intervals[i][0];
             int right = intervals[i][1];
 
             // Merge all overlapping intervals
-            while (i < intervals.Length - 1 && intervals[i + 1][0] <= right) {
+            while (i < intervals.Length - 1 && intervals[i + 1][0] <= right)
+            {
                 i++;
                 right = Math.Max(right, intervals[i][1]);
             }
