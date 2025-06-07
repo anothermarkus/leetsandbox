@@ -3,12 +3,36 @@ using System.Collections;
 
 static class LeetChallenges
 {
-    
 
-  public static int FindMinArrowShots(int[][] points) {
-         if (points.Length == 0) return 0; 
+     public static bool IsValid(string s) {
+        Stack<char> myStack = new Stack<char>();
 
-       // sort by right edge (end) 
+        for (int i=0; i< s.Length; i++){
+            char brace = s[i];
+            if (brace == '[' || brace == '(' || brace == '{'){
+                myStack.Push(brace);
+                continue;
+            }
+
+            if (myStack.Count == 0) return false;
+            char leftBrace = myStack.Pop();
+            
+            if (leftBrace == '(' && brace == ')' ||
+            leftBrace == '[' && brace == ']'
+            || leftBrace == '{' && brace == '}'){
+                continue;
+            }
+            return false;           
+        }
+
+        return myStack.Count == 0;
+    }
+
+    public static int FindMinArrowShots(int[][] points)
+    {
+        if (points.Length == 0) return 0;
+
+        // sort by right edge (end) 
         Array.Sort(points, (a, b) => a[1].CompareTo(b[1]));
 
         int i = 0;
@@ -18,13 +42,15 @@ static class LeetChallenges
         //   [2-----8] 1st arrow
         //        [7------12]     2nd arrow   
         //             [10------16]  2nd arrow
-        while (i < points.Length) {
+        while (i < points.Length)
+        {
             // shoot arrow at the end of current balloon
             int arrowPos = points[i][1];
             minArrows++;
 
             // skip all balloons that this arrow can burst
-            while (i < points.Length && points[i][0] <= arrowPos) {
+            while (i < points.Length && points[i][0] <= arrowPos)
+            {
                 i++;
             }
         }
