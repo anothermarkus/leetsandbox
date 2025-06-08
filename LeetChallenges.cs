@@ -3,26 +3,57 @@ using System.Collections;
 
 static class LeetChallenges
 {
+    
+      public static string SimplifyPath(string path) {
+        Stack<string> stack = new Stack<string>();
+        string[] parts = path.Split('/');
 
-     public static bool IsValid(string s) {
+        foreach (string part in parts) {
+            if (string.IsNullOrEmpty(part) || part == ".") {
+                continue;
+            } else if (part == "..") {
+                if (stack.Count > 0) {
+                    stack.Pop();
+                }
+            } else {
+                stack.Push(part);
+            }
+        }
+
+        if (stack.Count == 0) return "/";
+
+        var result = new StringBuilder();
+        foreach (var dir in stack.Reverse()) {
+            result.Append('/').Append(dir);
+        }
+
+        return result.ToString();
+    }
+
+
+     public static bool IsValid(string s)
+    {
         Stack<char> myStack = new Stack<char>();
 
-        for (int i=0; i< s.Length; i++){
+        for (int i = 0; i < s.Length; i++)
+        {
             char brace = s[i];
-            if (brace == '[' || brace == '(' || brace == '{'){
+            if (brace == '[' || brace == '(' || brace == '{')
+            {
                 myStack.Push(brace);
                 continue;
             }
 
             if (myStack.Count == 0) return false;
             char leftBrace = myStack.Pop();
-            
+
             if (leftBrace == '(' && brace == ')' ||
             leftBrace == '[' && brace == ']'
-            || leftBrace == '{' && brace == '}'){
+            || leftBrace == '{' && brace == '}')
+            {
                 continue;
             }
-            return false;           
+            return false;
         }
 
         return myStack.Count == 0;
