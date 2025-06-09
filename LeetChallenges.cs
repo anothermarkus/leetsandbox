@@ -1,21 +1,57 @@
 using System.Text;
 using System.Collections;
 
+
+
 static class LeetChallenges
 {
+
+    public static class MinStack {
+    static Stack<int[]> minStack = new Stack<int[]>();
+    public static void Push(int val) {
+        // each time I push in, I also push current minimum
+        if (minStack.Count == 0){
+            minStack.Push(new int[]{val,val});
+        }else{
+             minStack.Push(new int[]{val,Math.Min(minStack.Peek()[1],val)});
+        }
+    }
     
-      public static string SimplifyPath(string path) {
+    public static void Pop() {
+        minStack.Pop();
+    }
+    
+    public static int Top() {
+        return minStack.Peek()[0];
+    }
+    
+    public static int GetMin() {
+        return minStack.Peek()[1];
+    }
+}
+
+ 
+
+    public static string SimplifyPath(string path)
+    {
         Stack<string> stack = new Stack<string>();
         string[] parts = path.Split('/');
 
-        foreach (string part in parts) {
-            if (string.IsNullOrEmpty(part) || part == ".") {
+        foreach (string part in parts)
+        {
+            if (string.IsNullOrEmpty(part) || part == ".")
+            {
                 continue;
-            } else if (part == "..") {
-                if (stack.Count > 0) {
+            }
+            else if (part == "..")
+            {
+                if (stack.Count > 0)
+                {
                     stack.Pop();
                 }
-            } else {
+            }
+            else
+            {
                 stack.Push(part);
             }
         }
@@ -23,7 +59,8 @@ static class LeetChallenges
         if (stack.Count == 0) return "/";
 
         var result = new StringBuilder();
-        foreach (var dir in stack.Reverse()) {
+        foreach (var dir in stack.Reverse())
+        {
             result.Append('/').Append(dir);
         }
 
@@ -31,7 +68,7 @@ static class LeetChallenges
     }
 
 
-     public static bool IsValid(string s)
+    public static bool IsValid(string s)
     {
         Stack<char> myStack = new Stack<char>();
 
@@ -87,8 +124,8 @@ static class LeetChallenges
         }
 
         return minArrows;
-    }    
-    
+    }
+
     public static int[][] Insert(int[][] intervals, int[] newInterval)
     {
         int i = 0;
@@ -186,9 +223,9 @@ static class LeetChallenges
         return summaryRange;
 
     }
-    
 
-     public static IList<string> SummaryRanges(int[] nums)
+
+    public static IList<string> SummaryRanges(int[] nums)
     {
         List<string> summaryRange = new List<string>();
 
@@ -214,33 +251,37 @@ static class LeetChallenges
         return summaryRange;
     }
 
-    
-    public static int LongestConsecutive(int[] nums) {
-  
+
+    public static int LongestConsecutive(int[] nums)
+    {
+
         HashSet<int> hashNums = new HashSet<int>(nums);
         int longest = 0;
 
-        foreach (var num in hashNums){
-            if (hashNums.Contains(num-1)){
+        foreach (var num in hashNums)
+        {
+            if (hashNums.Contains(num - 1))
+            {
                 // not at the start of the set, skip
-                continue;                
+                continue;
             }
 
-            int length=1;
-            int currentNum = num; 
+            int length = 1;
+            int currentNum = num;
 
-            while (hashNums.Contains(currentNum+1)){
+            while (hashNums.Contains(currentNum + 1))
+            {
                 currentNum++;
                 length++;
             }
 
-            longest = Math.Max(longest,length);
+            longest = Math.Max(longest, length);
         }
 
-    return longest;
+        return longest;
     }
-    
-      public static bool ContainsNearbyDuplicate(int[] nums, int k)
+
+    public static bool ContainsNearbyDuplicate(int[] nums, int k)
     {
         // num,index
         Dictionary<int, int> seen = new Dictionary<int, int>();
@@ -255,7 +296,7 @@ static class LeetChallenges
         return false;
     }
 
-      public static int[] TwoSumClean(int[] nums, int target)
+    public static int[] TwoSumClean(int[] nums, int target)
     {
 
         Dictionary<int, int> indcies = new Dictionary<int, int>();
@@ -372,8 +413,8 @@ static class LeetChallenges
     }
 
 
-    
-     public static bool IsAnagramEfficient(string s, string t)
+
+    public static bool IsAnagramEfficient(string s, string t)
     {
         if (s.Length != t.Length) return false;
         int[] f = new int[26];
@@ -389,7 +430,7 @@ static class LeetChallenges
         return true;
     }
 
-     public static bool IsAnagram(string s, string t)
+    public static bool IsAnagram(string s, string t)
     {
 
         //Need to check cases like
@@ -416,7 +457,7 @@ static class LeetChallenges
         return true;
     }
 
-     public static bool WordPattern(string pattern, string s)
+    public static bool WordPattern(string pattern, string s)
     {
         Dictionary<char, string> patternToString = new Dictionary<char, string>();
         Dictionary<string, char> stringToPattern = new Dictionary<string, char>();
@@ -460,8 +501,8 @@ static class LeetChallenges
         }
         return true;
     }
-    
-      public static bool CanConstruct(string ransomNote, string magazine)
+
+    public static bool CanConstruct(string ransomNote, string magazine)
     {
         Dictionary<char, int> mag = new Dictionary<char, int>();
         foreach (char c in magazine)
@@ -487,7 +528,7 @@ static class LeetChallenges
     }
 
 
-      public static void GameOfLifeInPlace(int[][] board)
+    public static void GameOfLifeInPlace(int[][] board)
     {
         int rows = board.Length;
         int cols = board[0].Length;
@@ -539,7 +580,7 @@ static class LeetChallenges
         }
     }
 
-      public static void GameOfLife(int[][] board)
+    public static void GameOfLife(int[][] board)
     {
 
         int rows = board.Length;
@@ -570,7 +611,8 @@ static class LeetChallenges
     }
 
     // Checks the conditions of the surrounding squares
-    private static int nextVal(int[][] board, int i, int j){
+    private static int nextVal(int[][] board, int i, int j)
+    {
         int rows = board.Length;
         int columns = board[0].Length;
         int onesCount = 0;
@@ -580,58 +622,69 @@ static class LeetChallenges
         bool canGoBottom = i < rows - 1;
         bool canGoRight = j < columns - 1;
         bool canGoLeft = j > 0;
-        
+
 
         // top: i-1, j
-        if (canGoTop){
-            onesCount += board[i-1][j];
+        if (canGoTop)
+        {
+            onesCount += board[i - 1][j];
 
             // top left: i-1, j-1
-            if (canGoLeft){
-                  onesCount += board[i-1][j-1];
+            if (canGoLeft)
+            {
+                onesCount += board[i - 1][j - 1];
             }
 
             // top right: i-1, j+1 
-            if (canGoRight){
-                onesCount += board[i-1][j+1];
+            if (canGoRight)
+            {
+                onesCount += board[i - 1][j + 1];
             }
 
         }
-        
+
         // bottom: i+1, j
-        if (canGoBottom){
-            onesCount += board[i+1][j];
+        if (canGoBottom)
+        {
+            onesCount += board[i + 1][j];
 
             // bottom left: i+1, j-1
-            if (canGoLeft){
-                onesCount += board[i+1][j-1];
+            if (canGoLeft)
+            {
+                onesCount += board[i + 1][j - 1];
             }
-            
+
             // bottom right: i+1, j+1
-            if (canGoRight){
-                onesCount += board[i+1][j+1];
+            if (canGoRight)
+            {
+                onesCount += board[i + 1][j + 1];
             }
         }
 
         // left: i, j-1
-        if (canGoLeft){
-            onesCount += board[i][j-1];
+        if (canGoLeft)
+        {
+            onesCount += board[i][j - 1];
         }
 
         // right: i, j+1
-        if (canGoRight){
-            onesCount += board[i][j+1];
+        if (canGoRight)
+        {
+            onesCount += board[i][j + 1];
         }
 
-        if (cellValue == 0 && onesCount == 3){
+        if (cellValue == 0 && onesCount == 3)
+        {
             return 1;
         }
 
-        if (cellValue == 1 && (onesCount < 2 || onesCount > 3) ){
+        if (cellValue == 1 && (onesCount < 2 || onesCount > 3))
+        {
             return 0;
         }
 
-         if (cellValue == 1 && (onesCount == 2 || onesCount == 3) ){
+        if (cellValue == 1 && (onesCount == 2 || onesCount == 3))
+        {
             return 1;
         }
 
@@ -897,13 +950,17 @@ static class LeetChallenges
         return true;
     }
 
-    private static bool IsSubSolutionValid(char[][] board, int startRow, int endRow, int startCol, int endCol) {
-        HashSet<char> setOfNine  = new HashSet<char>();
+    private static bool IsSubSolutionValid(char[][] board, int startRow, int endRow, int startCol, int endCol)
+    {
+        HashSet<char> setOfNine = new HashSet<char>();
 
-        for (int i = startRow; i < endRow; i++) {
-            for (int j = startCol; j < endCol; j++) {
+        for (int i = startRow; i < endRow; i++)
+        {
+            for (int j = startCol; j < endCol; j++)
+            {
                 char candidate = board[i][j];
-                if (candidate != '.') {
+                if (candidate != '.')
+                {
                     if (setOfNine.Contains(candidate)) return false;
                     setOfNine.Add(candidate);
                 }
@@ -913,7 +970,7 @@ static class LeetChallenges
         return true;
     }
 
-     public static string MinWindow(string s, string t)
+    public static string MinWindow(string s, string t)
     {
         if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t)) return "";
 
@@ -966,9 +1023,9 @@ static class LeetChallenges
 
 
     }
-    
 
-      public static IList<int> FindSubstring(string s, string[] words)
+
+    public static IList<int> FindSubstring(string s, string[] words)
     {
         if (s == null || s.Length == 0 || words == null || words.Length == 0) return new List<int>();
 
@@ -1031,8 +1088,8 @@ static class LeetChallenges
 
 
     }
-    
-        public static int LengthOfLongestSubstring(string s)
+
+    public static int LengthOfLongestSubstring(string s)
     {
 
         // Uh oh, a dupe
@@ -1066,7 +1123,7 @@ static class LeetChallenges
     }
 
 
-      public static int MinSubArrayLen(int target, int[] nums)
+    public static int MinSubArrayLen(int target, int[] nums)
     {
 
         // Add to sum Going Right with R
@@ -1098,63 +1155,69 @@ static class LeetChallenges
     }
 
 
-     public static IList<IList<int>> ThreeSumPointer(int[] nums) {
-        Array.Sort(nums);
-    var result = new List<IList<int>>();
-
-    for (int i = 0; i < nums.Length - 2; i++)
+    public static IList<IList<int>> ThreeSumPointer(int[] nums)
     {
-        if (i > 0 && nums[i] == nums[i - 1])
-            continue; // Skip duplicate `i`
+        Array.Sort(nums);
+        var result = new List<IList<int>>();
 
-        int left = i + 1;
-        int right = nums.Length - 1;
-
-        while (left < right)
+        for (int i = 0; i < nums.Length - 2; i++)
         {
-            int sum = nums[i] + nums[left] + nums[right];
+            if (i > 0 && nums[i] == nums[i - 1])
+                continue; // Skip duplicate `i`
 
-            if (sum == 0)
-            {
-                result.Add(new List<int> { nums[i], nums[left], nums[right] });
+            int left = i + 1;
+            int right = nums.Length - 1;
 
-                // Move left/right and skip duplicates
-                int leftVal = nums[left];
-                int rightVal = nums[right];
+            while (left < right)
+            {
+                int sum = nums[i] + nums[left] + nums[right];
 
-                while (left < right && nums[left] == leftVal) left++;
-                while (left < right && nums[right] == rightVal) right--;
-            }
-            else if (sum < 0)
-            {
-                left++;
-            }
-            else
-            {
-                right--;
+                if (sum == 0)
+                {
+                    result.Add(new List<int> { nums[i], nums[left], nums[right] });
+
+                    // Move left/right and skip duplicates
+                    int leftVal = nums[left];
+                    int rightVal = nums[right];
+
+                    while (left < right && nums[left] == leftVal) left++;
+                    while (left < right && nums[right] == rightVal) right--;
+                }
+                else if (sum < 0)
+                {
+                    left++;
+                }
+                else
+                {
+                    right--;
+                }
             }
         }
+
+        return result;
     }
 
-    return result;
-    }
-
-     public static IList<IList<int>> ThreeSumHash(int[] nums) {
+    public static IList<IList<int>> ThreeSumHash(int[] nums)
+    {
         var results = new HashSet<string>(); // Use a set to prevent duplicates
         var final = new List<IList<int>>();
 
-        for (int i = 0; i < nums.Length; i++) {
+        for (int i = 0; i < nums.Length; i++)
+        {
             int fixedNum = nums[i];
             var seen = new HashSet<int>();
 
-            for (int j = i + 1; j < nums.Length; j++) {
+            for (int j = i + 1; j < nums.Length; j++)
+            {
                 int complement = -fixedNum - nums[j];
 
-                if (seen.Contains(complement)) {
+                if (seen.Contains(complement))
+                {
                     var triplet = new List<int> { fixedNum, nums[j], complement };
                     triplet.Sort(); // Ensure triplets are always in same order for deduplication
                     string key = string.Join(",", triplet);
-                    if (!results.Contains(key)) {
+                    if (!results.Contains(key))
+                    {
                         results.Add(key);
                         final.Add(triplet);
                     }
@@ -1201,32 +1264,41 @@ static class LeetChallenges
     // find the solution that is waiting for you.
     // 
     // Left inwards if it's too small, right inwards if it's too big.
-    public static int[] TwoSumOld(int[] numbers, int target) {
+    public static int[] TwoSumOld(int[] numbers, int target)
+    {
         int left = 0;
         int right = numbers.Length - 1;
 
-        while (left < right) {
+        while (left < right)
+        {
             int sum = numbers[left] + numbers[right];
-            if (sum == target) {
-                return new int[] { left + 1, right + 1 }; 
+            if (sum == target)
+            {
+                return new int[] { left + 1, right + 1 };
             }
-            if (sum < target) {
+            if (sum < target)
+            {
                 left++;
-            } else {
+            }
+            else
+            {
                 right--;
             }
         }
 
-        return new int[0]; 
+        return new int[0];
     }
 
 
-    public static bool IsSubsequence(string s, string t) {
+    public static bool IsSubsequence(string s, string t)
+    {
         int schar = 0;
         int tchar = 0;
 
-        while (schar < s.Length && tchar < t.Length) {
-            if (s[schar] == t[tchar]) {
+        while (schar < s.Length && tchar < t.Length)
+        {
+            if (s[schar] == t[tchar])
+            {
                 schar++;
             }
             tchar++;
