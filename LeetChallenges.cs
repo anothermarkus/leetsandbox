@@ -6,29 +6,82 @@ using System.Collections;
 static class LeetChallenges
 {
 
-    public static class MinStack {
-    static Stack<int[]> minStack = new Stack<int[]>();
-    public static void Push(int val) {
-        // each time I push in, I also push current minimum
-        if (minStack.Count == 0){
-            minStack.Push(new int[]{val,val});
-        }else{
-             minStack.Push(new int[]{val,Math.Min(minStack.Peek()[1],val)});
+    public static int EvalRPN(string[] tokens) {
+        
+        // if digit, then push into stack
+        // if operand, then popx2 
+        // and push result
+
+        Stack<int> calculator = new Stack<int>();
+        for (int i=0; i< tokens.Length; i++){
+            
+            string token = tokens[i];
+
+            if (token == "+" || 
+                token == "-" || 
+                token == "*" || 
+                token == "/"  ){
+
+                int rhs = calculator.Pop();
+                int lhs = calculator.Pop();
+                int result = 0;
+            
+                switch(token){
+                    case "+":
+                        result = lhs + rhs;
+                        break;
+                    case "-":
+                        result = lhs - rhs;
+                        break;
+                    case "/":
+                        result = lhs / rhs;
+                        break;
+                    case "*":
+                        result = lhs * rhs;
+                        break;
+                    default:
+                        throw new ArgumentException("Invalid operator");
+                }
+                calculator.Push(result);
+            }else{
+                calculator.Push(int.Parse(token));
+
+            }
+        }
+        return (int)calculator.Pop();
+    }
+
+    public static class MinStack
+    {
+        static Stack<int[]> minStack = new Stack<int[]>();
+        public static void Push(int val)
+        {
+            // each time I push in, I also push current minimum
+            if (minStack.Count == 0)
+            {
+                minStack.Push(new int[] { val, val });
+            }
+            else
+            {
+                minStack.Push(new int[] { val, Math.Min(minStack.Peek()[1], val) });
+            }
+        }
+
+        public static void Pop()
+        {
+            minStack.Pop();
+        }
+
+        public static int Top()
+        {
+            return minStack.Peek()[0];
+        }
+
+        public static int GetMin()
+        {
+            return minStack.Peek()[1];
         }
     }
-    
-    public static void Pop() {
-        minStack.Pop();
-    }
-    
-    public static int Top() {
-        return minStack.Peek()[0];
-    }
-    
-    public static int GetMin() {
-        return minStack.Peek()[1];
-    }
-}
 
  
 
