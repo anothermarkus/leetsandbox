@@ -6,27 +6,73 @@ using System.Collections;
 static class LeetChallenges
 {
 
-    public static int EvalRPN(string[] tokens) {
-        
+       public static int Calculate(string s) {
+        Stack<int> stack = new Stack<int>();
+        int result = 0;
+        int sign = 1;
+        int num = 0;
+
+        for (int i = 0; i < s.Length; i++) {
+            char c = s[i];
+
+            if (char.IsDigit(c)) {
+                num = num * 10 + (c - '0');
+            } 
+            else if (c == '+') {
+                result += sign * num;
+                num = 0;
+                sign = 1;
+            } 
+            else if (c == '-') {
+                result += sign * num;
+                num = 0;
+                sign = -1;
+            } 
+            else if (c == '(') {
+                stack.Push(result);
+                stack.Push(sign);
+                result = 0;
+                sign = 1;
+            } 
+            else if (c == ')') {
+                result += sign * num;
+                num = 0;
+                result *= stack.Pop(); // sign
+                result += stack.Pop(); // previous result
+            }
+            // else skip whitespace
+        }
+
+        result += sign * num;
+        return result;
+    }
+
+
+    public static int EvalRPN(string[] tokens)
+    {
+
         // if digit, then push into stack
         // if operand, then popx2 
         // and push result
 
         Stack<int> calculator = new Stack<int>();
-        for (int i=0; i< tokens.Length; i++){
-            
+        for (int i = 0; i < tokens.Length; i++)
+        {
+
             string token = tokens[i];
 
-            if (token == "+" || 
-                token == "-" || 
-                token == "*" || 
-                token == "/"  ){
+            if (token == "+" ||
+                token == "-" ||
+                token == "*" ||
+                token == "/")
+            {
 
                 int rhs = calculator.Pop();
                 int lhs = calculator.Pop();
                 int result = 0;
-            
-                switch(token){
+
+                switch (token)
+                {
                     case "+":
                         result = lhs + rhs;
                         break;
@@ -43,7 +89,9 @@ static class LeetChallenges
                         throw new ArgumentException("Invalid operator");
                 }
                 calculator.Push(result);
-            }else{
+            }
+            else
+            {
                 calculator.Push(int.Parse(token));
 
             }
