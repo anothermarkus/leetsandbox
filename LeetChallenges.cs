@@ -1,40 +1,81 @@
 using System.Text;
 using System.Collections;
 
-
+ public class ListNode {
+     public int val;
+      public ListNode next;
+      public ListNode(int x) {
+          val = x;
+          next = null;
+     }
+  }
+  
 
 static class LeetChallenges
 {
 
-       public static int Calculate(string s) {
+    public static bool HasCycle(ListNode head)
+    {
+
+        if (head == null || head.next == null)
+        {
+            return false;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while (fast != null && fast.next != null)
+        {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast)
+            {
+                return true;
+            }
+        }
+
+        return false;
+
+    }
+
+    public static int Calculate(string s)
+    {
         Stack<int> stack = new Stack<int>();
         int result = 0;
         int sign = 1;
         int num = 0;
 
-        for (int i = 0; i < s.Length; i++) {
+        for (int i = 0; i < s.Length; i++)
+        {
             char c = s[i];
 
-            if (char.IsDigit(c)) {
+            if (char.IsDigit(c))
+            {
                 num = num * 10 + (c - '0');
-            } 
-            else if (c == '+') {
+            }
+            else if (c == '+')
+            {
                 result += sign * num;
                 num = 0;
                 sign = 1;
-            } 
-            else if (c == '-') {
+            }
+            else if (c == '-')
+            {
                 result += sign * num;
                 num = 0;
                 sign = -1;
-            } 
-            else if (c == '(') {
+            }
+            else if (c == '(')
+            {
                 stack.Push(result);
                 stack.Push(sign);
                 result = 0;
                 sign = 1;
-            } 
-            else if (c == ')') {
+            }
+            else if (c == ')')
+            {
                 result += sign * num;
                 num = 0;
                 result *= stack.Pop(); // sign
@@ -131,7 +172,7 @@ static class LeetChallenges
         }
     }
 
- 
+
 
     public static string SimplifyPath(string path)
     {
