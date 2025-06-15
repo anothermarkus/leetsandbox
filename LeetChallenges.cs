@@ -15,20 +15,66 @@ using System.Collections;
         next = null;
     }
   }
-  
+
+public class Node
+{
+    public int val;
+    public Node next;
+    public Node random;
+
+    public Node(int _val)
+    {
+        val = _val;
+        next = null;
+        random = null;
+    }
+}
+
 
 static class LeetChallenges
 {
 
-    public static ListNode MergeTwoLists(ListNode list1, ListNode list2) {
+    public static Node CopyRandomList(Node head)
+    {
+        if (head == null) return null;
+
+        Dictionary<Node, Node> references = new Dictionary<Node, Node>();
+
+        Node oldNode = head;
+
+        // First pass: create new nodes and store them in the map
+        while (oldNode != null)
+        {
+            references[oldNode] = new Node(oldNode.val);
+            oldNode = oldNode.next;
+        }
+
+        oldNode = head;
+        // Second pass: assign next and random pointers
+        while (oldNode != null)
+        {
+            references[oldNode].next = oldNode.next != null ? references[oldNode.next] : null;
+            references[oldNode].random = oldNode.random != null ? references[oldNode.random] : null;
+            oldNode = oldNode.next;
+        }
+
+        return references[head];
+    }
+
+    public static ListNode MergeTwoLists(ListNode list1, ListNode list2)
+    {
         ListNode dummy = new ListNode();
         ListNode tail = dummy;
 
-        while (list1 != null && list2 != null) {
-            if (list1.val <= list2.val) {
+        while (list1 != null && list2 != null)
+        {
+            if (list1.val <= list2.val)
+            {
                 tail.next = list1;
                 list1 = list1.next;
-            } else {
+            }
+            else
+            {
                 tail.next = list2;
                 list2 = list2.next;
             }
