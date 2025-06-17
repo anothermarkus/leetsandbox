@@ -42,7 +42,35 @@ public class Node
 static class LeetChallenges
 {
 
-     public static ListNode ReverseBetween(ListNode head, int left, int right) {
+
+ public static ListNode ReverseBetweenEfficient(ListNode head, int left, int right) {
+        if (head == null || left == right) return head;
+
+        ListNode dummy = new ListNode(0, head);
+        ListNode prev = dummy;
+
+        // Move `prev` to the node just before the left-th node
+        for (int i = 1; i < left; i++) {
+            prev = prev.next;
+        }
+
+        // Start reversing from `current`
+        ListNode current = prev.next;
+        ListNode next = null;
+
+        // Reverse nodes between left and right
+        for (int i = 0; i < right - left; i++) {
+            next = current.next;
+            current.next = next.next;
+            next.next = prev.next;
+            prev.next = next;
+        }
+
+        return dummy.next;
+    }
+
+    public static ListNode ReverseBetween(ListNode head, int left, int right)
+    {
         if (head == null || left == right) return head;
 
         Stack<ListNode> stack = new Stack<ListNode>();
@@ -50,19 +78,22 @@ static class LeetChallenges
         ListNode prev = dummy;
 
 
-        for (int i = 1; i < left; i++) {
+        for (int i = 1; i < left; i++)
+        {
             prev = prev.next;
         }
 
         ListNode current = prev.next;
-        for (int i = 0; i <= right - left; i++) {
+        for (int i = 0; i <= right - left; i++)
+        {
             stack.Push(current);
             current = current.next;
         }
 
         // Re-link reversed nodes
         ListNode tail = current; // node after the reversed sublist
-        while (stack.Count > 0) {
+        while (stack.Count > 0)
+        {
             prev.next = stack.Pop();
             prev = prev.next;
         }
