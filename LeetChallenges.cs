@@ -1,19 +1,27 @@
 using System.Text;
 using System.Collections;
 
- public class ListNode {
-     public int val;
-      public ListNode next;
+public class ListNode
+{
+    public int val;
+    public ListNode next;
 
     public ListNode()
     {
-        
+
     }
-      public ListNode(int x)
+    public ListNode(int x)
     {
         val = x;
         next = null;
     }
+
+    public ListNode(int x, ListNode next)
+    {
+        val = x;
+        this.next = next;
+    }
+    
   }
 
 public class Node
@@ -33,6 +41,37 @@ public class Node
 
 static class LeetChallenges
 {
+
+     public static ListNode ReverseBetween(ListNode head, int left, int right) {
+        if (head == null || left == right) return head;
+
+        Stack<ListNode> stack = new Stack<ListNode>();
+        ListNode dummy = new ListNode(0, head);
+        ListNode prev = dummy;
+
+
+        for (int i = 1; i < left; i++) {
+            prev = prev.next;
+        }
+
+        ListNode current = prev.next;
+        for (int i = 0; i <= right - left; i++) {
+            stack.Push(current);
+            current = current.next;
+        }
+
+        // Re-link reversed nodes
+        ListNode tail = current; // node after the reversed sublist
+        while (stack.Count > 0) {
+            prev.next = stack.Pop();
+            prev = prev.next;
+        }
+
+        prev.next = tail;
+
+        return dummy.next;
+    }
+
 
     public static Node CopyRandomList(Node head)
     {
