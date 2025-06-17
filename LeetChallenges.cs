@@ -43,6 +43,31 @@ static class LeetChallenges
 {
 
 
+public static ListNode ReverseKGroup(ListNode head, int k) {
+    if (head == null || k <= 1) return head;
+
+    int count = 0;
+    ListNode ptr = head;
+
+    // Count total nodes
+    while (ptr != null) {
+        count++;
+        ptr = ptr.next;
+    }
+
+    int left = 1;
+    int right = k;
+
+    while (right <= count) {
+        head = ReverseBetweenEfficient(head, left, right);
+        left += k;
+        right += k;
+    }
+
+        return head;
+    }
+
+
  public static ListNode ReverseBetweenEfficient(ListNode head, int left, int right) {
         if (head == null || left == right) return head;
 
