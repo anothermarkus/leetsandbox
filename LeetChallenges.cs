@@ -42,6 +42,36 @@ public class Node
 static class LeetChallenges
 {
 
+   public ListNode DeleteDuplicates(ListNode head) {
+        ListNode dummy = head;
+        ListNode prev = null;
+
+        while (dummy !=null){
+            bool isDupe = false;
+            while (dummy.next !=null && dummy.val == dummy.next.val){
+                dummy.next = dummy.next.next;
+                isDupe = true;
+            }
+
+             if (isDupe) {
+                // Skip the entire dupe node
+                if (prev == null) {
+                    head = dummy.next;
+                } else {
+                    prev.next = dummy.next;
+                }
+                dummy = dummy.next; 
+            } else {
+                prev = dummy;
+                dummy = dummy.next;
+            }
+
+
+        }
+
+        return head;
+    }
+    
 
 public static ListNode ReverseKGroup(ListNode head, int k) {
     if (head == null || k <= 1) return head;
