@@ -41,27 +41,116 @@ public class Node
 
 static class LeetChallenges
 {
+    public static ListNode Partition(ListNode head, int x)
+    {
+        ListNode leftDummy = new ListNode(0);
+        ListNode rightDummy = new ListNode(0);
+        ListNode leftTail = leftDummy, rightTail = rightDummy;
 
-   public ListNode DeleteDuplicates(ListNode head) {
+        while (head != null)
+        {
+            if (head.val < x)
+            {
+                leftTail.next = head;
+                leftTail = leftTail.next;
+            }
+            else
+            {
+                rightTail.next = head;
+                rightTail = rightTail.next;
+            }
+            ListNode nextNode = head.next;
+            head.next = null;
+            head = nextNode;
+        }
+
+        leftTail.next = rightDummy.next;
+
+        return leftDummy.next;
+    }
+
+    public static ListNode RotateRight(ListNode head, int k) {
+        if (head == null || head.next == null || k == 0) return head;
+
+        ListNode dummy = head;
+        int count = 0;
+
+        while (dummy !=null){
+            count++;
+            dummy = dummy.next;
+        }
+
+        dummy = head;
+        // [ 1, 2, 3, 4, 5]
+        //  D,H
+
+        int remainder = k%count; // for big values of k
+        //                     (5   - 2 - 1 ) = 2
+        // disconnect  node  (count - k - 1) from the end, point the tail to head
+
+        if (remainder == 0) return head;
+
+        
+        int fastForward = count - remainder - 1;
+
+        while (fastForward > 0){
+            dummy = dummy.next;
+            fastForward--;
+        }
+
+        // [ 1, 2, 3, 4, 5]
+        //   H     D
+        ListNode tail = dummy;
+        ListNode newHead = dummy.next;
+
+        tail.next = null;
+
+        // [ 1, 2, 3 |  4, 5]
+        //   H    T    NH,D  
+
+        dummy = newHead;
+
+        while (dummy.next != null) {
+            dummy = dummy.next;
+        }
+
+        // [ 1, 2,  3 | 4, 5]
+        //   H     T     NH D  
+        dummy.next = head;
+
+        return newHead;
+    }
+
+
+   public static ListNode DeleteDuplicates(ListNode head)
+    {
         ListNode dummy = head;
         ListNode prev = null;
 
-        while (dummy !=null){
+        while (dummy != null)
+        {
             bool isDupe = false;
-            while (dummy.next !=null && dummy.val == dummy.next.val){
+            while (dummy.next != null && dummy.val == dummy.next.val)
+            {
                 dummy.next = dummy.next.next;
                 isDupe = true;
             }
 
-             if (isDupe) {
+            if (isDupe)
+            {
                 // Skip the entire dupe node
-                if (prev == null) {
+                if (prev == null)
+                {
                     head = dummy.next;
-                } else {
+                }
+                else
+                {
                     prev.next = dummy.next;
                 }
-                dummy = dummy.next; 
-            } else {
+                dummy = dummy.next;
+            }
+            else
+            {
                 prev = dummy;
                 dummy = dummy.next;
             }
@@ -71,7 +160,7 @@ static class LeetChallenges
 
         return head;
     }
-    
+
 
 public static ListNode ReverseKGroup(ListNode head, int k) {
     if (head == null || k <= 1) return head;
