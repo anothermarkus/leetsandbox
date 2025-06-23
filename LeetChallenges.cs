@@ -1,6 +1,18 @@
 using System.Text;
 using System.Collections;
 
+ public class TreeNode {
+      public int val;
+      public TreeNode left;
+      public TreeNode right;
+      public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) {
+          this.val = val;
+          this.left = left;
+          this.right = right;
+      }
+  }
+
+
 public class ListNode
 {
     public int val;
@@ -21,8 +33,8 @@ public class ListNode
         val = x;
         this.next = next;
     }
-    
-  }
+
+}
 
 public class Node
 {
@@ -41,6 +53,18 @@ public class Node
 
 static class LeetChallenges
 {
+
+    public static int MaxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return recursiveHelper(root,1);    
+    }
+
+    private static int recursiveHelper(TreeNode root, int currentDepth){
+        return Math.Max( (root.left == null) ? currentDepth : recursiveHelper(root.left, currentDepth + 1), 
+                         (root.right == null) ? currentDepth : recursiveHelper(root.right, currentDepth + 1) );
+
+    }
+
     public static ListNode Partition(ListNode head, int x)
     {
         ListNode leftDummy = new ListNode(0);
