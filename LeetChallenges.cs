@@ -53,10 +53,25 @@ public class Node
 
 static class LeetChallenges
 {
+    
+     public static bool IsSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null){
+            return true;
+        }
 
-    public static int MaxDepth(TreeNode root) {
+        if (p == null || q == null){
+            return false;
+        }
+
+        return p.val == q.val && IsSameTree(p.left, q.left) && IsSameTree(p.right,q.right); 
+        
+    }
+
+
+    public static int MaxDepth(TreeNode root)
+    {
         if (root == null) return 0;
-        return recursiveHelper(root,1);    
+        return recursiveHelper(root, 1);
     }
 
     private static int recursiveHelper(TreeNode root, int currentDepth){
