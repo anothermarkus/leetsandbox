@@ -54,17 +54,36 @@ public class Node
 static class LeetChallenges
 {
     
-     public static bool IsSameTree(TreeNode p, TreeNode q) {
-        if (p == null && q == null){
+      public static TreeNode InvertTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        
+        TreeNode temp = root.left;
+        root.left = root.right;
+        root.right = temp;
+
+        InvertTree(root.left);
+        InvertTree(root.right);
+
+        return root;
+    }
+
+
+     public static bool IsSameTree(TreeNode p, TreeNode q)
+    {
+        if (p == null && q == null)
+        {
             return true;
         }
 
-        if (p == null || q == null){
+        if (p == null || q == null)
+        {
             return false;
         }
 
-        return p.val == q.val && IsSameTree(p.left, q.left) && IsSameTree(p.right,q.right); 
-        
+        return p.val == q.val && IsSameTree(p.left, q.left) && IsSameTree(p.right, q.right);
+
     }
 
 
