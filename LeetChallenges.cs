@@ -54,12 +54,41 @@ public class Node
 static class LeetChallenges
 {
     
+     public static TreeNode BuildTree(int[] preorder, int[] inorder) {
+        // Build value-to-index map for inorder traversal
+        Dictionary<int, int> inorderIndexMap = new();
+        for (int i = 0; i < inorder.Length; i++) {
+            inorderIndexMap[inorder[i]] = i;
+        }
 
-     public static bool IsSymmetric(TreeNode root) {
-        if (root == null){
+        return BuildSubtree(0, 0, inorder.Length - 1, preorder, inorderIndexMap);
+    }
+
+    private static TreeNode BuildSubtree(int preStart, int inStart, int inEnd, int[] preorder, Dictionary<int, int> inorderIndexMap) {
+        if (preStart >= preorder.Length || inStart > inEnd)
+            return null;
+
+        int rootVal = preorder[preStart];
+        TreeNode root = new TreeNode(rootVal);
+
+        int inIndex = inorderIndexMap[rootVal];
+        int leftSubtreeSize = inIndex - inStart;
+
+        root.left = BuildSubtree(preStart + 1, inStart, inIndex - 1, preorder, inorderIndexMap);
+        root.right = BuildSubtree(preStart + 1 + leftSubtreeSize, inIndex + 1, inEnd, preorder, inorderIndexMap);
+
+        return root;
+    }
+
+
+
+    public static bool IsSymmetric(TreeNode root)
+    {
+        if (root == null)
+        {
             return true;
         }
-        return IsMirror(root.left,root.right);            
+        return IsMirror(root.left, root.right);
     }
 
     public static bool IsMirror(TreeNode left, TreeNode right){
