@@ -54,7 +54,7 @@ public class Node
 static class LeetChallenges
 {
     
-      public static TreeNode BuildTree(int[] inorder, int[] postorder) {
+      public static TreeNode BuildTree106(int[] inorder, int[] postorder) {
         
         Dictionary<int,int> inOrderlookup = new Dictionary<int,int>();
 
