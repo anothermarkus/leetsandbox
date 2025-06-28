@@ -54,10 +54,48 @@ public class Node
 static class LeetChallenges
 {
     
-     public static TreeNode BuildTree(int[] preorder, int[] inorder) {
+      public static TreeNode BuildTree(int[] inorder, int[] postorder) {
+        
+        Dictionary<int,int> inOrderlookup = new Dictionary<int,int>();
+
+        for (int i=0; i< inorder.Length; i++){
+            inOrderlookup.Add(inorder[i],i);
+        }
+
+        return BuildSubtree106(postorder.Length -1, 0, inorder.Length - 1, inorder, postorder, inOrderlookup);
+
+    }
+
+    private static TreeNode BuildSubtree106(int postStart,int leftInIndex, int rightInIndex, int[] inorder, int[] postorder, Dictionary<int,int> inOrderlookup){
+
+        if (postStart < 0){
+            return null;
+        }
+
+        if (leftInIndex > rightInIndex){
+            return null;
+        }
+
+        TreeNode root = new TreeNode(postorder[postStart]);
+        
+        int inOrderPartitionValue = inOrderlookup[postorder[postStart]];
+        int inOrderLeftSubtreeSize = inOrderPartitionValue - leftInIndex;
+        int inOrderRightSubtreeSize = rightInIndex - inOrderPartitionValue;
+
+        
+        root.left = BuildSubtree106( postStart - inOrderRightSubtreeSize -1, leftInIndex, inOrderPartitionValue -1, inorder,postorder,inOrderlookup );
+        root.right = BuildSubtree106( postStart -1, inOrderPartitionValue + 1, rightInIndex,inorder,postorder,inOrderlookup  );
+
+        return root;
+
+    }
+    
+     public static TreeNode BuildTree(int[] preorder, int[] inorder)
+    {
         // Build value-to-index map for inorder traversal
         Dictionary<int, int> inorderIndexMap = new();
-        for (int i = 0; i < inorder.Length; i++) {
+        for (int i = 0; i < inorder.Length; i++)
+        {
             inorderIndexMap[inorder[i]] = i;
         }
 
