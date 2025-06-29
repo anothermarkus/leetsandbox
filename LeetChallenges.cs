@@ -50,47 +50,98 @@ public class Node
     }
 }
 
+public class NodeConnect {
+    public int val;
+    public NodeConnect left;
+    public NodeConnect right;
+    public NodeConnect next;
+
+    public NodeConnect() {}
+
+    public NodeConnect(int _val) {
+        val = _val;
+    }
+
+    public NodeConnect(int _val, NodeConnect _left, NodeConnect _right, NodeConnect _next) {
+        val = _val;
+        left = _left;
+        right = _right;
+        next = _next;
+    }
+}
+
 
 static class LeetChallenges
 {
-    
-      public static TreeNode BuildTree106(int[] inorder, int[] postorder) {
-        
-        Dictionary<int,int> inOrderlookup = new Dictionary<int,int>();
 
-        for (int i=0; i< inorder.Length; i++){
-            inOrderlookup.Add(inorder[i],i);
+    public static NodeConnect Connect(NodeConnect root)
+    {
+        if (root == null) { return null; }
+
+        Queue<NodeConnect> elements = new Queue<NodeConnect>();
+        elements.Enqueue(root);
+
+        while (elements.Count > 0)
+        {
+            int levelSize = elements.Count;
+            NodeConnect prev = null;
+
+            for (int i = 0; i < levelSize; i++)
+            {
+                NodeConnect curr = elements.Dequeue();
+                if (prev != null) { prev.next = curr; }
+                prev = curr;
+
+                if (curr.left != null) { elements.Enqueue(curr.left); }
+                if (curr.right != null) { elements.Enqueue(curr.right); }
+            }
+            prev.next = null;
+        }
+        return root;
+    }
+
+    public static TreeNode BuildTree106(int[] inorder, int[] postorder)
+    {
+
+        Dictionary<int, int> inOrderlookup = new Dictionary<int, int>();
+
+        for (int i = 0; i < inorder.Length; i++)
+        {
+            inOrderlookup.Add(inorder[i], i);
         }
 
-        return BuildSubtree106(postorder.Length -1, 0, inorder.Length - 1, inorder, postorder, inOrderlookup);
+        return BuildSubtree106(postorder.Length - 1, 0, inorder.Length - 1, inorder, postorder, inOrderlookup);
 
     }
 
-    private static TreeNode BuildSubtree106(int postStart,int leftInIndex, int rightInIndex, int[] inorder, int[] postorder, Dictionary<int,int> inOrderlookup){
+    private static TreeNode BuildSubtree106(int postStart, int leftInIndex, int rightInIndex, int[] inorder, int[] postorder, Dictionary<int, int> inOrderlookup)
+    {
 
-        if (postStart < 0){
+        if (postStart < 0)
+        {
             return null;
         }
 
-        if (leftInIndex > rightInIndex){
+        if (leftInIndex > rightInIndex)
+        {
             return null;
         }
 
         TreeNode root = new TreeNode(postorder[postStart]);
-        
+
         int inOrderPartitionValue = inOrderlookup[postorder[postStart]];
         int inOrderLeftSubtreeSize = inOrderPartitionValue - leftInIndex;
         int inOrderRightSubtreeSize = rightInIndex - inOrderPartitionValue;
 
-        
-        root.left = BuildSubtree106( postStart - inOrderRightSubtreeSize -1, leftInIndex, inOrderPartitionValue -1, inorder,postorder,inOrderlookup );
-        root.right = BuildSubtree106( postStart -1, inOrderPartitionValue + 1, rightInIndex,inorder,postorder,inOrderlookup  );
+
+        root.left = BuildSubtree106(postStart - inOrderRightSubtreeSize - 1, leftInIndex, inOrderPartitionValue - 1, inorder, postorder, inOrderlookup);
+        root.right = BuildSubtree106(postStart - 1, inOrderPartitionValue + 1, rightInIndex, inorder, postorder, inOrderlookup);
 
         return root;
 
     }
-    
-     public static TreeNode BuildTree(int[] preorder, int[] inorder)
+
+    public static TreeNode BuildTree(int[] preorder, int[] inorder)
     {
         // Build value-to-index map for inorder traversal
         Dictionary<int, int> inorderIndexMap = new();
@@ -102,7 +153,8 @@ static class LeetChallenges
         return BuildSubtree(0, 0, inorder.Length - 1, preorder, inorderIndexMap);
     }
 
-    private static TreeNode BuildSubtree(int preStart, int inStart, int inEnd, int[] preorder, Dictionary<int, int> inorderIndexMap) {
+    private static TreeNode BuildSubtree(int preStart, int inStart, int inEnd, int[] preorder, Dictionary<int, int> inorderIndexMap)
+    {
         if (preStart >= preorder.Length || inStart > inEnd)
             return null;
 
@@ -129,18 +181,21 @@ static class LeetChallenges
         return IsMirror(root.left, root.right);
     }
 
-    public static bool IsMirror(TreeNode left, TreeNode right){
-        if( left== null && right == null){
+    public static bool IsMirror(TreeNode left, TreeNode right)
+    {
+        if (left == null && right == null)
+        {
             return true;
         }
-        if( left== null || right == null){
+        if (left == null || right == null)
+        {
             return false;
-        }         
-        return (left.val == right.val) && IsMirror(left.left, right.right) && IsMirror(left.right,right.left);        
+        }
+        return (left.val == right.val) && IsMirror(left.left, right.right) && IsMirror(left.right, right.left);
     }
 
-    
-      public static TreeNode InvertTree(TreeNode root)
+
+    public static TreeNode InvertTree(TreeNode root)
     {
         if (root == null)
         {
@@ -158,7 +213,7 @@ static class LeetChallenges
     }
 
 
-     public static bool IsSameTree(TreeNode p, TreeNode q)
+    public static bool IsSameTree(TreeNode p, TreeNode q)
     {
         if (p == null && q == null)
         {
@@ -181,9 +236,10 @@ static class LeetChallenges
         return recursiveHelper(root, 1);
     }
 
-    private static int recursiveHelper(TreeNode root, int currentDepth){
-        return Math.Max( (root.left == null) ? currentDepth : recursiveHelper(root.left, currentDepth + 1), 
-                         (root.right == null) ? currentDepth : recursiveHelper(root.right, currentDepth + 1) );
+    private static int recursiveHelper(TreeNode root, int currentDepth)
+    {
+        return Math.Max((root.left == null) ? currentDepth : recursiveHelper(root.left, currentDepth + 1),
+                         (root.right == null) ? currentDepth : recursiveHelper(root.right, currentDepth + 1));
 
     }
 
@@ -215,13 +271,15 @@ static class LeetChallenges
         return leftDummy.next;
     }
 
-    public static ListNode RotateRight(ListNode head, int k) {
+    public static ListNode RotateRight(ListNode head, int k)
+    {
         if (head == null || head.next == null || k == 0) return head;
 
         ListNode dummy = head;
         int count = 0;
 
-        while (dummy !=null){
+        while (dummy != null)
+        {
             count++;
             dummy = dummy.next;
         }
@@ -230,16 +288,17 @@ static class LeetChallenges
         // [ 1, 2, 3, 4, 5]
         //  D,H
 
-        int remainder = k%count; // for big values of k
+        int remainder = k % count; // for big values of k
         //                     (5   - 2 - 1 ) = 2
         // disconnect  node  (count - k - 1) from the end, point the tail to head
 
         if (remainder == 0) return head;
 
-        
+
         int fastForward = count - remainder - 1;
 
-        while (fastForward > 0){
+        while (fastForward > 0)
+        {
             dummy = dummy.next;
             fastForward--;
         }
@@ -256,7 +315,8 @@ static class LeetChallenges
 
         dummy = newHead;
 
-        while (dummy.next != null) {
+        while (dummy.next != null)
+        {
             dummy = dummy.next;
         }
 
@@ -268,7 +328,7 @@ static class LeetChallenges
     }
 
 
-   public static ListNode DeleteDuplicates(ListNode head)
+    public static ListNode DeleteDuplicates(ListNode head)
     {
         ListNode dummy = head;
         ListNode prev = null;
@@ -308,39 +368,44 @@ static class LeetChallenges
     }
 
 
-public static ListNode ReverseKGroup(ListNode head, int k) {
-    if (head == null || k <= 1) return head;
+    public static ListNode ReverseKGroup(ListNode head, int k)
+    {
+        if (head == null || k <= 1) return head;
 
-    int count = 0;
-    ListNode ptr = head;
+        int count = 0;
+        ListNode ptr = head;
 
-    // Count total nodes
-    while (ptr != null) {
-        count++;
-        ptr = ptr.next;
-    }
+        // Count total nodes
+        while (ptr != null)
+        {
+            count++;
+            ptr = ptr.next;
+        }
 
-    int left = 1;
-    int right = k;
+        int left = 1;
+        int right = k;
 
-    while (right <= count) {
-        head = ReverseBetweenEfficient(head, left, right);
-        left += k;
-        right += k;
-    }
+        while (right <= count)
+        {
+            head = ReverseBetweenEfficient(head, left, right);
+            left += k;
+            right += k;
+        }
 
         return head;
     }
 
 
- public static ListNode ReverseBetweenEfficient(ListNode head, int left, int right) {
+    public static ListNode ReverseBetweenEfficient(ListNode head, int left, int right)
+    {
         if (head == null || left == right) return head;
 
         ListNode dummy = new ListNode(0, head);
         ListNode prev = dummy;
 
         // Move `prev` to the node just before the left-th node
-        for (int i = 1; i < left; i++) {
+        for (int i = 1; i < left; i++)
+        {
             prev = prev.next;
         }
 
@@ -349,7 +414,8 @@ public static ListNode ReverseKGroup(ListNode head, int k) {
         ListNode next = null;
 
         // Reverse nodes between left and right
-        for (int i = 0; i < right - left; i++) {
+        for (int i = 0; i < right - left; i++)
+        {
             next = current.next;
             current.next = next.next;
             next.next = prev.next;
