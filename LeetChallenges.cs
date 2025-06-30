@@ -74,6 +74,28 @@ public class NodeConnect {
 static class LeetChallenges
 {
 
+    public static void Flatten(TreeNode root) {
+        TreeNode prev = null;
+        FlattenPreorder(root, ref prev);
+    }
+
+    private static void FlattenPreorder(TreeNode node, ref TreeNode prev) {
+        if (node == null) return;
+
+        if (prev != null) {
+            prev.right = node;
+            prev.left = null; // clear left pointer
+        }
+
+        prev = node;
+
+        TreeNode left = node.left;
+        TreeNode right = node.right;
+
+        FlattenPreorder(left, ref prev);
+        FlattenPreorder(right, ref prev);
+    }
+
     public static NodeConnect Connect(NodeConnect root)
     {
         if (root == null) { return null; }
