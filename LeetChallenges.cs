@@ -73,8 +73,23 @@ public class NodeConnect {
 
 static class LeetChallenges
 {
+    public static bool HasPathSum(TreeNode root, int targetSum) { 
+        if (root == null){ return false;}
 
-    public static void Flatten(TreeNode root) {
+        int currentVal = root.val;
+        targetSum = targetSum - currentVal;
+
+        // leaf node
+        if (root.left == null && root.right == null){
+           return targetSum == 0;      
+        }
+
+        return HasPathSum(root.left, targetSum) || HasPathSum(root.right, targetSum);
+    }
+
+
+    public static void Flatten(TreeNode root)
+    {
         TreeNode prev = null;
         FlattenPreorder(root, ref prev);
     }
