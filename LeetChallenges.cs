@@ -73,15 +73,38 @@ public class NodeConnect {
 
 static class LeetChallenges
 {
-    public static bool HasPathSum(TreeNode root, int targetSum) { 
-        if (root == null){ return false;}
+    
+    public static int SumNumbers(TreeNode root) {
+        if (root == null){ return 0; }
+        if (root.left == null && root.right == null){ return root.val;}
+
+        return SumHelper(root.left, root.val) + SumHelper(root.right, root.val);
+    }
+
+    private static int SumHelper(TreeNode root, int runningSum){
+        if (root == null){
+            return 0;
+        }
+        runningSum = runningSum * 10 + root.val;
+        // we are at the leat node, time to exit
+        if (root.left == null && root.right == null){
+            return runningSum;
+        }
+        return SumHelper(root.left, runningSum) + 
+        SumHelper(root.right, runningSum);
+    }
+
+    public static bool HasPathSum(TreeNode root, int targetSum)
+    {
+        if (root == null) { return false; }
 
         int currentVal = root.val;
         targetSum = targetSum - currentVal;
 
         // leaf node
-        if (root.left == null && root.right == null){
-           return targetSum == 0;      
+        if (root.left == null && root.right == null)
+        {
+            return targetSum == 0;
         }
 
         return HasPathSum(root.left, targetSum) || HasPathSum(root.right, targetSum);
