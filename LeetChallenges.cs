@@ -73,10 +73,33 @@ public class NodeConnect {
 
 static class LeetChallenges
 {
+
+    private static int globalMax = int.MinValue;
+
+    public static int MaxPathSum(TreeNode root) {
+        MaxGain(root);
+        return globalMax;
+    }
+
+    private static int MaxGain(TreeNode node) {
+        if (node == null) return 0;
+
+        int leftGain = Math.Max(MaxGain(node.left), 0);
+        int rightGain = Math.Max(MaxGain(node.right), 0);
+
+        int localMax = node.val + leftGain + rightGain;
+
+        globalMax = Math.Max(globalMax, localMax);
+
+        return node.val + Math.Max(leftGain, rightGain);
+    }
+  
+
     
-    public static int SumNumbers(TreeNode root) {
-        if (root == null){ return 0; }
-        if (root.left == null && root.right == null){ return root.val;}
+    public static int SumNumbers(TreeNode root)
+    {
+        if (root == null) { return 0; }
+        if (root.left == null && root.right == null) { return root.val; }
 
         return SumHelper(root.left, root.val) + SumHelper(root.right, root.val);
     }
