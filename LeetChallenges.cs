@@ -50,19 +50,22 @@ public class Node
     }
 }
 
-public class NodeConnect {
+public class NodeConnect
+{
     public int val;
     public NodeConnect left;
     public NodeConnect right;
     public NodeConnect next;
 
-    public NodeConnect() {}
+    public NodeConnect() { }
 
-    public NodeConnect(int _val) {
+    public NodeConnect(int _val)
+    {
         val = _val;
     }
 
-    public NodeConnect(int _val, NodeConnect _left, NodeConnect _right, NodeConnect _next) {
+    public NodeConnect(int _val, NodeConnect _left, NodeConnect _right, NodeConnect _next)
+    {
         val = _val;
         left = _left;
         right = _right;
@@ -70,18 +73,60 @@ public class NodeConnect {
     }
 }
 
+public class BSTIterator
+{
+
+    private Stack<TreeNode> stack;
+    private TreeNode current;
+
+    public BSTIterator(TreeNode root)
+    {
+        stack = new Stack<TreeNode>();
+        current = root;
+    }
+
+    // In Order: LNR
+    public int Next()
+    {
+
+        // L : Push all the lefts as it works recursively
+        while (current != null)
+        {
+            stack.Push(current);
+            current = current.left;
+        }
+
+        // N : Done with all the lefts, pop one out
+        current = stack.Pop();
+        int result = current.val;
+
+        // R : Move right only once after lefts have been pushed first
+        current = current.right;
+
+        return result;
+    }
+
+    public bool HasNext()
+    {
+        return stack.Count > 0 || current != null;
+    }
+}
+
+
 
 static class LeetChallenges
 {
 
     private static int globalMax = int.MinValue;
 
-    public static int MaxPathSum(TreeNode root) {
+    public static int MaxPathSum(TreeNode root)
+    {
         MaxGain(root);
         return globalMax;
     }
 
-    private static int MaxGain(TreeNode node) {
+    private static int MaxGain(TreeNode node)
+    {
         if (node == null) return 0;
 
         int leftGain = Math.Max(MaxGain(node.left), 0);
@@ -93,9 +138,9 @@ static class LeetChallenges
 
         return node.val + Math.Max(leftGain, rightGain);
     }
-  
 
-    
+
+
     public static int SumNumbers(TreeNode root)
     {
         if (root == null) { return 0; }
@@ -104,16 +149,19 @@ static class LeetChallenges
         return SumHelper(root.left, root.val) + SumHelper(root.right, root.val);
     }
 
-    private static int SumHelper(TreeNode root, int runningSum){
-        if (root == null){
+    private static int SumHelper(TreeNode root, int runningSum)
+    {
+        if (root == null)
+        {
             return 0;
         }
         runningSum = runningSum * 10 + root.val;
         // we are at the leat node, time to exit
-        if (root.left == null && root.right == null){
+        if (root.left == null && root.right == null)
+        {
             return runningSum;
         }
-        return SumHelper(root.left, runningSum) + 
+        return SumHelper(root.left, runningSum) +
         SumHelper(root.right, runningSum);
     }
 
@@ -140,10 +188,12 @@ static class LeetChallenges
         FlattenPreorder(root, ref prev);
     }
 
-    private static void FlattenPreorder(TreeNode node, ref TreeNode prev) {
+    private static void FlattenPreorder(TreeNode node, ref TreeNode prev)
+    {
         if (node == null) return;
 
-        if (prev != null) {
+        if (prev != null)
+        {
             prev.right = node;
             prev.left = null; // clear left pointer
         }
