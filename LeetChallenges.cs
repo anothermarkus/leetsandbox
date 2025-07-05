@@ -117,6 +117,14 @@ public class BSTIterator
 static class LeetChallenges
 {
 
+
+    public static int CountNodes(TreeNode root) {        
+        if (root == null){
+            return 0;
+        }      
+        return CountNodes(root.left) + CountNodes(root.right) + 1;
+    }
+
     private static int globalMax = int.MinValue;
 
     public static int MaxPathSum(TreeNode root)
