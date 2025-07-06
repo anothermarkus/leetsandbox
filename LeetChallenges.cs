@@ -116,12 +116,37 @@ public class BSTIterator
 
 static class LeetChallenges
 {
-
-
-    public static int CountNodes(TreeNode root) {        
+    
+    public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {   
         if (root == null){
+            return null;
+        } 
+        
+        // This node matches either p or q
+        if(root == p || root == q) {
+            return root;
+        }
+
+        TreeNode left = LowestCommonAncestor(root.left, p, q);
+        TreeNode right = LowestCommonAncestor(root.right, p, q);
+
+        // both left and right subtrees have p and q
+        if (left != null && right != null) {
+            return root;
+        }
+
+        return left != null ? left : right;
+
+    }
+
+
+
+    public static int CountNodes(TreeNode root)
+    {
+        if (root == null)
+        {
             return 0;
-        }      
+        }
         return CountNodes(root.left) + CountNodes(root.right) + 1;
     }
 
