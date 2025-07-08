@@ -117,13 +117,41 @@ public class BSTIterator
 static class LeetChallenges
 {
     
-    public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {   
+
+     public static IList<double> AverageOfLevels(TreeNode root) {
         if (root == null){
             return null;
-        } 
-        
+        }
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        IList<double> avg = new List<double>();
+
+        q.Enqueue(root);
+
+        while (q.Count > 0){
+            int nodesInLevel = q.Count;
+            double sum = 0;
+            for (int i=0; i< nodesInLevel; i++){
+                TreeNode node = q.Dequeue();
+                sum+= node.val;
+
+                if (node.left != null){ q.Enqueue(node.left);}
+                if (node.right != null){ q.Enqueue(node.right);}
+            }
+            avg.Add(sum/nodesInLevel);
+        }
+        return avg;
+    }
+    
+    public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+    {
+        if (root == null)
+        {
+            return null;
+        }
+
         // This node matches either p or q
-        if(root == p || root == q) {
+        if (root == p || root == q)
+        {
             return root;
         }
 
@@ -131,7 +159,8 @@ static class LeetChallenges
         TreeNode right = LowestCommonAncestor(root.right, p, q);
 
         // both left and right subtrees have p and q
-        if (left != null && right != null) {
+        if (left != null && right != null)
+        {
             return root;
         }
 
