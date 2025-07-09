@@ -117,9 +117,39 @@ public class BSTIterator
 static class LeetChallenges
 {
     
-
-     public static IList<double> AverageOfLevels(TreeNode root) {
+    public class Solution {
+    public static IList<IList<int>> LevelOrder(TreeNode root) {
         if (root == null){
+            return new List<IList<int>>();
+        }
+    
+        Queue<TreeNode> q = new Queue<TreeNode>();
+        IList<IList<int>> levels = new List<IList<int>>();
+
+        q.Enqueue(root);
+
+        while (q.Count > 0){
+            IList<int> level = new List<int>();
+            int levelCount = q.Count;
+
+            for (int i=0; i<levelCount;i++){
+                TreeNode node = q.Dequeue();
+                level.Add(node.val);
+
+                if (node.left != null){ q.Enqueue(node.left); }
+                if (node.right != null){ q.Enqueue(node.right); }
+            }
+            levels.Add(level);
+        }
+        return levels;
+        }
+    }
+    
+
+     public static IList<double> AverageOfLevels(TreeNode root)
+    {
+        if (root == null)
+        {
             return null;
         }
         Queue<TreeNode> q = new Queue<TreeNode>();
@@ -127,17 +157,19 @@ static class LeetChallenges
 
         q.Enqueue(root);
 
-        while (q.Count > 0){
+        while (q.Count > 0)
+        {
             int nodesInLevel = q.Count;
             double sum = 0;
-            for (int i=0; i< nodesInLevel; i++){
+            for (int i = 0; i < nodesInLevel; i++)
+            {
                 TreeNode node = q.Dequeue();
-                sum+= node.val;
+                sum += node.val;
 
-                if (node.left != null){ q.Enqueue(node.left);}
-                if (node.right != null){ q.Enqueue(node.right);}
+                if (node.left != null) { q.Enqueue(node.left); }
+                if (node.right != null) { q.Enqueue(node.right); }
             }
-            avg.Add(sum/nodesInLevel);
+            avg.Add(sum / nodesInLevel);
         }
         return avg;
     }
