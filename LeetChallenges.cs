@@ -118,30 +118,60 @@ static class LeetChallenges
 {
     
     public class Solution {
-    public static IList<IList<int>> LevelOrder(TreeNode root) {
-        if (root == null){
-            return new List<IList<int>>();
-        }
-    
+        
+        public static IList<IList<int>> ZigzagLevelOrder(TreeNode root) {
+        if (root == null){ return new List<IList<int>>(); }
+        bool reverse = false;
+        IList<IList<int>> list = new List<IList<int>>();
         Queue<TreeNode> q = new Queue<TreeNode>();
-        IList<IList<int>> levels = new List<IList<int>>();
-
         q.Enqueue(root);
-
         while (q.Count > 0){
-            IList<int> level = new List<int>();
-            int levelCount = q.Count;
-
-            for (int i=0; i<levelCount;i++){
-                TreeNode node = q.Dequeue();
-                level.Add(node.val);
-
-                if (node.left != null){ q.Enqueue(node.left); }
-                if (node.right != null){ q.Enqueue(node.right); }
-            }
-            levels.Add(level);
+                int levelCount = q.Count;                
+                List<int> sublist = new List<int>();
+                for (int i=0; i< levelCount; i++){                    
+                    TreeNode node = q.Dequeue();
+                    sublist.Add(node.val);
+                    if (node.left !=null){ q.Enqueue(node.left); }
+                    if (node.right !=null){ q.Enqueue(node.right); }
+                }
+                if (reverse) {  
+                    sublist.Reverse();
+                }
+                reverse = !reverse;               
+                list.Add(sublist);
         }
-        return levels;
+        return list;
+    }
+
+
+    public static IList<IList<int>> LevelOrder(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<IList<int>>();
+            }
+
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            IList<IList<int>> levels = new List<IList<int>>();
+
+            q.Enqueue(root);
+
+            while (q.Count > 0)
+            {
+                IList<int> level = new List<int>();
+                int levelCount = q.Count;
+
+                for (int i = 0; i < levelCount; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    level.Add(node.val);
+
+                    if (node.left != null) { q.Enqueue(node.left); }
+                    if (node.right != null) { q.Enqueue(node.right); }
+                }
+                levels.Add(level);
+            }
+            return levels;
         }
     }
     
