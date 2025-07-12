@@ -118,6 +118,33 @@ static class LeetChallenges
 {
     
 
+    public static int KthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        int visitCount = 0;
+        TreeNode current = root;
+
+        while (current !=null || stack.Count > 0){
+            // LEFT
+            if (current != null){
+                while (current != null){
+                    stack.Push(current);
+                    current = current.left;
+                }
+            }
+            current = stack.Pop();
+            // Node
+            visitCount++;
+            if (visitCount == k){
+                return current.val;
+            }
+            // RIGHT
+            current = current.right;
+
+        }
+        // not found
+        return -1; 
+    }
+
      public static int GetMinimumDifference(TreeNode root)
     {
         TreeNode prev = null;
