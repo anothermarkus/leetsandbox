@@ -116,7 +116,27 @@ public class BSTIterator
 
 static class LeetChallenges
 {
-    
+    public static bool IsValidBST(TreeNode root) {
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        TreeNode curr = root;
+        TreeNode prev = null;
+        
+        while (curr != null || stack.Count > 0 ){
+            while (curr != null){
+                stack.Push(curr);
+                curr = curr.left;
+            }
+            curr = stack.Pop();            
+
+           if (prev != null && prev.val >= curr.val){
+            // sommething off with the binary tree, not increasing in values
+            return false;
+           }            
+            prev = curr;
+            curr = curr.right;            
+        }
+        return true;        
+    }
 
     public static int KthSmallest(TreeNode root, int k) {
         Stack<TreeNode> stack = new Stack<TreeNode>();
