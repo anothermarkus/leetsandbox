@@ -112,30 +112,70 @@ public class BSTIterator
     }
 }
 
+    
+    
 
 
 static class LeetChallenges
 {
-    public static bool IsValidBST(TreeNode root) {
+    
+     public static int NumIslands(char[][] grid) {
+        if (grid == null || grid.Length == 0 || grid[0].Length == 0) return 0;
+        
+        int rows = grid.Length;
+        int columns = grid[0].Length;
+        int count = 0;
+        for (int i=0; i< rows; i++){
+            for (int j=0; j< columns; j++){
+                if (grid[i][j] == '1'){
+                    flood(grid,i,j,rows,columns);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    
+    public static void flood(char[][] grid, int i, int j, int rows, int columns)
+    {
+        if (i < 0 || i > rows - 1 || j < 0 || j > columns - 1 || grid[i][j] == '0')
+        {
+            return;
+        }
+        grid[i][j] = '0';
+        // we are here because something was a "1"
+        // anything touching a 1 should be reset to 0 in all directions
+        flood(grid, i + 1, j,rows,columns);
+        flood(grid, i - 1, j,rows,columns);
+        flood(grid, i, j + 1,rows,columns);
+        flood(grid, i, j - 1,rows,columns);
+    }
+
+
+    public static bool IsValidBST(TreeNode root)
+    {
         Stack<TreeNode> stack = new Stack<TreeNode>();
         TreeNode curr = root;
         TreeNode prev = null;
-        
-        while (curr != null || stack.Count > 0 ){
-            while (curr != null){
+
+        while (curr != null || stack.Count > 0)
+        {
+            while (curr != null)
+            {
                 stack.Push(curr);
                 curr = curr.left;
             }
-            curr = stack.Pop();            
+            curr = stack.Pop();
 
-           if (prev != null && prev.val >= curr.val){
-            // sommething off with the binary tree, not increasing in values
-            return false;
-           }            
+            if (prev != null && prev.val >= curr.val)
+            {
+                // sommething off with the binary tree, not increasing in values
+                return false;
+            }
             prev = curr;
-            curr = curr.right;            
+            curr = curr.right;
         }
-        return true;        
+        return true;
     }
 
     public static int KthSmallest(TreeNode root, int k) {
@@ -143,10 +183,10 @@ static class LeetChallenges
         int visitCount = 0;
         TreeNode current = root;
 
-        while (current !=null || stack.Count > 0){
+        while (current != null || stack.Count > 0) {
             // LEFT
-            if (current != null){
-                while (current != null){
+            if (current != null) {
+                while (current != null) {
                     stack.Push(current);
                     current = current.left;
                 }
@@ -154,7 +194,7 @@ static class LeetChallenges
             current = stack.Pop();
             // Node
             visitCount++;
-            if (visitCount == k){
+            if (visitCount == k) {
                 return current.val;
             }
             // RIGHT
@@ -162,10 +202,10 @@ static class LeetChallenges
 
         }
         // not found
-        return -1; 
+        return -1;
     }
 
-     public static int GetMinimumDifference(TreeNode root)
+    public static int GetMinimumDifference(TreeNode root)
     {
         TreeNode prev = null;
         TreeNode curr = root;
@@ -221,7 +261,7 @@ static class LeetChallenges
         }
         return list;
     }
-    
+
 
 
     public static IList<IList<int>> LevelOrder(TreeNode root)
@@ -253,10 +293,10 @@ static class LeetChallenges
         }
         return levels;
     }
-    
-    
 
-     public static IList<double> AverageOfLevels(TreeNode root)
+
+
+    public static IList<double> AverageOfLevels(TreeNode root)
     {
         if (root == null)
         {
@@ -283,7 +323,7 @@ static class LeetChallenges
         }
         return avg;
     }
-    
+
     public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
     {
         if (root == null)
