@@ -118,17 +118,77 @@ public class BSTIterator
 
 static class LeetChallenges
 {
+     public static void MarkVisited(char[][] board, int i, int j, int rows, int cols){
+        if (i > rows - 1 || j > cols -1 || j < 0 || i < 0 || board[i][j] != 'O'){
+            return;
+        }
+
+        board[i][j] = 'V';
+        MarkVisited(board, i,j+1,rows,cols);
+        MarkVisited(board, i,j-1,rows,cols);
+        MarkVisited(board, i+1,j,rows,cols);
+        MarkVisited(board, i-1,j,rows,cols);
+    }
     
-     public static int NumIslands(char[][] grid) {
+    public static void Solve(char[][] board)
+    {
+
+        // I understand you just flood the region with 0's as long as they are not on the edge
+        int rows = board.Length;
+        int cols = board[0].Length;
+
+        // 1. mark all border '0's as 'V'
+        // recurse through their connected nodes as 'V'
+
+        for (int i = 0; i < rows; i++)
+        {
+            MarkVisited(board, i, 0, rows, cols);
+            MarkVisited(board, i, cols - 1, rows, cols);
+        }
+
+        for (int j = 0; j < cols; j++)
+        {
+            MarkVisited(board, 0, j, rows, cols);
+            MarkVisited(board, rows - 1, j, rows, cols);
+        }
+
+        // 2. visit all nodes with '0' mark as 'X'        
+        // 3. mark 'V's as 'X'
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                // these are not 'V' and should be surrounded by 'X'
+                if (board[i][j] == 'O')
+                {
+                    board[i][j] = 'X';
+                }
+                else if (board[i][j] == 'V')
+                { // revert these back to 'O'
+                    board[i][j] = 'O';
+                }
+            }
+        }
+
+
+    }
+
+    
+     public static int NumIslands(char[][] grid)
+    {
         if (grid == null || grid.Length == 0 || grid[0].Length == 0) return 0;
-        
+
         int rows = grid.Length;
         int columns = grid[0].Length;
         int count = 0;
-        for (int i=0; i< rows; i++){
-            for (int j=0; j< columns; j++){
-                if (grid[i][j] == '1'){
-                    flood(grid,i,j,rows,columns);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                if (grid[i][j] == '1')
+                {
+                    flood(grid, i, j, rows, columns);
                     count++;
                 }
             }
