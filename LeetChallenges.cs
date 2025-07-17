@@ -112,24 +112,151 @@ public class BSTIterator
     }
 }
 
-    
-    
+
+public class GraphNode
+{
+    public int val;
+    public IList<GraphNode> neighbors;
+
+    public GraphNode()
+    {
+        val = 0;
+        neighbors = new List<GraphNode>();
+    }
+
+    public GraphNode(int _val)
+    {
+        val = _val;
+        neighbors = new List<GraphNode>();
+    }
+
+    public GraphNode(int _val, List<GraphNode> _neighbors)
+    {
+        val = _val;
+        neighbors = _neighbors;
+    }
+}
+
+  public class Edge{
+        public string Variable { get; set; } 
+        public double Weight { get; set; }
+        public Edge Next { get; set; }
+    }
+
+
 
 
 static class LeetChallenges
 {
-     public static void MarkVisited(char[][] board, int i, int j, int rows, int cols){
-        if (i > rows - 1 || j > cols -1 || j < 0 || i < 0 || board[i][j] != 'O'){
+
+
+    public static double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries) {
+        // Example
+        // a/b = 2
+        // b/c = 3
+
+        // a = 6c
+        // b = 3c
+        // c = c
+        
+        // a --2.0-> b 
+        // b --0.5-> a
+        // b --3.0-> c 
+        // c --1/3-> b
+
+        // add nodes to dictionary, follow links 
+
+        // Build up the dictionary
+        Dictionary<string, List<Edge>> graph = new Dictionary<string, List<Edge>>();
+
+        int length = values.Length;
+
+        for (int i = 0; i < equations.Count; i++) {
+            string a = equations[i][0];
+            string b = equations[i][1];
+            double value = values[i];
+
+            if (!graph.ContainsKey(a)) graph[a] = new List<Edge>();
+            if (!graph.ContainsKey(b)) graph[b] = new List<Edge>();
+
+            graph[a].Add(new Edge { Variable = b, Weight = value });
+            graph[b].Add(new Edge { Variable = a, Weight = 1.0 / value });
+        }
+        
+        List<double> result = new List<double>();
+
+          foreach (var query in queries) {
+            string start = query[0];
+            string end = query[1];
+
+            if (!graph.ContainsKey(start) || !graph.ContainsKey(end)) {
+                result.Add(-1.0);
+            } else {
+                HashSet<string> visited = new HashSet<string>();
+                double val = Dfs(graph, start, end, 1.0, visited);
+                result.Add(val);
+            }
+        }
+
+        return result.ToArray();
+    }
+
+     private static double Dfs(Dictionary<string, List<Edge>> graph, string current, string target, double accProduct, HashSet<string> visited) {
+        if (current == target) return accProduct;
+
+        visited.Add(current);
+
+        foreach (var neighbor in graph[current]) {
+            if (!visited.Contains(neighbor.Variable)) {
+                double result = Dfs(graph, neighbor.Variable, target, accProduct * neighbor.Weight, visited);
+                if (result != -1.0)
+                    return result;
+            }
+        }
+
+        return -1.0;
+    }
+
+
+
+    private static Dictionary<int, GraphNode> map = new Dictionary<int, GraphNode>();
+
+    public static GraphNode CloneGraph(GraphNode node)
+    {
+        if (node == null) return null;
+
+        // return visited one
+        if (map.ContainsKey(node.val))
+            return map[node.val];
+
+        GraphNode copy = new GraphNode(node.val);
+        map[node.val] = copy;
+
+        if (node.neighbors != null)
+        {
+            foreach (GraphNode neighbour in node.neighbors)
+            {
+                copy.neighbors.Add(CloneGraph(neighbour));
+            }
+        }
+        return copy;
+
+    }
+
+    public static void MarkVisited(char[][] board, int i, int j, int rows, int cols)
+    {
+        if (i > rows - 1 || j > cols - 1 || j < 0 || i < 0 || board[i][j] != 'O')
+        {
             return;
         }
 
         board[i][j] = 'V';
-        MarkVisited(board, i,j+1,rows,cols);
-        MarkVisited(board, i,j-1,rows,cols);
-        MarkVisited(board, i+1,j,rows,cols);
-        MarkVisited(board, i-1,j,rows,cols);
+        MarkVisited(board, i, j + 1, rows, cols);
+        MarkVisited(board, i, j - 1, rows, cols);
+        MarkVisited(board, i + 1, j, rows, cols);
+        MarkVisited(board, i - 1, j, rows, cols);
     }
-    
+
     public static void Solve(char[][] board)
     {
 
@@ -174,8 +301,8 @@ static class LeetChallenges
 
     }
 
-    
-     public static int NumIslands(char[][] grid)
+
+    public static int NumIslands(char[][] grid)
     {
         if (grid == null || grid.Length == 0 || grid[0].Length == 0) return 0;
 
@@ -195,7 +322,7 @@ static class LeetChallenges
         }
         return count;
     }
-    
+
     public static void flood(char[][] grid, int i, int j, int rows, int columns)
     {
         if (i < 0 || i > rows - 1 || j < 0 || j > columns - 1 || grid[i][j] == '0')
@@ -205,10 +332,10 @@ static class LeetChallenges
         grid[i][j] = '0';
         // we are here because something was a "1"
         // anything touching a 1 should be reset to 0 in all directions
-        flood(grid, i + 1, j,rows,columns);
-        flood(grid, i - 1, j,rows,columns);
-        flood(grid, i, j + 1,rows,columns);
-        flood(grid, i, j - 1,rows,columns);
+        flood(grid, i + 1, j, rows, columns);
+        flood(grid, i - 1, j, rows, columns);
+        flood(grid, i, j + 1, rows, columns);
+        flood(grid, i, j - 1, rows, columns);
     }
 
 
@@ -238,15 +365,19 @@ static class LeetChallenges
         return true;
     }
 
-    public static int KthSmallest(TreeNode root, int k) {
+    public static int KthSmallest(TreeNode root, int k)
+    {
         Stack<TreeNode> stack = new Stack<TreeNode>();
         int visitCount = 0;
         TreeNode current = root;
 
-        while (current != null || stack.Count > 0) {
+        while (current != null || stack.Count > 0)
+        {
             // LEFT
-            if (current != null) {
-                while (current != null) {
+            if (current != null)
+            {
+                while (current != null)
+                {
                     stack.Push(current);
                     current = current.left;
                 }
@@ -254,7 +385,8 @@ static class LeetChallenges
             current = stack.Pop();
             // Node
             visitCount++;
-            if (visitCount == k) {
+            if (visitCount == k)
+            {
                 return current.val;
             }
             // RIGHT
@@ -726,8 +858,8 @@ static class LeetChallenges
         //  D,H
 
         int remainder = k % count; // for big values of k
-        //                     (5   - 2 - 1 ) = 2
-        // disconnect  node  (count - k - 1) from the end, point the tail to head
+                                   //                     (5   - 2 - 1 ) = 2
+                                   // disconnect  node  (count - k - 1) from the end, point the tail to head
 
         if (remainder == 0) return head;
 
@@ -1537,7 +1669,7 @@ static class LeetChallenges
 
         //Need to check cases like
         // s = "aabb" and "ab" 
-        if (s.Length != t.Length) return false;
+        if (s.Length != t.Length) return false;
 
         Dictionary<char, int> charCount = new Dictionary<char, int>();
         for (int i = 0; i < s.Length; i++)
@@ -2984,14 +3116,14 @@ static class LeetChallenges
     static int RomanToIntOptimized(string s)
     {
         Dictionary<char, int> dict = new Dictionary<char, int> {
-            {'I', 1},
-            {'V', 5},
-            {'X', 10},
-            {'L', 50},
-            {'C', 100},
-            {'D', 500},
-            {'M', 1000}
-        };
+                { 'I', 1 },
+                { 'V', 5 },
+                { 'X', 10 },
+                { 'L', 50 },
+                { 'C', 100 },
+                { 'D', 500 },
+                { 'M', 1000 }
+            };
 
         int total = 0;
         int prevValue = 0;
