@@ -149,8 +149,39 @@ public class GraphNode
 static class LeetChallenges
 {
 
+ public static bool CanFinish(int numCourses, int[][] prerequisites) {        
+        var graph = new Dictionary<int, List<int>>();
+        foreach (var edge in prerequisites) {
+            int from = edge[1], to = edge[0];
+            if (!graph.ContainsKey(from)) graph[from] = new List<int>();
+            graph[from].Add(to);
+        }
+        var state = new Dictionary<int, int>(); // 0 = unvisited, 1 = visiting, 2 = visited
+        foreach (var node in graph.Keys) {
+            if (!state.ContainsKey(node) && HasCycleDFS(node, graph, state)) {
+                return false; // Cycle found cannot finish
+            }
+        }
+        return true; // No cycle found, can finish
+    }
+     private static bool HasCycleDFS(int node, Dictionary<int, List<int>> graph, Dictionary<int, int> state) {
+        state[node] = 1; // mark as visiting
+        if (graph.ContainsKey(node)) {
+            foreach (var neighbor in graph[node]) {
+                if (!state.ContainsKey(neighbor)) {
+                    if (HasCycleDFS(neighbor, graph, state)) return true;
+                } else if (state[neighbor] == 1) {
+                    // Cycle detected
+                    return true;
+                }
+            }
+        }
+        state[node] = 2; // mark as visited
+        return false;
+    }
 
-    public static double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries) {
+    public static double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries)
+    {
         // Example
         // a/b = 2
         // b/c = 3
@@ -158,7 +189,7 @@ static class LeetChallenges
         // a = 6c
         // b = 3c
         // c = c
-        
+
         // a --2.0-> b 
         // b --0.5-> a
         // b --3.0-> c 
@@ -171,7 +202,8 @@ static class LeetChallenges
 
         int length = values.Length;
 
-        for (int i = 0; i < equations.Count; i++) {
+        for (int i = 0; i < equations.Count; i++)
+        {
             string a = equations[i][0];
             string b = equations[i][1];
             double value = values[i];
@@ -182,16 +214,20 @@ static class LeetChallenges
             graph[a].Add(new Edge { Variable = b, Weight = value });
             graph[b].Add(new Edge { Variable = a, Weight = 1.0 / value });
         }
-        
+
         List<double> result = new List<double>();
 
-          foreach (var query in queries) {
+        foreach (var query in queries)
+        {
             string start = query[0];
             string end = query[1];
 
-            if (!graph.ContainsKey(start) || !graph.ContainsKey(end)) {
+            if (!graph.ContainsKey(start) || !graph.ContainsKey(end))
+            {
                 result.Add(-1.0);
-            } else {
+            }
+            else
+            {
                 HashSet<string> visited = new HashSet<string>();
                 double val = Dfs(graph, start, end, 1.0, visited);
                 result.Add(val);
