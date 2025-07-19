@@ -148,17 +148,61 @@ public class GraphNode
 
 static class LeetChallenges
 {
-
- public static bool CanFinish(int numCourses, int[][] prerequisites) {        
+    
+     public static List<int> result = new List<int>();
+    
+    public static int[] FindOrder(int numCourses, int[][] prerequisites) {
         var graph = new Dictionary<int, List<int>>();
+        
         foreach (var edge in prerequisites) {
+            int from = edge[1], to = edge[0];
+            if (!graph.ContainsKey(from)) graph[from] = new List<int>();            
+            graph[from].Add(to);
+        }
+        var state = new Dictionary<int, int>(); // 0 = unvisited, 1 = visiting, 2 = visited       
+        for (int i = 0; i < numCourses; i++) {
+            if (!state.ContainsKey(i)) {
+                if (HasCycle(i, graph, state)) {
+                    return []; // Cycle found
+                }
+            }
+        }
+        result.Reverse();
+        return result.ToArray();
+    }
+
+     private static bool HasCycle(int node, Dictionary<int, List<int>> graph, Dictionary<int, int> state) {
+        state[node] = 1; // mark as visiting
+        if (graph.ContainsKey(node)) {
+            foreach (var neighbor in graph[node]) {
+                if (!state.ContainsKey(neighbor)) {
+                    if (HasCycle(neighbor, graph, state)) return true;
+                } else if (state[neighbor] == 1) {
+                    // Cycle detected
+                    return true;
+                }
+            }
+        }
+        state[node] = 2; // mark as visited
+        result.Add(node); 
+        return false;
+    }
+
+
+ public static bool CanFinish(int numCourses, int[][] prerequisites)
+    {
+        var graph = new Dictionary<int, List<int>>();
+        foreach (var edge in prerequisites)
+        {
             int from = edge[1], to = edge[0];
             if (!graph.ContainsKey(from)) graph[from] = new List<int>();
             graph[from].Add(to);
         }
         var state = new Dictionary<int, int>(); // 0 = unvisited, 1 = visiting, 2 = visited
-        foreach (var node in graph.Keys) {
-            if (!state.ContainsKey(node) && HasCycleDFS(node, graph, state)) {
+        foreach (var node in graph.Keys)
+        {
+            if (!state.ContainsKey(node) && HasCycleDFS(node, graph, state))
+            {
                 return false; // Cycle found cannot finish
             }
         }
