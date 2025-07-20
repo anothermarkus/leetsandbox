@@ -148,6 +148,46 @@ public class GraphNode
 
 static class LeetChallenges
 {
+
+    public static int SnakesAndLadders(int[][] board) {   
+        int n = board.Length;
+        var visited = new bool[n * n + 1];
+        var queue = new Queue<(int pos, int moves)>();
+        queue.Enqueue((1, 0)); // start at square 1, 0 moves
+        visited[1] = true;
+        while (queue.Count > 0)
+        {
+            var (curr, moves) = queue.Dequeue();
+            for (int i = 1; i <= 6; i++)
+            {
+                int next = curr + i;
+                if (next > n * n) continue;
+
+                var (row, col) = GetCoordinates(next, n);
+                if (board[row][col] != -1)
+                    next = board[row][col]; // snake or ladder
+
+                if (next == n * n)
+                    return moves + 1;
+
+                if (!visited[next])
+                {
+                    visited[next] = true;
+                    queue.Enqueue((next, moves + 1));
+                }
+            }
+        }
+        return -1;
+    }
+        private static (int row, int col) GetCoordinates(int square, int n)
+        {
+            int r = (square - 1) / n;
+            int c = (square - 1) % n;
+            int row = n - 1 - r;
+            int col = (r % 2 == 0) ? c : n - 1 - c;
+            return (row, col);
+        }
+
     
      public static List<int> result = new List<int>();
     
