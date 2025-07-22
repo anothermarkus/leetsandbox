@@ -148,8 +148,66 @@ public class GraphNode
 
 static class LeetChallenges
 {
+    
+      public static int LadderLength(string beginWord, string endWord, IList<string> wordList) {
+        HashSet<string> bank = new HashSet<string>(wordList);
+        HashSet<string> visited = new HashSet<string>();
+        char[] chars = new char[] { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+        Queue<(string, int)> q = new Queue<(string,int)>();
+        q.Enqueue((beginWord,1));
+        while (q.Count > 0){
+            (string word, int count) = q.Dequeue();
+            if (word == endWord){
+                return count;
+            }
+            for (int i=0; i< word.Length; i++){
+                foreach (char c in chars){                
+                    StringBuilder sb = new StringBuilder(word);
+                    sb[i] = c;
 
-    public static int SnakesAndLadders(int[][] board) {   
+                    string next = sb.ToString();
+
+                    if (bank.Contains(next) && !visited.Contains(next)){
+                        visited.Add(next);
+                        q.Enqueue((next, count +1));
+                    }
+                }
+            }
+        }
+        return 0;        
+    }
+
+      public static int MinMutation(string startGene, string endGene, string[] bank) {     
+       HashSet<string> visited = new HashSet<string>();
+       HashSet<string> geneBank = new HashSet<string>(bank);
+        Queue<(string, int)> q = new Queue<(string, int)>();
+        q.Enqueue((startGene,0));
+        while (q.Count > 0){
+            var (gene, count) = q.Dequeue();
+            if (gene == endGene){
+                return count;
+            }
+            for (int i=0; i< gene.Length; i++){
+                foreach (char c in new char[] {'A','C','G','T'}){
+                    var newGene = Substitute(gene, i, c);
+                    if (geneBank.Contains(newGene) && !visited.Contains(newGene)) {
+                        visited.Add(newGene);
+                        q.Enqueue((newGene, count + 1));                        
+                    }
+                }                                
+            }
+        }
+        return -1;
+    }
+    private static string Substitute(string gene, int index, char c){
+        StringBuilder sb = new StringBuilder(gene);                
+        sb[index] = c;                
+        return sb.ToString();
+    }
+
+
+    public static int SnakesAndLadders(int[][] board)
+    {
         int n = board.Length;
         var visited = new bool[n * n + 1];
         var queue = new Queue<(int pos, int moves)>();
