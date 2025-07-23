@@ -149,32 +149,90 @@ public class GraphNode
 static class LeetChallenges
 {
     
-      public static int LadderLength(string beginWord, string endWord, IList<string> wordList) {
+    public class TrieNode {
+    public TrieNode(){
+    }
+    public TrieNode(char c){
+        this.c = c;
+    }
+    public bool isEndofWord {get; set;}
+    public char c {get; set;}
+    public Dictionary<char, TrieNode> Children = new Dictionary<char, TrieNode>();
+    }
+
+
+    public class Trie {
+    TrieNode root;
+    public Trie() {
+        root = new TrieNode();        
+    }
+    
+    public void Insert(string word) {
+        TrieNode current = root;
+        foreach(char c in word){
+            if (!current.Children.ContainsKey(c)) {
+                current.Children[c] = new TrieNode(c);
+            }
+            current = current.Children[c];
+        }
+        current.isEndofWord = true;
+    }
+    
+    public bool Search(string word) {
+        TrieNode current = root;
+        foreach(char c in word){
+            if (!current.Children.ContainsKey(c)) {
+                return false;
+            }
+            current = current.Children[c];
+        }
+        return current.isEndofWord;
+    }
+    
+    public bool StartsWith(string prefix) {
+       TrieNode current = root;
+        foreach(char c in prefix){
+            if (!current.Children.ContainsKey(c)) {
+                return false;
+            }
+            current = current.Children[c];
+        }
+        return true;
+        }
+    }
+    
+      public static int LadderLength(string beginWord, string endWord, IList<string> wordList)
+    {
         HashSet<string> bank = new HashSet<string>(wordList);
         HashSet<string> visited = new HashSet<string>();
-        char[] chars = new char[] { 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
-        Queue<(string, int)> q = new Queue<(string,int)>();
-        q.Enqueue((beginWord,1));
-        while (q.Count > 0){
+        char[] chars = new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+        Queue<(string, int)> q = new Queue<(string, int)>();
+        q.Enqueue((beginWord, 1));
+        while (q.Count > 0)
+        {
             (string word, int count) = q.Dequeue();
-            if (word == endWord){
+            if (word == endWord)
+            {
                 return count;
             }
-            for (int i=0; i< word.Length; i++){
-                foreach (char c in chars){                
+            for (int i = 0; i < word.Length; i++)
+            {
+                foreach (char c in chars)
+                {
                     StringBuilder sb = new StringBuilder(word);
                     sb[i] = c;
 
                     string next = sb.ToString();
 
-                    if (bank.Contains(next) && !visited.Contains(next)){
+                    if (bank.Contains(next) && !visited.Contains(next))
+                    {
                         visited.Add(next);
-                        q.Enqueue((next, count +1));
+                        q.Enqueue((next, count + 1));
                     }
                 }
             }
         }
-        return 0;        
+        return 0;
     }
 
       public static int MinMutation(string startGene, string endGene, string[] bank) {     
