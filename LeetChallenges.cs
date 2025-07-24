@@ -149,15 +149,54 @@ public class GraphNode
 static class LeetChallenges
 {
     
-    public class TrieNode {
-    public TrieNode(){
+    public class WordDictionary {
+    private TrieNode root = new TrieNode();
+
+    public void AddWord(string word) {
+        TrieNode current = root;
+        foreach(var c in word){
+            if (!current.Children.ContainsKey(c)){
+                TrieNode node = new TrieNode();
+                node.c = c;
+                current.Children[c] = node;
+            }
+            current = current.Children[c];
+        }
+        current.isEndofWord = true;
     }
-    public TrieNode(char c){
-        this.c = c;
+    public bool Search(string word) {
+        return SearchInNode(word, 0, root);
     }
-    public bool isEndofWord {get; set;}
-    public char c {get; set;}
-    public Dictionary<char, TrieNode> Children = new Dictionary<char, TrieNode>();
+    private bool SearchInNode(string word, int index, TrieNode node) {
+        if (index == word.Length) return node.isEndofWord;
+        char c = word[index];
+        if (c == '.') {
+            // This should go down all possible paths rather than a single path
+            foreach (var child in node.Children.Values) {
+                if (SearchInNode(word, index + 1, child)) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            if (!node.Children.ContainsKey(c)) return false;
+            return SearchInNode(word, index + 1, node.Children[c]);
+        }
+    }
+}
+    
+    public class TrieNode
+    {
+        public TrieNode()
+        {
+        }
+        public TrieNode(char c)
+        {
+            this.c = c;
+        }
+        public bool isEndofWord { get; set; }
+        public char c { get; set; }
+        public Dictionary<char, TrieNode> Children = new Dictionary<char, TrieNode>();
     }
 
 
