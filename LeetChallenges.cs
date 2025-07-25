@@ -149,41 +149,104 @@ public class GraphNode
 static class LeetChallenges
 {
     
-    public class WordDictionary {
-    private TrieNode root = new TrieNode();
+    static List<string> returnList = new List<string>();
+    static TrieNode root = new TrieNode();
 
-    public void AddWord(string word) {
-        TrieNode current = root;
-        foreach(var c in word){
-            if (!current.Children.ContainsKey(c)){
-                TrieNode node = new TrieNode();
-                node.c = c;
-                current.Children[c] = node;
+    public static IList<string> FindWords(char[][] board, string[] words) {        
+        // 1. Build up dictionary words as a trie
+        foreach(var word in words){
+            TrieNode curr = root;
+            foreach (var c in word) {
+                if (!curr.Children.ContainsKey(c))
+                    curr.Children[c] = new TrieNode(c);
+                curr = curr.Children[c];
             }
-            current = current.Children[c];
+            curr.isEndofWord = true;
         }
-        current.isEndofWord = true;
+
+
+        // 2. Across the board, pass trie and board
+        for (int i=0; i< board.Length; i++){
+            for (int j=0; j< board[0].Length; j++){
+                BuildWord(board, i, j, root, "");
+            }
+        }
+
+        return returnList;
+
     }
-    public bool Search(string word) {
-        return SearchInNode(word, 0, root);
+
+    public static void BuildWord(char[][] board, int i, int j, TrieNode node, string path){
+        if (i < 0 || j < 0 || i >= board.Length || j >= board[0].Length || board[i][j] == '#')
+        return;
+
+        char c = board[i][j];
+        if (!node.Children.ContainsKey(c))
+            return;
+
+        node = node.Children[c];
+        string newPath = path + c;
+
+        if (node.isEndofWord) {
+            returnList.Add(newPath);
+            node.isEndofWord = false; 
+        }
+
+        board[i][j] = '#'; // mark visited
+        BuildWord(board, i + 1, j, node, newPath); // down
+        BuildWord(board, i - 1, j, node, newPath); // up
+        BuildWord(board, i, j + 1, node, newPath); // right
+        BuildWord(board, i, j - 1, node, newPath); // left
+        board[i][j] = c; // restore
+
     }
-    private bool SearchInNode(string word, int index, TrieNode node) {
-        if (index == word.Length) return node.isEndofWord;
-        char c = word[index];
-        if (c == '.') {
-            // This should go down all possible paths rather than a single path
-            foreach (var child in node.Children.Values) {
-                if (SearchInNode(word, index + 1, child)) {
-                    return true;
+
+    public class WordDictionary
+    {
+        private TrieNode root = new TrieNode();
+
+        public void AddWord(string word)
+        {
+            TrieNode current = root;
+            foreach (var c in word)
+            {
+                if (!current.Children.ContainsKey(c))
+                {
+                    TrieNode node = new TrieNode();
+                    node.c = c;
+                    current.Children[c] = node;
                 }
+                current = current.Children[c];
             }
-            return false;
-        } else {
-            if (!node.Children.ContainsKey(c)) return false;
-            return SearchInNode(word, index + 1, node.Children[c]);
+            current.isEndofWord = true;
+        }
+        public bool Search(string word)
+        {
+            return SearchInNode(word, 0, root);
+        }
+        private bool SearchInNode(string word, int index, TrieNode node)
+        {
+            if (index == word.Length) return node.isEndofWord;
+            char c = word[index];
+            if (c == '.')
+            {
+                // This should go down all possible paths rather than a single path
+                foreach (var child in node.Children.Values)
+                {
+                    if (SearchInNode(word, index + 1, child))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+            {
+                if (!node.Children.ContainsKey(c)) return false;
+                return SearchInNode(word, index + 1, node.Children[c]);
+            }
         }
     }
-}
     
     public class TrieNode
     {
