@@ -149,6 +149,38 @@ public class GraphNode
 static class LeetChallenges
 {
     
+    static Dictionary<char,char[]> dictionary = new Dictionary<char,char[]>();
+     
+    public static IList<string> LetterCombinations(string digits)
+    {
+        if (string.IsNullOrEmpty(digits)) return returnList;
+
+        dictionary.Add('2', new char[] { 'a', 'b', 'c' });
+        dictionary.Add('3', new char[] { 'd', 'e', 'f' });
+        dictionary.Add('4', new char[] { 'g', 'h', 'i' });
+        dictionary.Add('5', new char[] { 'j', 'k', 'l' });
+        dictionary.Add('6', new char[] { 'm', 'n', 'o' });
+        dictionary.Add('7', new char[] { 'p', 'q', 'r', 's' });
+        dictionary.Add('8', new char[] { 't', 'u', 'v' });
+        dictionary.Add('9', new char[] { 'w', 'x', 'y', 'z' });
+        chainResponse("", digits, 0);
+        return returnList;
+    }
+
+    public static void chainResponse(string currword,string digits,int i)
+    {
+        if (i == digits.Length){
+            returnList.Add(currword);
+            return;
+        }
+        char number = digits[i];
+        char[] letters = dictionary[number];
+
+        for (int j = 0; j < letters.Length; j++) {
+            chainResponse(currword + letters[j], digits, i + 1);
+        }
+    }   
+
     static List<string> returnList = new List<string>();
     static TrieNode root = new TrieNode();
 
