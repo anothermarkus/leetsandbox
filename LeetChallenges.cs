@@ -148,8 +148,50 @@ public class GraphNode
 
 static class LeetChallenges
 {
-    
-    static Dictionary<char,char[]> dictionary = new Dictionary<char,char[]>();
+
+    public class Solution
+    {
+        // 1 - 1 - 1 x
+        // 1 - 1 - 2 x
+        // 1 - 1 - 3 x
+        // 1 - 2 - 1 x
+        // 1 - 2 - 2 x
+        // 1 - 2 - 3 
+        // 1 - 3 - 1 x
+        // 1 - 3 - 2 x
+        // 1 - 3 - 3 x
+        // 2 - 1 - 1 x
+        // 2 - 1 - 2 x
+        // 2 - 1 - 3 x
+        // 2 - 2 - 1 x
+        // 2 - 2 - 2 x
+        // 2 - 2 - 3 x
+        private List<IList<int>> retval = new List<IList<int>>();
+
+        public IList<IList<int>> Combine(int n, int k)
+        {
+            Combinations(new List<int>(), 1, n, k);
+            return retval;
+        }
+
+        private void Combinations(List<int> combination, int start, int n, int k)
+        {
+            if (combination.Count == k)
+            {
+                // reached the lengh of choices
+                retval.Add(new List<int>(combination));
+                return;
+            }
+            for (int i = start; i <= n; i++)
+            {
+                combination.Add(i); // [1] --> [2] -> [3]  || [1,2] -> [1,3]
+                Combinations(combination, i + 1, n, k); // [1] --> [2] -> [3] || [1,2] -> [1,3]
+                combination.RemoveAt(combination.Count - 1);  // [] -> [] -> []  || [1] -> [1]
+            }
+        }
+    }
+
+    static Dictionary<char, char[]> dictionary = new Dictionary<char, char[]>();
      
     public static IList<string> LetterCombinations(string digits)
     {
