@@ -151,6 +151,29 @@ static class LeetChallenges
 
     public class Solution
     {
+
+        public IList<IList<int>> Permute(int[] nums) {
+            Combine(new List<int>(),nums, new bool[nums.Length]);
+            return retval;
+        }
+
+    public void Combine(List<int> combination, int[] nums, bool[] used){
+
+        if (combination.Count  == nums.Length){
+            retval.Add(new List<int>(combination));
+        }
+
+        for (int i=0; i< nums.Length ; i++){
+            if (used[i]) continue;
+
+            used[i] = true;
+            combination.Add(nums[i]);            
+            Combine(combination,nums,used);
+            combination.RemoveAt(combination.Count - 1);
+            used[i] = false;
+        }
+    }
+
         // 1 - 1 - 1 x
         // 1 - 1 - 2 x
         // 1 - 1 - 3 x
