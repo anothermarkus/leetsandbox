@@ -148,31 +148,59 @@ public class GraphNode
 
 static class LeetChallenges
 {
+    
+
+
 
     public class Solution
     {
 
-        public IList<IList<int>> Permute(int[] nums) {
-            Combine(new List<int>(),nums, new bool[nums.Length]);
+    public IList<IList<int>> CombinationSum(int[] candidates, int target) {
+        Combinations(candidates, target, 0, new List<int>());
+        return retval;
+    }
+
+    public void Combinations(int[] candidates, int target, int start, List<int> combination){
+        int sum =0;
+        foreach(var val in combination) sum+=val; 
+        if (sum > target) return; 
+        if (sum == target){
+            retval.Add(new List<int>(combination));
+            return;
+        }
+
+        for (int i=start; i< candidates.Length; i++){
+            combination.Add(candidates[i]);            
+            Combinations(candidates,target, i, combination);
+            combination.RemoveAt(combination.Count - 1);
+        }
+    }
+
+        public IList<IList<int>> Permute(int[] nums)
+        {
+            Combine(new List<int>(), nums, new bool[nums.Length]);
             return retval;
         }
 
-    public void Combine(List<int> combination, int[] nums, bool[] used){
+        public void Combine(List<int> combination, int[] nums, bool[] used)
+        {
 
-        if (combination.Count  == nums.Length){
-            retval.Add(new List<int>(combination));
+            if (combination.Count == nums.Length)
+            {
+                retval.Add(new List<int>(combination));
+            }
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (used[i]) continue;
+
+                used[i] = true;
+                combination.Add(nums[i]);
+                Combine(combination, nums, used);
+                combination.RemoveAt(combination.Count - 1);
+                used[i] = false;
+            }
         }
-
-        for (int i=0; i< nums.Length ; i++){
-            if (used[i]) continue;
-
-            used[i] = true;
-            combination.Add(nums[i]);            
-            Combine(combination,nums,used);
-            combination.RemoveAt(combination.Count - 1);
-            used[i] = false;
-        }
-    }
 
         // 1 - 1 - 1 x
         // 1 - 1 - 2 x
