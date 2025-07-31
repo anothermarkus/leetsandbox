@@ -149,7 +149,32 @@ public class GraphNode
 static class LeetChallenges
 {
     
+     static int count = 0;
 
+    public static int TotalNQueens(int n) {
+        Combine(new HashSet<int>(), new HashSet<int>(), new HashSet<int>(), 0, n);
+        return count;
+    }
+    public static void Combine(HashSet<int> colPlacement, HashSet<int> posSlopeIntercept, HashSet<int> negSlopeIntercept, int x, int n){
+        if (colPlacement.Count == n){
+            count++;
+        }
+        // cols
+        for (int y=0; y< n; y++){
+            if (colPlacement.Contains(y) || posSlopeIntercept.Contains(x - y) || negSlopeIntercept.Contains(x+y)){
+                continue;
+            }
+            colPlacement.Add(y);
+            posSlopeIntercept.Add(x - y);
+            negSlopeIntercept.Add(x + y);
+ 
+            Combine(colPlacement, posSlopeIntercept, negSlopeIntercept, x + 1, n);
+
+            colPlacement.Remove(y);
+            posSlopeIntercept.Remove(x - y);
+            negSlopeIntercept.Remove(x + y);
+        }
+    }
 
 
     public class Solution
