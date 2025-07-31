@@ -1,7 +1,8 @@
 using System.Text;
 using System.Collections;
+using System.Net;
 
- public class TreeNode {
+public class TreeNode {
       public int val;
       public TreeNode left;
       public TreeNode right;
@@ -148,6 +149,35 @@ public class GraphNode
 
 static class LeetChallenges
 {
+
+     static List<string> validParens = new List<string>();
+    public static IList<string> GenerateParenthesis(int n) {        
+        Combinations("",0,0,n);
+        return validParens;
+    }
+
+    public static void Combinations(string parens, int numLeft, int numRight, int n){
+        if (parens.Length == (n*2)){
+            validParens.Add(parens);
+            // No need for post-validation because 
+            // we constructed the parens based 
+            // on rules below.
+            return;
+        }
+      
+        // backtracking because we are re-using the same
+        // parens after calling Combinations()
+
+        // never add more '(' than the max
+        if (numLeft < n){            
+            Combinations(parens + '(',numLeft+1,numRight,n);
+        }    
+
+        // never add a ')' more than we have ')'
+        if (numRight < numLeft){                        
+            Combinations(parens + ')',numLeft,numRight + 1,n);            
+        }             
+    }
     
      static int count = 0;
 
