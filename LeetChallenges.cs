@@ -150,7 +150,31 @@ public class GraphNode
 static class LeetChallenges
 {
 
-     static List<string> validParens = new List<string>();
+    public static bool Exist(char[][] board, string word) {
+        for (int i = 0; i < board.Length; i++) {
+            for (int j = 0; j < board[0].Length; j++) {
+                if (Combine(board, word, 0, i, j))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    private static bool Combine(char[][] board, string word, int index, int row, int col) {
+        if (index == word.Length) return true;
+        if (row < 0 || row >= board.Length || col < 0 || col >= board[0].Length || board[row][col] != word[index])
+            return false;
+        char temp = board[row][col];
+        board[row][col] = '#';
+        bool found = Combine(board, word, index + 1, row + 1, col) ||
+                     Combine(board, word, index + 1, row - 1, col) ||
+                     Combine(board, word, index + 1, row, col + 1) ||
+                     Combine(board, word, index + 1, row, col - 1);
+        board[row][col] = temp;
+        return found;
+    }
+
+    static List<string> validParens = new List<string>();
     public static IList<string> GenerateParenthesis(int n) {        
         Combinations("",0,0,n);
         return validParens;
