@@ -149,10 +149,29 @@ public class GraphNode
 
 static class LeetChallenges
 {
+    
+     public static ListNode SortList(ListNode head) {
+        List<int> storage = new List<int>();
+        while (head != null){
+            storage.Add(head.val);
+            head = head.next;
+        }
+        storage.Sort();
+        ListNode dummy = new ListNode();
+        ListNode current = dummy;
+        foreach(int item in storage){
+            current.next = new ListNode(item);
+            current = current.next;
+        }
+        return dummy.next;       
+    }
 
-    public static bool Exist(char[][] board, string word) {
-        for (int i = 0; i < board.Length; i++) {
-            for (int j = 0; j < board[0].Length; j++) {
+    public static bool Exist(char[][] board, string word)
+    {
+        for (int i = 0; i < board.Length; i++)
+        {
+            for (int j = 0; j < board[0].Length; j++)
+            {
                 if (Combine(board, word, 0, i, j))
                     return true;
             }
