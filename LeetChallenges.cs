@@ -188,10 +188,32 @@ public class QNode
     static class LeetChallenges
     {
 
-        public static QNode Construct(int[][] grid) {
-            int n = grid.Length;
-            return BuildRecursively(grid, 0, 0, n);
+    public static ListNode MergeKLists(ListNode[] lists) {
+        var pq = new PriorityQueue<ListNode, int>();
+        foreach (var node in lists) {
+            if (node != null)
+                pq.Enqueue(node, node.val);
         }
+
+        ListNode dummy = new ListNode(0);
+        ListNode current = dummy;
+
+        while (pq.Count > 0) {
+            var node = pq.Dequeue();
+            current.next = node;
+            current = current.next;
+
+            if (node.next != null)
+                pq.Enqueue(node.next, node.next.val);
+        }
+
+        return dummy.next;
+    }
+    public static QNode Construct(int[][] grid)
+    {
+        int n = grid.Length;
+        return BuildRecursively(grid, 0, 0, n);
+    }
         private static QNode BuildRecursively(int[][] grid, int row, int col, int size) {
             // Even if it's a huge matrix of all the values
             // you want to have a leaf node output here
