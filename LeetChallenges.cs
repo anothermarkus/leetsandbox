@@ -187,10 +187,34 @@ public class QNode
 
     static class LeetChallenges
     {
+        
+        public static int MaxSubarraySumCircular(int[] nums) {
+        int total = 0;
+        int maxSum = nums[0];
+        int curMax = 0;
+        int minSum = nums[0];
+        int curMin = 0;
 
-    public static ListNode MergeKLists(ListNode[] lists) {
+        foreach (int num in nums) {
+            curMax = Math.Max(num, curMax + num);
+            maxSum = Math.Max(maxSum, curMax);
+
+            curMin = Math.Min(num, curMin + num);
+            minSum = Math.Min(minSum, curMin);
+
+            total += num;
+        }
+
+        if (maxSum < 0) return maxSum; 
+        return Math.Max(maxSum, total - minSum);
+    }
+
+
+    public static ListNode MergeKLists(ListNode[] lists)
+    {
         var pq = new PriorityQueue<ListNode, int>();
-        foreach (var node in lists) {
+        foreach (var node in lists)
+        {
             if (node != null)
                 pq.Enqueue(node, node.val);
         }
@@ -198,7 +222,8 @@ public class QNode
         ListNode dummy = new ListNode(0);
         ListNode current = dummy;
 
-        while (pq.Count > 0) {
+        while (pq.Count > 0)
+        {
             var node = pq.Dequeue();
             current.next = node;
             current = current.next;
