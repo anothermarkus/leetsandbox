@@ -188,14 +188,37 @@ public class QNode
     static class LeetChallenges
     {
         
-        public static int MaxSubarraySumCircular(int[] nums) {
+        public static int SearchInsert(int[] nums, int target) {
+        int left = 0;
+        int right = nums.Length -1;
+        
+        while (right >= left){
+            int half =  left + (right - left) / 2;
+
+            if (nums[half] == target){
+                return half;
+            }
+
+            if (nums[half] < target){
+                left = half + 1;                
+            }else{
+                right = half - 1;
+            }           
+        }
+        return left;
+    }
+
+        
+        public static int MaxSubarraySumCircular(int[] nums)
+    {
         int total = 0;
         int maxSum = nums[0];
         int curMax = 0;
         int minSum = nums[0];
         int curMin = 0;
 
-        foreach (int num in nums) {
+        foreach (int num in nums)
+        {
             curMax = Math.Max(num, curMax + num);
             maxSum = Math.Max(maxSum, curMax);
 
@@ -205,7 +228,7 @@ public class QNode
             total += num;
         }
 
-        if (maxSum < 0) return maxSum; 
+        if (maxSum < 0) return maxSum;
         return Math.Max(maxSum, total - minSum);
     }
 
