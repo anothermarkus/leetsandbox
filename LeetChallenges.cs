@@ -187,23 +187,53 @@ public class QNode
 
     static class LeetChallenges
     {
-        
-        public static int SearchInsert(int[] nums, int target) {
-        int left = 0;
-        int right = nums.Length -1;
-        
-        while (right >= left){
-            int half =  left + (right - left) / 2;
 
-            if (nums[half] == target){
+        public static bool SearchMatrix(int[][] matrix, int target)
+        {
+            int m = matrix.Length;
+            int n = matrix[0].Length;
+
+            int left = 0;
+            int right = m * n - 1;
+
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+                int row = mid / n;
+                int column = mid % n;
+                int val = matrix[row][column];
+
+                if (target == val) { return true; }
+
+                if (target < val) { right = mid - 1; }
+                else { left = mid + 1; }
+            }
+            return false;      
+        }
+
+        
+        public static int SearchInsert(int[] nums, int target)
+    {
+        int left = 0;
+        int right = nums.Length - 1;
+
+        while (right >= left)
+        {
+            int half = left + (right - left) / 2;
+
+            if (nums[half] == target)
+            {
                 return half;
             }
 
-            if (nums[half] < target){
-                left = half + 1;                
-            }else{
+            if (nums[half] < target)
+            {
+                left = half + 1;
+            }
+            else
+            {
                 right = half - 1;
-            }           
+            }
         }
         return left;
     }
