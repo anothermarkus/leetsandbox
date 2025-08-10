@@ -187,29 +187,56 @@ public class QNode
 
     static class LeetChallenges
     {
+        
+        public static int FindPeakElement(int[] nums) {
+        int left = 0;
+        int right = nums.Length - 1;
+        
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            int prev = mid - 1 >= 0 ? nums[mid - 1] : int.MinValue;
+            int next = mid + 1 < nums.Length ? nums[mid + 1] : int.MinValue;
+
+            // Peak case: greater than both neighbors
+            if (nums[mid] > prev && nums[mid] > next) {
+                return mid;
+            }
+            
+            // upward slope - peak to the right
+            if (nums[mid] < nums[mid + 1]) {
+                left = mid + 1;
+            } else {
+                // downward slope - peak is to the left
+                right = mid;
+            }
+        }
+        
+        return left; // only edge cases should reach here 
+    }
 
         public static bool SearchMatrix(int[][] matrix, int target)
+    {
+        int m = matrix.Length;
+        int n = matrix[0].Length;
+
+        int left = 0;
+        int right = m * n - 1;
+
+        while (left <= right)
         {
-            int m = matrix.Length;
-            int n = matrix[0].Length;
+            int mid = left + (right - left) / 2;
+            int row = mid / n;
+            int column = mid % n;
+            int val = matrix[row][column];
 
-            int left = 0;
-            int right = m * n - 1;
+            if (target == val) { return true; }
 
-            while (left <= right)
-            {
-                int mid = left + (right - left) / 2;
-                int row = mid / n;
-                int column = mid % n;
-                int val = matrix[row][column];
-
-                if (target == val) { return true; }
-
-                if (target < val) { right = mid - 1; }
-                else { left = mid + 1; }
-            }
-            return false;      
+            if (target < val) { right = mid - 1; }
+            else { left = mid + 1; }
         }
+        return false;
+    }
 
         
         public static int SearchInsert(int[] nums, int target)
