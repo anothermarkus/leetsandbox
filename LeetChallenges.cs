@@ -187,12 +187,76 @@ public class QNode
 
     static class LeetChallenges
     {
+        
+         public static double FindMedianSortedArrays(int[] nums1, int[] nums2)
+    {
+        if (nums1.Length > nums2.Length)
+            return FindMedianSortedArrays(nums2, nums1);
 
-        public static int[] SearchRange(int[] nums, int target) {
-            int first = FindEnd(nums, target, true);
-            int last = FindEnd(nums, target, false);
-            return new int[] { first, last };
+        int m = nums1.Length, n = nums2.Length;
+        int left = 0, right = m;
+
+        while (left <= right)
+        {
+            int mid1 = (left + right) / 2;
+            int mid2 = (m + n + 1) / 2 - mid1;
+
+            int l1 = (mid1 == 0) ? int.MinValue : nums1[mid1 - 1];
+            int r1 = (mid1 == m) ? int.MaxValue : nums1[mid1];
+            int l2 = (mid2 == 0) ? int.MinValue : nums2[mid2 - 1];
+            int r2 = (mid2 == n) ? int.MaxValue : nums2[mid2];
+
+            if (l1 <= r2 && l2 <= r1)
+            {
+                int maxLeft = Math.Max(l1, l2);
+                int minRight = Math.Min(r1, r2);
+                return ((m + n) % 2 == 0)
+                    ? (maxLeft + minRight) / 2.0
+                    : maxLeft;
+            }
+            else if (l1 > r2)
+            {
+                right = mid1 - 1;
+            }
+            else
+            {
+                left = mid1 + 1;
+            }
         }
+
+        throw new ArgumentException("Input arrays not sorted");
+    }
+        
+        public static int FindMin(int[] nums)
+    {
+        int left = 0;
+        int right = nums.Length - 1;
+
+        while (left < right)
+        {
+            int mid = left + (right - left) / 2;
+
+            // min must be in the right half
+            if (nums[mid] > nums[right])
+            {
+                left = mid + 1;
+            }
+            else
+            {
+                // min is in left half (including mid)
+                right = mid;
+            }
+        }
+
+        return nums[left];
+    }
+
+        public static int[] SearchRange(int[] nums, int target)
+    {
+        int first = FindEnd(nums, target, true);
+        int last = FindEnd(nums, target, false);
+        return new int[] { first, last };
+    }
         private static int FindEnd(int[] nums, int target, bool searchleft) {
             int left = 0;
             int right = nums.Length - 1;
