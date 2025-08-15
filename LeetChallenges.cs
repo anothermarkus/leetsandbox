@@ -188,6 +188,23 @@ public class QNode
     static class LeetChallenges
     {
         
+
+    public static int FindKthLargestOptimal(int[] nums, int k)
+    {
+        var pq = new PriorityQueue<int, int>();
+
+        foreach (int num in nums)
+        {
+            pq.Enqueue(num, num); // small high priority
+            if (pq.Count > k)
+            {
+                pq.Dequeue(); // this will remove the smallest ones first
+            }
+        }
+
+        return pq.Peek(); // returns the smallest == k'th largest
+    }
+
          public static double FindMedianSortedArrays(int[] nums1, int[] nums2)
     {
         if (nums1.Length > nums2.Length)
