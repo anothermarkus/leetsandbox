@@ -187,6 +187,33 @@ public class QNode
 
     static class LeetChallenges
     {
+
+        
+    // Min Heap - All projects ordered by least expensive to most expensive
+    // Max Heap - Most Profitable Projects - add from min heap as we go only based on capital 
+    public static int FindMaximizedCapital(int k, int w, int[] profits, int[] capital) {
+        var capitalMinHeap = new PriorityQueue<(int cap, int profit), int>();
+        var profitMaxHeap = new PriorityQueue<int, int>();
+
+        for (int i = 0; i < profits.Length; i++) {
+            capitalMinHeap.Enqueue((capital[i], profits[i]), capital[i]);
+        }
+
+        // each iteration we keep adding all the projects we can afford 
+        // grabbing the most profitable one
+        for (int i = 0; i < k; i++) {
+            while (capitalMinHeap.Count > 0 && capitalMinHeap.Peek().cap <= w) {
+                var project = capitalMinHeap.Dequeue();
+                profitMaxHeap.Enqueue(project.profit, project.profit*-1);
+            }
+
+            if (profitMaxHeap.Count == 0) break;
+
+            w += profitMaxHeap.Dequeue();
+        }
+
+        return w;
+    }
         
 
     public static int FindKthLargestOptimal(int[] nums, int k)
