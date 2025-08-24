@@ -230,6 +230,44 @@ static class LeetChallenges
 {
 
 
+    public static string AddBinary(string a, string b) {
+        
+        // right to left simply carry over to next significat digit
+
+        StringBuilder answer = new StringBuilder();
+
+        int indexA = a.Length -1;
+        int indexB = b.Length -1;
+        int carryOver = 0;
+
+        while (indexA >= 0 || indexB >= 0 || carryOver > 0){
+
+            int aBit = 0, bBit = 0, sum = 0;
+
+            if (indexA >= 0){
+                aBit = a[indexA] - '0'; // can't cast to (int)
+                indexA--;
+            }
+
+            if (indexB >= 0){
+                bBit = b[indexB] - '0'; // can't cast to (int)
+                indexB--;
+            }
+            
+            sum = (carryOver + aBit + bBit) % 2; // set the BIT not the int
+            carryOver = (carryOver + aBit + bBit)/2;  // carry over the Bit not the int
+
+            answer.Append(sum); // this is going to be have the answer in reverse order
+        }
+
+        // Java has .reverse() in StringBuffer, C# you have to do this nonsense
+        var result = answer.ToString().ToCharArray();
+        Array.Reverse(result);
+        var reversed = new string(result);
+
+        return reversed;
+    }
+
 
 
     // Min Heap - All projects ordered by least expensive to most expensive
