@@ -229,33 +229,81 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
+    public static int ReverseBitsSimplier(int n)
+    {
+        var res = 0;
+        for (int i = 0; i < 32; i++)
+        {
+            var bit = (n >> i) & 1;      // extract the i-th bit
+            res = res | (bit << (31 - i)); // put it in reversed position
+        }
+        return res;
+    }
 
-    public static string AddBinary(string a, string b) {
-        
+    // input 0101 -> output 1010
+    //
+    //  0101 (input)
+    // &   1 
+    //  0001 (mask)
+    //
+    //  0000 (result)
+    // |0001 (mask)
+    //  0001 (result)
+    //
+    //  0101 (input)
+    // >>  1 (shift right)
+    //   010 (new input)
+    //
+    //  Next iteration
+    //  0001 (result)
+    // <<  1 (shift left)
+    //  0010 (result)
+    //
+    // ...etc
+    public static int ReverseBits(int n)
+    {
+        uint x = (uint)n;
+        uint result = 0;
+        for (int i = 0; i < 32; i++)
+        {
+            result = result << 1; // shift left to make the digit more significant
+            uint mask = x & 1; // e.g. 0000001 to get the last digit
+            result = result | mask; // use an OR to preserve the last digit
+            x = x >> 1; // shift over and the rightmost bit falls off            
+        }
+        return (int)result;
+    }
+
+    public static string AddBinary(string a, string b)
+    {
+
         // right to left simply carry over to next significat digit
 
         StringBuilder answer = new StringBuilder();
 
-        int indexA = a.Length -1;
-        int indexB = b.Length -1;
+        int indexA = a.Length - 1;
+        int indexB = b.Length - 1;
         int carryOver = 0;
 
-        while (indexA >= 0 || indexB >= 0 || carryOver > 0){
+        while (indexA >= 0 || indexB >= 0 || carryOver > 0)
+        {
 
             int aBit = 0, bBit = 0, sum = 0;
 
-            if (indexA >= 0){
+            if (indexA >= 0)
+            {
                 aBit = a[indexA] - '0'; // can't cast to (int)
                 indexA--;
             }
 
-            if (indexB >= 0){
+            if (indexB >= 0)
+            {
                 bBit = b[indexB] - '0'; // can't cast to (int)
                 indexB--;
             }
-            
+
             sum = (carryOver + aBit + bBit) % 2; // set the BIT not the int
-            carryOver = (carryOver + aBit + bBit)/2;  // carry over the Bit not the int
+            carryOver = (carryOver + aBit + bBit) / 2;  // carry over the Bit not the int
 
             answer.Append(sum); // this is going to be have the answer in reverse order
         }
