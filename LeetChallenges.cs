@@ -229,6 +229,17 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
+     public static int HammingWeight(int n) {
+        int weight = 0;
+        while (n > 0){
+            if ( (n & 1) == 1){
+                weight++;
+            }
+            n = n >> 1; // shift right
+        }
+        return weight;
+    }
+
     public static int ReverseBitsSimplier(int n)
     {
         var res = 0;
