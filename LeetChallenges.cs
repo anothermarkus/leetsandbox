@@ -229,10 +229,38 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
-     public static int HammingWeight(int n) {
+    //  1011  - same
+    //  1000 - diff
+    //  1011 - same
+
+    //  1011 - same
+    // ^1000  -diff
+    // ------
+    //  0011
+    //
+    //   0011
+    //  ^1011 - same
+    // -----
+    //  1000 - diff -- yay
+    //
+    public static int SingleNumber(int[] nums) {
+
+        int result =0;
+
+        for (int i=0;i<nums.Length;i++){
+            result = result ^ nums[i];
+        }
+        return result;
+
+    }
+
+    public static int HammingWeight(int n)
+    {
         int weight = 0;
-        while (n > 0){
-            if ( (n & 1) == 1){
+        while (n > 0)
+        {
+            if ((n & 1) == 1)
+            {
                 weight++;
             }
             n = n >> 1; // shift right
