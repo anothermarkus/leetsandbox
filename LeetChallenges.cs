@@ -228,6 +228,40 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+    
+    public static int SingleNumberTriplets(int[] nums) {
+    // 1010
+    // 1010  
+    // 1010
+    // 1000 <--- save
+
+    // Looping through all 32 bits with a bitmask through all numbers. 
+    // Store a bitcounter of three- iterate bit-by-bit, if you come across three of them, cancel out. 
+    // Then reset the triplet counter to 0. Anything left in the counter by the end (should either be three or 1 or 0), 
+    // you position that bit in place
+
+    // Better to have a modulo 3 that sets the bit
+        int result =0;
+        for (int j=0; j< 32; j++){
+            int bit =0;
+            int bitmask = 1 << j;
+            long bitresult = 0;
+
+            for (int i=0; i< nums.Length; i++){
+                int num = nums[i];
+                
+                bitresult += (nums[i] & bitmask);
+            }
+
+            // If this bit contributes to the unique number
+            if ((bitresult % 3) != 0) {
+                result = result | bitmask;
+            }
+        }
+        return result;
+
+    }
+
 
     //  1011  - same
     //  1000 - diff
@@ -243,11 +277,13 @@ static class LeetChallenges
     // -----
     //  1000 - diff -- yay
     //
-    public static int SingleNumber(int[] nums) {
+    public static int SingleNumber(int[] nums)
+    {
 
-        int result =0;
+        int result = 0;
 
-        for (int i=0;i<nums.Length;i++){
+        for (int i = 0; i < nums.Length; i++)
+        {
             result = result ^ nums[i];
         }
         return result;
