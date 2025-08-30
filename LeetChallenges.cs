@@ -228,7 +228,43 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-    
+      public static bool IsPalindrome(int x) {
+        if (x < 0){
+            return false;
+        }
+
+         // Find the divisor to extract the most significant digit
+        int div = 1;
+        while (x / div >= 10) {
+            div *= 10;
+        }
+        
+        while (x > 0){
+            int msb = x/ div;
+            int lsb = x % 10;            
+            if (msb != lsb) return false;
+
+            x = (x % div) / 10;
+            div = div / 100; // two numbers are gone not just one.
+        }
+        return true;
+    }
+
+    // standard answer
+    //public bool IsPalindrome(int x) {
+    //    if (x < 0 || (x % 10 == 0 && x != 0)) return false;
+    //
+    //    int reversedHalf = 0;
+    //    while (x > reversedHalf) {
+    //        reversedHalf = reversedHalf * 10 + x % 10;
+    //        x /= 10;
+    //    }
+    //    // Even length: x == reversedHalf
+    //    // Odd length: x == reversedHalf / 10
+    //    return x == reversedHalf || x == reversedHalf / 10;
+    //}
+
+
     public static int SingleNumberTriplets(int[] nums) {
     // 1010
     // 1010  
