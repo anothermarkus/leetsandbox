@@ -228,20 +228,44 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-      public static bool IsPalindrome(int x) {
-        if (x < 0){
+
+    public static int[] PlusOne(int[] digits) {
+        for (int i = digits.Length - 1; i >= 0; i--) {
+            if (digits[i] < 9) {
+                digits[i]++;
+                // [9,9,9,9,9,8] ->  [9,9,9,9,9,9] -> exit
+                return digits;  
+            }
+            // [1,9,9,9,9,9] -> [1,0,0,0,0,0] -> Next iteration it would reach if{} statement -> [2,0,0,0,0,0] -> exit
+            digits[i] = 0;  // carry over
+        }
+        
+        // can only reach here if it's all 9's
+        // [9,9,9,9,9] -> [1,0,0,0,0,0] -> exit
+        int[] result = new int[digits.Length + 1];
+        result[0] = 1;
+        return result;
+    }
+
+
+    public static bool IsPalindrome(int x)
+    {
+        if (x < 0)
+        {
             return false;
         }
 
-         // Find the divisor to extract the most significant digit
+        // Find the divisor to extract the most significant digit
         int div = 1;
-        while (x / div >= 10) {
+        while (x / div >= 10)
+        {
             div *= 10;
         }
-        
-        while (x > 0){
-            int msb = x/ div;
-            int lsb = x % 10;            
+
+        while (x > 0)
+        {
+            int msb = x / div;
+            int lsb = x % 10;
             if (msb != lsb) return false;
 
             x = (x % div) / 10;
