@@ -229,17 +229,48 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
-    public static int[] PlusOne(int[] digits) {
-        for (int i = digits.Length - 1; i >= 0; i--) {
-            if (digits[i] < 9) {
+    public static int TrailingZeroes(int n) {
+        // You are not supposed to multiply the factoral then divide powers of 10.
+        // Numbers will get too large
+        //
+        // Count the factors of 5
+
+        // e.g. 25
+        // 5,10,15,20,25 --> 6 factors
+        // 25*24*23*22*21*20*19*18*17*16*15*14...1
+        //    (2)   (2)   (2)   (2)  (2)  (2)... etc (at least 6 of them)
+        //     *     *     *    *    *     * 
+        //    5*2   10(5*2)  15(5*3) 20(5*4) 25(5*5)... etc.. A(6 5's)
+        //    10  *  10  *   10 *   10 *  10 *  10  --Pull out the factor of 5 multiply by any 2 available
+        //   1000000 (6 zeros)
+
+        // how many 5's?
+        // e.g. 25
+        // 25/5 = 5
+        // 5/5 =  1
+        // 6 5's in total
+        int count = 0;
+        while (n > 0) {
+            n = n/ 5;
+            count += n; 
+        }
+        return count;
+    }
+
+    public static int[] PlusOne(int[] digits)
+    {
+        for (int i = digits.Length - 1; i >= 0; i--)
+        {
+            if (digits[i] < 9)
+            {
                 digits[i]++;
                 // [9,9,9,9,9,8] ->  [9,9,9,9,9,9] -> exit
-                return digits;  
+                return digits;
             }
             // [1,9,9,9,9,9] -> [1,0,0,0,0,0] -> Next iteration it would reach if{} statement -> [2,0,0,0,0,0] -> exit
             digits[i] = 0;  // carry over
         }
-        
+
         // can only reach here if it's all 9's
         // [9,9,9,9,9] -> [1,0,0,0,0,0] -> exit
         int[] result = new int[digits.Length + 1];
