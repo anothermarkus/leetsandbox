@@ -228,8 +228,37 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+    
+      public static int MySqrt(int x) {
+        // Approach 1
+        // simple brute force idea -- linear search
+        // keep incremeneting and double to find perfect square less than or 
+        // equal to x
 
-    public static int TrailingZeroes(int n) {
+        // Approach 2
+        // use binary search rather than linear search  -- optimized
+        //
+        //  1         x
+        // left  mid  right
+        int left = 1, right = x, ans = 0;
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+            long square = (long)mid * mid; // gotcha, long to avoid overflows
+
+            if (square == x) {
+                return mid;  
+            } else if (square < x) {
+                ans = mid;  
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+        return ans;  // floor of sqrt(x)
+    }
+
+    public static int TrailingZeroes(int n)
+    {
         // You are not supposed to multiply the factoral then divide powers of 10.
         // Numbers will get too large
         //
@@ -250,9 +279,10 @@ static class LeetChallenges
         // 5/5 =  1
         // 6 5's in total
         int count = 0;
-        while (n > 0) {
-            n = n/ 5;
-            count += n; 
+        while (n > 0)
+        {
+            n = n / 5;
+            count += n;
         }
         return count;
     }
