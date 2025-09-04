@@ -229,7 +229,84 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
-      public static int MySqrt(int x) {
+
+       // y = mx+b
+    // gotcha: Repeated points won't create a line
+    public static int MaxPoints(int[][] points) {
+        int maxFitPoints = 0;
+        for (int i=0; i< points.Length; i++){
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+            int localMax = 0;
+            var hashCount = new Dictionary<(int, int), int>();  
+            int dupes = 0;            
+
+            for (int j=i+1; j< points.Length; j++){
+                int x2 = points[j][0];
+                int y2 = points[j][1];
+                int dy = y2-y1;
+                int dx = x2-x1;
+        
+                if (dx == 0 && dy == 0) {
+                    dupes++;
+                    continue;
+                }
+
+                // Gotcha! Don't do this!
+                // for values of m + b that are the same, they fit the line, add to the count;
+                // int m = (y2-y1)/(x2-x1); // This is a gotcha, for decimal precision and edge cases
+                // int b = y1-(m*x1); 
+                int gcd = GCD(dy,dx); // keep as simplified fractions
+
+                dy = dy/gcd;
+                dx = dx/gcd;
+
+                if (dx == 0) {
+                    dy = 1; dx = 0; // vertical line
+                } else if (dy == 0) {
+                    dx = 1; dy = 0; // horizontal line
+                } else if (dx < 0) {
+                    //Original slope	After normalization
+                    //(1,1)	            (1,1)
+                    //(-1,-1)	        (1,1)
+                    //(1,-1)	        (1,-1)
+                    //(-1,1)	        (1,-1)
+                    
+                    // Example
+                    // (0,0) -> (-3,2) has slope 2/-3 = -2/3
+                    // (0,0) -> (3,-2) has slope -2/3                    
+                    dx = -dx; dy = -dy;     // keep dx positive doesn't affect the slope
+                }
+
+                var slope = (dy,dx);
+
+                if (!hashCount.ContainsKey(slope)) { hashCount[slope] = 0; }
+                hashCount[slope]++;
+                
+                if (hashCount[slope] > localMax) {
+                    localMax = hashCount[slope];
+                }
+            }
+            maxFitPoints = Math.Max(maxFitPoints, localMax + dupes + 1);
+        }
+        return maxFitPoints;
+    }
+
+     // Gleaned a GCD method
+     private static int GCD(int a, int b) {
+        a = Math.Abs(a);
+        b = Math.Abs(b);
+        while (b != 0) {
+            int tmp = b;
+            b = a % b;
+            a = tmp;
+        }
+        return a;
+    }
+
+    
+      public static int MySqrt(int x)
+    {
         // Approach 1
         // simple brute force idea -- linear search
         // keep incremeneting and double to find perfect square less than or 
@@ -241,16 +318,22 @@ static class LeetChallenges
         //  1         x
         // left  mid  right
         int left = 1, right = x, ans = 0;
-        while (left <= right) {
+        while (left <= right)
+        {
             int mid = left + (right - left) / 2;
             long square = (long)mid * mid; // gotcha, long to avoid overflows
 
-            if (square == x) {
-                return mid;  
-            } else if (square < x) {
-                ans = mid;  
+            if (square == x)
+            {
+                return mid;
+            }
+            else if (square < x)
+            {
+                ans = mid;
                 left = mid + 1;
-            } else {
+            }
+            else
+            {
                 right = mid - 1;
             }
         }
