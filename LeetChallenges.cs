@@ -228,6 +228,42 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+
+        
+    // Recursive
+    public static int ClimbStairs(int n) {
+        //                              one more    two more
+        // Ways to reach step n = SUM { step n-1 + step n-2}
+        // ways[n] = ways[n-1] + ways[n-2]
+        // ways[1] = 1 // ways to reach step 1 (only way to reach it is with one step)
+        // ways[2] = 2 // ways to reach step 2 (can reach it 2 steps, or 1 step == 2)
+        return BuildWays(new int[n+1],n);        
+    }
+
+    private static int BuildWays(int[] ways,int i){
+        if (i == 1){  return 1; }
+        if (i == 2){  return 2; }
+        
+        if (ways[i] != 0) return ways[i]; // don't recompute the same one
+
+        ways[i] = BuildWays(ways, i-1) + BuildWays(ways,i-2);
+        
+        return ways[i];
+    }
+    // Iterative
+    // public int ClimbStairs(int n) {
+    //     if (n <= 2) return n;
+
+    //     var ways = new int[n + 1];
+    //     ways[1] = 1;
+    //     ways[2] = 2;
+
+    //     for (int i = 3; i <= n; i++) {
+    //         ways[i] = ways[i - 1] + ways[i - 2];
+    //     }
+
+    //     return ways[n];
+    // }
     
 
        // y = mx+b
