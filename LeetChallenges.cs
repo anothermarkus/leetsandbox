@@ -230,14 +230,62 @@ static class LeetChallenges
 {
 
         
+        public static int Rob(int[] nums) {
+        // Recurrence: 
+        // sum[i] = Max( sum[i-2], sum[i-3] );  X Wrong!!, forgot to add value from i
+
+        // The "current answer" 
+        // Either include 'i" or skip it and the sum up to the previous 'i' 
+        // (Can't include i as it's adjacent)
+        //
+        // sum[i] = Max( sum[i-1], sum[i-2] + nums[i])
+
+        // Base Case
+        // sum[0] = nums[0]; 
+        // sum[1] = Max( num[1], num[0] )
+
+        var sums = new int[nums.Length];
+        Array.Fill(sums, -1);  
+
+        return RobHouses(nums,sums,nums.Length-1);
+    }
+
+    private static int RobHouses(int[] nums, int[] sums, int i){
+        if (i == 0){ return nums[0]; }
+        if (i == 1){ return Math.Max(nums[1], nums[0]); }
+        
+        if (sums[i] != -1) return sums[i]; // skip filled values to kill recursion
+
+        sums[i] = Math.Max( RobHouses(nums,sums, i-1), RobHouses(nums,sums,i-2) + nums[i] );
+        return sums[i];
+    }
+
+    //Iterative
+    //   public int Rob(int[] nums) {
+    //     if (nums == null || nums.Length == 0) return 0;
+    //     if (nums.Length == 1) return nums[0];
+
+    //     int prev2 = nums[0];
+    //     int prev1 = Math.Max(nums[0], nums[1]);
+
+    //     for (int i = 2; i < nums.Length; i++) {
+    //         int curr = Math.Max(prev1, prev2 + nums[i]);
+    //         prev2 = prev1;
+    //         prev1 = curr;
+    //     }
+
+    //     return prev1;
+    // }
+
     // Recursive
-    public static int ClimbStairs(int n) {
+    public static int ClimbStairs(int n)
+    {
         //                              one more    two more
         // Ways to reach step n = SUM { step n-1 + step n-2}
         // ways[n] = ways[n-1] + ways[n-2]
         // ways[1] = 1 // ways to reach step 1 (only way to reach it is with one step)
         // ways[2] = 2 // ways to reach step 2 (can reach it 2 steps, or 1 step == 2)
-        return BuildWays(new int[n+1],n);        
+        return BuildWays(new int[n + 1], n);
     }
 
     private static int BuildWays(int[] ways,int i){
