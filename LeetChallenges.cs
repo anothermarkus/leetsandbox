@@ -229,8 +229,44 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
+
+    public static bool WordBreak(string s, IList<string> wordDict) {
         
-        public static int Rob(int[] nums) {
+        // working backwards from the end to the beginning: "leetcode"
+        //                                                      "leet"                             "code"
+        // recurrence relation: memo[i] = was there a match from [0->j] and do I have a match from [j->i]  
+        // base case: memoization at 0 should be true
+        //
+        // Nleetcode
+        // tffftffft 
+        // 
+        return BuildWordBreak(s, new HashSet<string>(wordDict), new bool?[s.Length + 1],s.Length);
+
+    }
+
+    private static bool BuildWordBreak(string s, HashSet<string> dict, bool?[] wordbreak, int i){
+
+        if (i == 0){
+            return true; // base case has to be set true
+        }
+        if (wordbreak[i].HasValue) return wordbreak[i].Value; // gotcha to prune recursive paths
+        // Was there ever an earlier "hit" and is there a current "hit"?
+        for (int j = 0; j < i; j++) {
+                // was there a match up to exaclty j  && is there a match from j to i           
+            if (BuildWordBreak(s, dict, wordbreak,j) && dict.Contains(s.Substring(j, i - j))) {
+                wordbreak[i] = true;
+                return true;
+            }
+        }
+        // no words earlier in string exist
+        wordbreak[i] = false;
+        return false;
+    }
+
+
+
+    public static int Rob(int[] nums)
+    {
         // Recurrence: 
         // sum[i] = Max( sum[i-2], sum[i-3] );  X Wrong!!, forgot to add value from i
 
@@ -245,9 +281,9 @@ static class LeetChallenges
         // sum[1] = Max( num[1], num[0] )
 
         var sums = new int[nums.Length];
-        Array.Fill(sums, -1);  
+        Array.Fill(sums, -1);
 
-        return RobHouses(nums,sums,nums.Length-1);
+        return RobHouses(nums, sums, nums.Length - 1);
     }
 
     private static int RobHouses(int[] nums, int[] sums, int i){
