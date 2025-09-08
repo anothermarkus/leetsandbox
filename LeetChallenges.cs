@@ -228,10 +228,70 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+    
+    // Recurrence
+    // makeChange(amount) = 1 + [ min( makeChange(amount - coin) ) for each coin where coin ≤ amount ]
+
+    public static int CoinChange(int[] coins, int amount) {
+        int[] memo = new int[amount + 1];
+        for (int i = 0; i <= amount; i++)
+        {
+            memo[i] = -2; // -1 signals no combination
+        }
+        return MakeChange(coins, amount, memo);
+    }
+
+    public static int MakeChange(int[] coins, int amount, int[] memo){   
+        if (amount == 0) return 0;     // Base case: no coins needed
+
+        if (memo[amount] != -2) return memo[amount];// Gotcha prune recursive paths
+
+        int min = int.MaxValue;
+        foreach (int coin in coins)
+        {
+            if (amount - coin < 0) continue; // skip invalid subproblem
+            int res = MakeChange(coins, amount - coin, memo);
+            if (res >= 0 && res < min)
+            {
+                min = res + 1; // Found a smaller count
+            }
+        }
+
+        memo[amount] = (min == int.MaxValue) ? -1 : min; // Save in memo
+        return memo[amount];
+    }
 
 
-    public static bool WordBreak(string s, IList<string> wordDict) {
-        
+    // Iterative
+    // public static int CoinChange(int[] coins, int amount)
+    // {
+    //     int[] dp = new int[amount + 1];
+    //     dp[0] = 0;
+
+    //     for (int i = 1; i <= amount; i++)
+    //     {
+    //         dp[i] = amount + 1;
+    //     }
+
+    //     foreach (int coin in coins)
+    //     {
+    //         for (int i = coin; i <= amount; i++)
+    //         {
+    //             dp[i] = Math.Min(dp[i], dp[i - coin] + 1);
+    //         }
+    //     }
+
+    //     if (dp[amount] == amount + 1)
+    //     {
+    //         return -1;
+    //     }
+    //     return dp[amount];
+    // }
+
+
+    public static bool WordBreak(string s, IList<string> wordDict)
+    {
+
         // working backwards from the end to the beginning: "leetcode"
         //                                                      "leet"                             "code"
         // recurrence relation: memo[i] = was there a match from [0->j] and do I have a match from [j->i]  
@@ -240,7 +300,7 @@ static class LeetChallenges
         // Nleetcode
         // tffftffft 
         // 
-        return BuildWordBreak(s, new HashSet<string>(wordDict), new bool?[s.Length + 1],s.Length);
+        return BuildWordBreak(s, new HashSet<string>(wordDict), new bool?[s.Length + 1], s.Length);
 
     }
 
