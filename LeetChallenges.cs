@@ -228,11 +228,32 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+    public static int LengthOfLIS(int[] nums) {
+        List<int> sub=new List<int>();
+        foreach(int n in nums){
+            int l=0, r=sub.Count-1, mid=0;
+            while(l<=r){
+                mid=(l+r)/2;
+                if(n<=sub[mid])
+                    r=mid-1;
+                else
+                    l=mid+1;
+            }
+            if(l==sub.Count)    
+                sub.Add(n);
+            else
+                sub[l]=n;
+            //Console.WriteLine(n+"______" +l+"___"+r+"___"+string.Join(",", sub));
+        }
+        return sub.Count;
+    }
     
+
     // Recurrence
     // makeChange(amount) = 1 + [ min( makeChange(amount - coin) ) for each coin where coin ≤ amount ]
 
-    public static int CoinChange(int[] coins, int amount) {
+    public static int CoinChange(int[] coins, int amount)
+    {
         int[] memo = new int[amount + 1];
         for (int i = 0; i <= amount; i++)
         {
