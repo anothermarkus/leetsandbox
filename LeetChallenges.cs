@@ -228,21 +228,46 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-    public static int LengthOfLIS(int[] nums) {
-        List<int> sub=new List<int>();
-        foreach(int n in nums){
-            int l=0, r=sub.Count-1, mid=0;
-            while(l<=r){
-                mid=(l+r)/2;
-                if(n<=sub[mid])
-                    r=mid-1;
+    
+    public static int MinimumTotal(IList<IList<int>> triangle) {
+        int n = triangle.Count;
+        var memo = new int?[n, n];
+        return TriangleSum(triangle, 0, 0, memo);
+    }
+
+    private static int TriangleSum(IList<IList<int>> triangle, int row, int col, int?[,] memo) {
+        if (row == triangle.Count - 1) {
+            return triangle[row][col]; // base case: bottom row
+        }
+
+        if (memo[row, col] != null) {  return memo[row, col].Value; }
+
+        int down = TriangleSum(triangle, row + 1, col, memo);
+        int diagonal = TriangleSum(triangle, row + 1, col + 1, memo);
+
+        memo[row, col] = triangle[row][col] + Math.Min(down, diagonal);
+        return memo[row, col].Value;
+    }
+
+
+    public static int LengthOfLIS(int[] nums)
+    {
+        List<int> sub = new List<int>();
+        foreach (int n in nums)
+        {
+            int l = 0, r = sub.Count - 1, mid = 0;
+            while (l <= r)
+            {
+                mid = (l + r) / 2;
+                if (n <= sub[mid])
+                    r = mid - 1;
                 else
-                    l=mid+1;
+                    l = mid + 1;
             }
-            if(l==sub.Count)    
+            if (l == sub.Count)
                 sub.Add(n);
             else
-                sub[l]=n;
+                sub[l] = n;
             //Console.WriteLine(n+"______" +l+"___"+r+"___"+string.Join(",", sub));
         }
         return sub.Count;
