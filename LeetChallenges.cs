@@ -229,7 +229,47 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
-    public static int MinimumTotal(IList<IList<int>> triangle) {
+     // can only move down or right
+    // memo[i][j] = min( memo[i+1][j], memo[i][j+1]  )
+    public static int MinPathSum(int[][] grid) {
+        int rows = grid.Length;
+        int cols = grid[0].Length;
+
+        int[][] memo = new int[rows][];
+        for (int i = 0; i < rows; i++) {
+            memo[i] = new int[cols];
+            for (int j = 0; j < cols; j++) {
+                memo[i][j] = -1;
+            }
+        }
+        return MinSum(grid, memo, 0, 0);
+    }
+
+    private static int MinSum(int[][] grid, int[][] memo, int row, int col) {
+        int rows = grid.Length;
+        int cols = grid[0].Length;
+
+        if (row >= rows || col >= cols){
+            return int.MaxValue; // Boundary
+        }
+    
+        if (memo[row][col] != -1){
+            return memo[row][col]; // Memoized result
+        } 
+
+        if (row == rows - 1 && col == cols - 1){
+            return grid[row][col]; // Base case
+        } 
+
+        // Recurrance relation        
+        memo[row][col] = grid[row][col] + Math.Min(MinSum(grid, memo, row, col + 1), MinSum(grid, memo, row + 1, col));
+
+        return memo[row][col];
+    }
+
+    
+    public static int MinimumTotal(IList<IList<int>> triangle)
+    {
         int n = triangle.Count;
         var memo = new int?[n, n];
         return TriangleSum(triangle, 0, 0, memo);
