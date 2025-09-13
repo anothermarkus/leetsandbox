@@ -229,15 +229,43 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
+     private static int start = 0, maxLen = 1;
+
+    public static string LongestPalindrome(string s) {
+        int n = s.Length;
+        if (n < 2) return s;
+        bool?[,] memo = new bool?[n, n];
+        // two pointers, sweep all combinations [i/j ... -->...n]
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                if (IsPalindrome(s, memo,i, j) && j - i + 1 > maxLen) { 
+                    start = i; // track start position
+                    maxLen = j - i + 1; // new max
+                }
+            }
+        }
+        return s.Substring(start, maxLen);
+    }
+
+    private static bool IsPalindrome(string s, bool?[,] memo, int i, int j) {
+        if (i >= j) return true; // base case, single char is palindrome
+        if (memo[i, j] != null) return memo[i, j].Value; // Gotcha Cut down on recursions
+        memo[i, j] = s[i] == s[j] && IsPalindrome(s, memo, i + 1, j - 1); //recurrence: if chars == and inner value is palindrome
+        return memo[i, j].Value;
+    }
+
     
     // current = down + right // recurrence: AllPaths[i][j] = AllPaths[i+1][j] + AllPaths[i][j+1]
-    public static int UniquePathsWithObstacles(int[][] obstacleGrid) {
+    public static int UniquePathsWithObstacles(int[][] obstacleGrid)
+    {
         int rows = obstacleGrid.Length;
         int cols = obstacleGrid[0].Length;
         int[][] memo = new int[rows][];
-        for (int i = 0; i < rows; i++) {
+        for (int i = 0; i < rows; i++)
+        {
             memo[i] = new int[cols];
-            for (int j = 0; j < cols; j++) {
+            for (int j = 0; j < cols; j++)
+            {
                 memo[i][j] = -1;
             }
         }
