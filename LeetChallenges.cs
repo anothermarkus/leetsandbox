@@ -229,16 +229,50 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
-     // can only move down or right
-    // memo[i][j] = min( memo[i+1][j], memo[i][j+1]  )
-    public static int MinPathSum(int[][] grid) {
-        int rows = grid.Length;
-        int cols = grid[0].Length;
-
+    
+    // current = down + right // recurrence: AllPaths[i][j] = AllPaths[i+1][j] + AllPaths[i][j+1]
+    public static int UniquePathsWithObstacles(int[][] obstacleGrid) {
+        int rows = obstacleGrid.Length;
+        int cols = obstacleGrid[0].Length;
         int[][] memo = new int[rows][];
         for (int i = 0; i < rows; i++) {
             memo[i] = new int[cols];
             for (int j = 0; j < cols; j++) {
+                memo[i][j] = -1;
+            }
+        }
+        return AllPaths(obstacleGrid, memo, 0, 0);
+    }
+
+    private static int AllPaths(int[][] obstacleGrid, int[][] memo, int row, int col) {
+        int rows = obstacleGrid.Length;
+        int cols = obstacleGrid[0].Length;
+
+        if (row >= rows || col >= cols){  return 0; } // Out of bounds        
+        if (obstacleGrid[row][col] == 1){ return 0; } // Obstacle       
+        if (row == rows - 1 && col == cols - 1){ return 1; } // Base Case       
+        if (memo[row][col] != -1){ return memo[row][col]; } // Gotcha, cut down recursive paths
+        
+        int paths = AllPaths(obstacleGrid, memo, row + 1, col) 
+                  + AllPaths(obstacleGrid, memo, row, col + 1); // Recurrence Relation
+        memo[row][col] = paths;
+        return paths;
+    }
+
+
+     // can only move down or right
+    // memo[i][j] = min( memo[i+1][j], memo[i][j+1]  )
+    public static int MinPathSum(int[][] grid)
+    {
+        int rows = grid.Length;
+        int cols = grid[0].Length;
+
+        int[][] memo = new int[rows][];
+        for (int i = 0; i < rows; i++)
+        {
+            memo[i] = new int[cols];
+            for (int j = 0; j < cols; j++)
+            {
                 memo[i][j] = -1;
             }
         }
