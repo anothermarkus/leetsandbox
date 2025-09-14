@@ -228,6 +228,37 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+
+     public static bool IsInterleave(string s1, string s2, string s3) {
+
+    // memo[s1pointer, s2pointer] =  
+    // (s1[s1pointer]  == s3[s1pointer+s2pointer] => recurse( s1pointer++ )  ) || 
+    //  (s2[s2pointer] == s3[s1pointer+s2pointer] ==>  recurse( s2pointer++ )  )
+
+        if (s1.Length + s2.Length != s3.Length){ return false; }
+        bool?[,] memo = new bool?[s1.Length + 1, s2.Length + 1];
+        return CheckInterleave(0, 0, s1, s2, s3, memo);
+    }
+
+    private static bool CheckInterleave(int i, int j, string s1, string s2, string s3, bool?[,] memo) {
+        if (i == s1.Length && j == s2.Length) return true; // boundary
+
+        if (memo[i, j].HasValue) { return memo[i, j].Value; } // gotcha exit recusion
+
+        int k = i + j; // index into s3
+        bool ans = false;
+
+        if (i < s1.Length && s1[i] == s3[k]) { // use up s1
+            ans = ans || CheckInterleave(i + 1, j, s1, s2, s3, memo);
+        }
+        if (j < s2.Length && s2[j] == s3[k]) { // use up s2
+            ans = ans || CheckInterleave(i, j + 1, s1, s2, s3, memo);
+        }
+
+        memo[i, j] = ans;
+        return ans;
+    }
+
     
      private static int start = 0, maxLen = 1;
 
