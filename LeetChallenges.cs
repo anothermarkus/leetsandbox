@@ -229,6 +229,50 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
+     public static int MinDistance(string word1, string word2) {
+        
+        // dp[i][j] = minimum edits to convert the first  i characters of word1 
+        //            into the first j characters of word2
+
+        // Base - if last chars match
+        // dp[i][j] = dp[i-1][j-1]
+
+        // otherwise
+        // Recurrence
+        //dp[i][j] = min(
+        // dp[i-1][j-1] + (word1[i-1] == word2[j-1] ? 0 : 1), //replace
+        // dp[i-1][j] + 1,                                    //delete
+        // dp[i][j-1] + 1                                     //insert
+        int m = word1.Length;
+        int n = word2.Length;
+
+        // memo[i,j] = min edits for word1[0..i) vs word2[0..j)
+        var memo = new int?[m + 1, n + 1];
+
+        return FindMinDistance(m, n, word1, word2, memo);
+    }
+
+      private static int FindMinDistance(int i, int j, string word1, string word2, int?[,] memo) {
+        // Base cases
+        if (i == 0) return j; // need j inserts
+        if (j == 0) return i; // need i deletes
+
+        if (memo[i, j].HasValue) return memo[i, j].Value;
+
+        if (word1[i - 1] == word2[j - 1]) {
+            // chars match, no operation
+            memo[i, j] = FindMinDistance(i - 1, j - 1, word1, word2, memo);
+        } else {
+            int replace = FindMinDistance(i - 1, j - 1, word1, word2, memo) + 1;
+            int delete  = FindMinDistance(i - 1, j, word1, word2, memo) + 1;
+            int insert  = FindMinDistance(i, j - 1, word1, word2, memo) + 1;
+
+            memo[i, j] = Math.Min(replace, Math.Min(delete, insert)); // min of 3
+        }
+
+        return memo[i, j].Value;
+    }
+
      public static bool IsInterleave(string s1, string s2, string s3) {
 
     // memo[s1pointer, s2pointer] =  
