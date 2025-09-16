@@ -228,9 +228,60 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-
-     public static int MinDistance(string word1, string word2) {
+    
+      public static int MaxProfitDP2(int[] prices) {
         
+        // memo
+        // maxprofit[i][k][h] = max profit on day i, with at most k transactions left, and holding state h.
+
+        // base cases
+        // maxprofit[0][k][0] = 0 (if not holding on day 0, profit is 0)
+        // maxprofit[0][k][1] = -prices[0] (if holding on day 0, profit is -cost of stock)
+        // maxprofit[i][0][*] = 0 (if no transactions left, profit is always 0)
+        
+        // recurrence 
+        //
+        // not holding
+        // maxprofit[i][k][0] = max(maxprofit[i-1][k][0], maxprofit[i-1][k][1] + prices[i])
+
+        // holding
+        // maxprofit[i][k][1] = max(maxprofit[i-1][k][1], maxprofit[i-1][k-1][0] - prices[i])
+    
+        int n = prices.Length;
+        int[,,] memo = new int[n, 3, 2];
+        // memo[day, transactionsLeft, holding]
+        for (int i = 0; i < n; i++)
+            for (int k = 0; k < 3; k++)
+                for (int h = 0; h < 2; h++)
+                    memo[i, k, h] = int.MinValue; // mark uncomputed
+
+        return MaxProfits(prices, memo, 0, 2, 0);
+    }
+
+    private static int MaxProfits(int[] prices, int[,,] memo, int i, int k, int holding) {
+        if (i == prices.Length || k == 0) return 0; // base case
+
+        if (memo[i, k, holding] != int.MinValue)
+            return memo[i, k, holding];
+
+        int doNothing = MaxProfits(prices, memo, i + 1, k, holding);
+        int doSomething;
+
+        if (holding == 1) {
+            // sell
+            doSomething = prices[i] + MaxProfits(prices, memo, i + 1, k - 1, 0);
+        } else {
+            // buy
+            doSomething = -prices[i] + MaxProfits(prices, memo, i + 1, k, 1);
+        }
+
+        return memo[i, k, holding] = Math.Max(doNothing, doSomething);
+    }
+
+
+     public static int MinDistance(string word1, string word2)
+    {
+
         // dp[i][j] = minimum edits to convert the first  i characters of word1 
         //            into the first j characters of word2
 
