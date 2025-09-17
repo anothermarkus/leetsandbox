@@ -229,8 +229,20 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
-      public static int MaxProfitDP2(int[] prices) {
-        
+      public static int MaxProfitDP3(int k, int[] prices) {
+        int n = prices.Length;
+        int[,,] memo = new int[n, k + 1, 2];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j <= k; j++)  // 0 -> k transactions rather than 0 -> 3
+                for (int h = 0; h < 2; h++) // hold
+                    memo[i, j, h] = int.MinValue;
+        return MaxProfits(prices, memo, 0, k, 0);
+    }
+
+ 
+    public static int MaxProfitDP2(int[] prices)
+    {
+
         // memo
         // maxprofit[i][k][h] = max profit on day i, with at most k transactions left, and holding state h.
 
@@ -238,7 +250,7 @@ static class LeetChallenges
         // maxprofit[0][k][0] = 0 (if not holding on day 0, profit is 0)
         // maxprofit[0][k][1] = -prices[0] (if holding on day 0, profit is -cost of stock)
         // maxprofit[i][0][*] = 0 (if no transactions left, profit is always 0)
-        
+
         // recurrence 
         //
         // not holding
@@ -246,7 +258,7 @@ static class LeetChallenges
 
         // holding
         // maxprofit[i][k][1] = max(maxprofit[i-1][k][1], maxprofit[i-1][k-1][0] - prices[i])
-    
+
         int n = prices.Length;
         int[,,] memo = new int[n, 3, 2];
         // memo[day, transactionsLeft, holding]
