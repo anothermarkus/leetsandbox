@@ -228,8 +228,52 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+
+    private static int maxSide = 0;
+    // Memo: memo[i,j] = largest square ixj
+    // Base Case: memo[0,0] = matrix[0,0] || 0 if out of bounds
+    // Recurrence: memo[i,j] = 1 + min (i+1 j+1 || i j+1 || i+1 j)
+    public static int MaximalSquare(char[][] matrix) {
+        int rows = matrix.Length;
+        int cols = matrix[0].Length;
+        int[,] memo = new int[rows, cols];
+
+        // initialize memo with -1 (uncomputed)
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                memo[i, j] = -1;
+            }
+        }
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                FindMaxSquare(matrix, memo, i, j);
+            }
+        }
+        return maxSide * maxSide;
+    }
+
+    private static int FindMaxSquare(char[][] matrix,  int[,] memo, int row, int col) {
+        if (row >= matrix.Length || col >= matrix[0].Length) {return 0;} // bounds
+
+        if (memo[row, col] != -1) { return memo[row, col]; } // gotcha cut recursion
+
+        if (matrix[row][col] == '0') {
+            memo[row, col] = 0;
+            return 0;
+        } 
     
-      public static int MaxProfitDP3(int k, int[] prices) {
+        int down = FindMaxSquare(matrix, memo, row + 1, col);
+        int right = FindMaxSquare(matrix, memo, row, col + 1);
+        int diag = FindMaxSquare(matrix, memo, row + 1, col + 1);
+
+        memo[row, col] = 1 + Math.Min(Math.Min(down, right), diag); // enforces squareness 
+        maxSide = Math.Max(maxSide, memo[row, col]);
+
+        return memo[row, col];
+    }
+    
+      public static int MaxProfitDP3(int k, int[] prices)
+    {
         int n = prices.Length;
         int[,,] memo = new int[n, k + 1, 2];
         for (int i = 0; i < n; i++)
