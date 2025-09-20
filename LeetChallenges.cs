@@ -229,6 +229,22 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
+    public static int Fib(int n) {
+        if (n == 0){ return 0; }
+        if (n == 1){ return 1; }
+
+        int nMinus1 = 1;
+        int nMinus2 = 0;
+        int current = 0;
+        for (int i = 2; i <= n; i++){
+            current = nMinus1 + nMinus2;
+            nMinus2 = nMinus1;
+            nMinus1 = current;
+        }
+        return current;        
+    }
+
+
     private static int maxSide = 0;
     // Memo: memo[i,j] = largest square ixj
     // Base Case: memo[0,0] = matrix[0,0] || 0 if out of bounds
