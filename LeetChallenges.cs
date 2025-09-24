@@ -229,19 +229,36 @@ public class MedianFinder {
 static class LeetChallenges
 {
 
-    public static int Fib(int n) {
-        if (n == 0){ return 0; }
-        if (n == 1){ return 1; }
+
+    public static ListNode ReverseList(ListNode head) {
+         ListNode prev = null;
+
+        while (head != null) {
+            ListNode next = head.next;  
+            head.next = prev;               
+            prev = head;                   
+            head = next;              
+        }
+
+        return prev;
+    }
+
+
+    public static int Fib(int n)
+    {
+        if (n == 0) { return 0; }
+        if (n == 1) { return 1; }
 
         int nMinus1 = 1;
         int nMinus2 = 0;
         int current = 0;
-        for (int i = 2; i <= n; i++){
+        for (int i = 2; i <= n; i++)
+        {
             current = nMinus1 + nMinus2;
             nMinus2 = nMinus1;
             nMinus1 = current;
         }
-        return current;        
+        return current;
     }
 
 
