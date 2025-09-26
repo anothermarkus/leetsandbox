@@ -228,16 +228,31 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
+    
+     public static string RemoveDuplicates(string s) {
+         var stack = new Stack<char>();
+         foreach(char c in s){
+                if (stack.Count > 0 && stack.Peek() == c){
+                    stack.Pop();
+                }else{
+                    stack.Push(c);
+                }
+        }
+        return new String(stack.Reverse().ToArray());
+    }
 
 
-    public static ListNode ReverseList(ListNode head) {
-         ListNode prev = null;
 
-        while (head != null) {
-            ListNode next = head.next;  
-            head.next = prev;               
-            prev = head;                   
-            head = next;              
+    public static ListNode ReverseList(ListNode head)
+    {
+        ListNode prev = null;
+
+        while (head != null)
+        {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
         }
 
         return prev;
