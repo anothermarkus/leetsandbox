@@ -229,14 +229,43 @@ public class MedianFinder {
 static class LeetChallenges
 {
     
-     public static string RemoveDuplicates(string s) {
-         var stack = new Stack<char>();
-         foreach(char c in s){
-                if (stack.Count > 0 && stack.Peek() == c){
-                    stack.Pop();
-                }else{
-                    stack.Push(c);
-                }
+
+    public static void MoveZeroes(int[] nums) {
+        if (nums.Length == 1){
+            return;
+        }
+
+       int leftPointer = 0; // L
+        //        L i
+        // 1 3 12 0 0
+        for (int i = 0; i < nums.Length; i++) {
+            if (nums[i] != 0) {
+                nums[leftPointer] = nums[i];
+                leftPointer++;
+            }
+        }
+
+        while (leftPointer < nums.Length) {
+            nums[leftPointer] = 0;
+            leftPointer++;
+            
+        }
+    }
+
+    
+     public static string RemoveDuplicates(string s)
+    {
+        var stack = new Stack<char>();
+        foreach (char c in s)
+        {
+            if (stack.Count > 0 && stack.Peek() == c)
+            {
+                stack.Pop();
+            }
+            else
+            {
+                stack.Push(c);
+            }
         }
         return new String(stack.Reverse().ToArray());
     }
