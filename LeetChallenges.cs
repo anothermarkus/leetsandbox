@@ -228,7 +228,29 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-    
+     public static ListNode DetectCycle(ListNode head) {
+        ListNode originalHead = head;
+        ListNode doubleSpeed = head;
+        ListNode meetingPoint = null;
+        
+        while (doubleSpeed !=null && doubleSpeed.next != null){
+            head = head.next;
+            doubleSpeed = doubleSpeed.next.next;
+            if (head == doubleSpeed){
+                // Meeting Point
+                meetingPoint = head;
+                break;
+            }
+        }
+
+        if (meetingPoint == null){ return null;}        
+        // Head -> Entry (D1) == Meeting -> Entry (compliment of cycle nC -D2)
+        while (meetingPoint != originalHead){
+            meetingPoint = meetingPoint.next;
+            originalHead = originalHead.next;
+        }
+        return meetingPoint;
+    }
 
     public static void MoveZeroes(int[] nums) {
         if (nums.Length == 1){
