@@ -228,24 +228,47 @@ public class MedianFinder {
 
 static class LeetChallenges
 {
-     public static ListNode DetectCycle(ListNode head) {
+    
+      public static bool ValidPalindrome(string s) {
+        return IsPalindrome(s, 0, s.Length - 1, false);
+    }
+
+    private static bool IsPalindrome(string s, int p1, int p2, bool usedSafetyNet) {
+        while (p1 < p2) {
+            if (s[p1] != s[p2]) {
+                if (usedSafetyNet) return false; 
+                return IsPalindrome(s, p1 + 1, p2, true) ||
+                    IsPalindrome(s, p1, p2 - 1, true);
+            }
+            p1++;
+            p2--;
+        }
+        return true;
+    }
+
+
+     public static ListNode DetectCycle(ListNode head)
+    {
         ListNode originalHead = head;
         ListNode doubleSpeed = head;
         ListNode meetingPoint = null;
-        
-        while (doubleSpeed !=null && doubleSpeed.next != null){
+
+        while (doubleSpeed != null && doubleSpeed.next != null)
+        {
             head = head.next;
             doubleSpeed = doubleSpeed.next.next;
-            if (head == doubleSpeed){
+            if (head == doubleSpeed)
+            {
                 // Meeting Point
                 meetingPoint = head;
                 break;
             }
         }
 
-        if (meetingPoint == null){ return null;}        
+        if (meetingPoint == null) { return null; }
         // Head -> Entry (D1) == Meeting -> Entry (compliment of cycle nC -D2)
-        while (meetingPoint != originalHead){
+        while (meetingPoint != originalHead)
+        {
             meetingPoint = meetingPoint.next;
             originalHead = originalHead.next;
         }
